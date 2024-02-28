@@ -1,4 +1,4 @@
-//notice.js
+//product-query.js
 // 예시
 const boardList = 
 `select * from customers`;
