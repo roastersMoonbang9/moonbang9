@@ -1,7 +1,7 @@
 //event.js
 // 예시
 const boardList = 
-`select * from customers`;
+`select count(*) from dual`;
 
 
 module.exports = {

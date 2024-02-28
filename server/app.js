@@ -1,9 +1,10 @@
-const express = require('express')
-const app = express()
-const port = 3000
+require('dotenv').config({ path : './db/db.env'})
+const express = require('express');
+const app = express();
+const port = 3000;
 
 //라우팅방식 app 
-const memberRouter =require('./router/userRouter/userRouter.js');
+const userRouter =require('./router/userRouter/userRouter.js');
 const couponRouter =require('./router/userRouter/couponRouter.js');
 const gradeRouter =require('./router/userRouter/gradeRouter.js');
 const queryRouter =require('./router/userRouter/queryRouter.js');
@@ -21,10 +22,10 @@ const returnRouter =require('./router/orderRouter/returnRouter.js');
 app.use(express.json()).use(express.urlencoded({extended : false}));
 
 //라우팅 분할해서 작성
-app.use('/member',memberRouter);
-app.use('/member',couponRouter);
-app.use('/member',gradeRouter);
-app.use('/member',queryRouter);
+app.use('/user',userRouter);
+app.use('/user',couponRouter);
+app.use('/user',gradeRouter);
+app.use('/user',queryRouter);
 app.use('/notice',noticeRouter);
 app.use('/notice',eventRouter);
 app.use('/product',productRouter);
