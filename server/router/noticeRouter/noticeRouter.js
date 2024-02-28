@@ -1,6 +1,6 @@
 const express = require('express');
 const noticeRouter = express.Router();
-const db = require("../db.js");
+const db = require("../../db.js");
 
 //예시
 //쿼리형태로 받음

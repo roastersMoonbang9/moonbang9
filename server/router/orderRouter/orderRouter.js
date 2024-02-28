@@ -1,6 +1,6 @@
 const express = require('express');
 const orderRouter = express.Router();
-const db = require("../db.js");
+const db = require("../../db.js");
 
 
 //예시
