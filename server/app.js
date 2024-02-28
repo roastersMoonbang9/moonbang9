@@ -19,6 +19,7 @@ const orderDetailRouter =require('./router/orderRouter/orderDetailRouter.js');
 const deliveryRouter =require('./router/orderRouter/deliveryRouter.js');
 const returnRouter =require('./router/orderRouter/returnRouter.js');
 
+app.use(express.json());
 app.use(express.json()).use(express.urlencoded({extended : false}));
 
 //라우팅 분할해서 작성
