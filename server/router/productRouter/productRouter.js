@@ -10,6 +10,3 @@ productRouter.get("/", async (request,response)=>{
   })
 
   module.exports = productRouter;
-
-
-  //깃 시험중~
