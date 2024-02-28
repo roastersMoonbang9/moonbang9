@@ -13,13 +13,15 @@ const dbInfo = {
 const dbPool = mysql.createPool(dbInfo);
 
 module.exports = {
-     connection(table, alias, param = []) {
-      return new Promise((resolve, reject) => dbPool.query(sql[table][alias], param, (error, results) => {
-        if (error) {         
-          reject({
-            error
-          });
-        } else resolve(results);
-      }));
-    }
-  };
+  connection(table,alias, param = []) {
+   console.log(table)
+   console.log(alias)
+   return new Promise((resolve, reject) => dbPool.query(sql[table][alias], param, (error, results) => {
+     if (error) {
+       reject({
+         error
+       });
+     } else resolve(results);
+   }));
+ }
+};
