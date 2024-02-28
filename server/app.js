@@ -1,6 +1,7 @@
-const express = require('express')
-const app = express()
-const port = 3000
+require('dotenv').config({ path : './db/db.env'})
+const express = require('express');
+const app = express();
+const port = 3000;
 
 //라우팅방식 app 
 const userRouter =require('./router/userRouter/userRouter.js');
