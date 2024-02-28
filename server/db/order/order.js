@@ -1,6 +1,6 @@
 //order.js
 // 주문 목록추가
-const orderList = 
+const orderAdd = 
 `INSERT INTO orders
             (ord_no, 
             mem_no, 
@@ -19,15 +19,12 @@ const orderList =
             accu_pnt,
             cpn_no, 
             cpn_disc) 
-VALUES ?`;
+SET ?`;
 
 //주문 결제 조회
-
-
-
-
-
-
+const orderList = 
+`
+`;
 
 
 //예시
@@ -36,6 +33,7 @@ const test =
 
 
 module.exports = {
+    orderAdd,
     orderList,
     test
 }
