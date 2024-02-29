@@ -1,7 +1,10 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/about">About</router-link> |
+    <router-link to="/review">리뷰</router-link> |
+    <router-link to="/delivery">배송</router-link>
+
   </nav>
   <router-view/>
 </template>
