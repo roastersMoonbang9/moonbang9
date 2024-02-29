@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import testView from '../views/testjeonView.vue'
+import adminView from '../views/admin/AdminMainView.vue'
 import CartView from '../views/product/CartView.vue'
 import loginView from '../views/loginView.vue'
 import userJoinView from '../views/userJoinView.vue'
@@ -19,6 +21,15 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
+    path: '/notice',
+    name: 'notice',
+    component: testView
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: adminView
+  },
     path: '/cart',
     name: 'cart',
     component: CartView
