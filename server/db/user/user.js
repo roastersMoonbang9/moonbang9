@@ -1,9 +1,62 @@
 //user.js
-// 예시
-const boardList = 
-`select * from customers`;
+
+// 회원 전체 조회
+const userList = 
+`SELECT
+        mem_no,
+        id,
+        name,
+        pwd,
+        phone,
+        birth_dt,
+        gen,
+        email,
+        addr,
+        addrdt,
+        point,
+        token,
+        mem_status,
+        grade_no
+FROM    member
+ORDER BY mem_no`;
+
+// 회원 개별 조회
+const userInfo = 
+`SELECT
+        id,
+        name,
+        pwd,
+        phone,
+        birth_dt,
+        gen,
+        email,
+        addr,
+        addrdt,
+        point
+FROM    member
+WHERE mem_no = ?`;
+
+// 회원 가입
+const userJoin = 
+`INSERT INTO member 
+SET ?`;
+
+// 회원 정보 수정
+const userUpdate = 
+`UPDATE member 
+ SET ?
+ WHERE mem_no = ?`;
+
+ //회원탈퇴
+//const userQuit =
 
 
-module.exports = {
-    boardList
+ //const userDelete = 
+ 
+
+ module.exports = {
+    userList,
+    userInfo,
+    userJoin,
+    userUpdate
 }

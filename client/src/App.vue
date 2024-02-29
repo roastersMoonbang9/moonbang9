@@ -1,7 +1,9 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/about">About</router-link> |
+    <router-link to="/login">로그인 화이팅화이팅!!</router-link> |
+    <router-link to="/userJoin">회원가입 힘내힘내!!</router-link>
   </nav>
   <router-view/>
 </template>
