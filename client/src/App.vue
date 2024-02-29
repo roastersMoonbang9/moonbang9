@@ -2,6 +2,8 @@
   <HeaderComponent />
   <nav>
     <router-link to="/">Home</router-link> |
+    <router-link to="/about">About</router-link> | 
+    <router-link to="/product">상품목록</router-link> |
     <router-link to="/about">About</router-link> |
     <router-link to="/review">리뷰</router-link> |
     <router-link to="/delivery">배송</router-link> |

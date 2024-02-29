@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import product from './product.js'
 import DeliveryView from '../views/TestingDelivery.vue'
 import ProductReview from '../views/TestingDelivery.vue'
 import testView from '../views/testjeonView.vue'
@@ -9,6 +10,7 @@ import loginView from '../views/loginView.vue'
 import userJoinView from '../views/userJoinView.vue'
 
 const routes = [
+  product,
   {
     path: '/',
     name: 'home',
