@@ -34,6 +34,7 @@ const routes = [
     name: 'review',
     component: ProductReview
   },
+  {
     path: '/notice',
     name: 'notice',
     component: testView
@@ -43,6 +44,7 @@ const routes = [
     name: 'admin',
     component: adminView
   },
+  {
     path: '/cart',
     name: 'cart',
     component: CartView
