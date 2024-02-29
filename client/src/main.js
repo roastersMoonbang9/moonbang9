@@ -12,3 +12,6 @@ createApp(App)
 .use(adminCss)
 .use(adminBootstrap)
 .mount('#app')
+import './assets/style.default.css';
+
+createApp(App).use(store).use(router).mount('#app')
