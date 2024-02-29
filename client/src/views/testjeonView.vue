@@ -21,9 +21,15 @@
         </tbody>
       </table>
       <div>
-        <button v-if="currentPage > 1" @click="currentPage--">이전 페이지</button>
+        <button @click="changPage()">1</button>
+        <button @click="changPage()">2</button>
+        <button @click="changPage()">3</button>
+        <button @click="changPage()">4</button>
+        <button @click="changPage()">5</button>
+        
+        <!-- <button v-if="currentPage > 1" @click="currentPage--">이전 페이지</button>
         <span>{{ currentPage }} / {{ totalPages }}</span>
-        <button v-if="currentPage < totalPages" @click="currentPage++">다음 페이지</button>
+        <button v-if="currentPage < totalPages" @click="currentPage++">다음 페이지</button> -->
       </div>
     </div>
   </template>
@@ -35,31 +41,31 @@
     data () {
       return {
         noticeList : [],
-        currentPage : 1,
-        postsPerPage : 5,
         start : 0,
-        cnt : 5
+        noticeCnt : 0,
+        pagePerBlock : 0
       }
     },
     computed : {
-      displayedPosts() {
-        const startIndex = (this.currentPage - 1) * this.postsPerPage;
-        const endIndex = startIndex + this.postsPerPage;
-        return this.noticeList.slice(startIndex, endIndex);
-      },
-      totalPages() {
-        return Math.ceil(this.noticeList.length / this.postsPerPage);
-      }
+
     },
     created() {
       this.getNoticeList(); // 비동기작업
+      this.getNoticeCount();
     },
     methods : {
       async getNoticeList() { // 동기작업
-        let result = await axios.get('/api/notice/' + this.start,this.cnt)
+        console.log(this.start);
+        let result = await axios.get(`/api/notice/${this.start}`)
                                 .catch(err => console.log(err));
-        let list = result.data;
-        this.noticeList = list;
+        console.log(result);
+        this.noticeList = result.data;
+      },
+      async getNoticeCount() {
+        let result = await axios.get(`/api/notice`)
+                                .catch(err => console.log(err));
+        console.log(result);
+        this.noticeList = result.data;
       }
     }
   }

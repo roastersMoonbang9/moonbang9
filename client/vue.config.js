@@ -9,7 +9,7 @@ module.exports = defineConfig({
         target,
         changeOrigin: true,
         ws: false, // ws = 웹소켓 - 기본 사용으로 되어있음. 받는쪽과 보내는쪽 둘다 있어야하기에 false로 설정.
-        pathRewrite: { '^/api': '/' } // /api 를 / 로 교체
+        pathRewrite: { '^/api':'/' } // /api 를 / 로 교체
       }
     }
   }
