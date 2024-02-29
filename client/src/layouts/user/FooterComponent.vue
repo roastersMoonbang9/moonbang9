@@ -3,13 +3,7 @@
         <div class="container py-4">
           <div class="row py-5">
             <div class="col-md-4 mb-3 mb-md-0">
-              <h6 class="text-uppercase mb-3">Customer services</h6>
-              <ul class="list-unstyled mb-0">
-                <li><a class="footer-link" href="#!">Help &amp; Contact Us</a></li>
-                <li><a class="footer-link" href="#!">Returns &amp; Refunds</a></li>
-                <li><a class="footer-link" href="#!">Online Stores</a></li>
-                <li><a class="footer-link" href="#!">Terms &amp; Conditions</a></li>
-              </ul>
+              <img src="./../../assets/moonbang9_3.png" alt="moonbang9">
             </div>
             <div class="col-md-4 mb-3 mb-md-0">
               <h6 class="text-uppercase mb-3">Company</h6>

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "nodemons" : "nodemon app.js"
+    "nodemons": "nodemon app.js"
   },
   "keywords": [
     "node",
