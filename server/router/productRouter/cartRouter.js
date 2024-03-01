@@ -1,6 +1,8 @@
 const express = require('express');
 const cartRouter = express.Router();
 const db = require("../../db.js");
+
+
 //async await
 // 회원정보 기준 장바구니 리스트 목록
 cartRouter.get("/cart/:mem_no", async (request,response)=>{
@@ -23,7 +25,7 @@ cartRouter.put("/cart/:cart_cd", async (request,response)=>{
   let dataResult = [data, data2]
   console.log(data2)
   console.log(data)
-  let result = await db.connection('cart','cartUpdate',dataResult).then(res =>{console.log(res)}).catch(err=>{console.log(err)});
+  let result = await db.connection('cart','cartUpdate',dataResult);
   response.send(result);
 })
 

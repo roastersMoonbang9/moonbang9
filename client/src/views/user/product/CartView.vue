@@ -35,11 +35,11 @@
                         <p class="mb-0 small">{{list.sale_price}}</p>
                       </td>
                       <td class="p-3 align-middle border-light">
-                        <div class="border d-flex align-items-center justify-content-between px-3">
+                        <div class="border align-items-center justify-content-between px-0">
                           <div class="quantity">
-                            <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
-                            <input class="form-control form-control-sm border-0 shadow-0 p-0" type="text" :value="list.cart_qty" :key="idx" @input="cartQty($event,idx)"/>
-                            <button class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>
+                            <button class="dec-btn p-0 glyphicon glyphicon-chevron-left" @click="minusQty($event,idx)"></button>
+                            <input class="form-control form-control-sm border-0 shadow-0 p-0" min="1" type="number" :value="list.cart_qty" :key="idx" @input="cartQty($event,idx)" style="-moz-appearance: textfield;"/>
+                            <button class="dec-btn p-0 glyphicon glyphicon-chevron-right" @click="list.cart_qty++"></button>
                           </div>
                         </div>
                         <input class="form-control form-control-sm border-0 shadow-0 p-0" type="button" value="수정" @click="modCartQty(list)"/>
@@ -52,7 +52,7 @@
                       <td class="p-3 align-middle border-light">
                         <div class="d-flex flex-column d-grid gap-4 align-items-center">
                           <input type="button" value="바로주문">
-                          <input type="button" value="삭제" @click="delCartInfo(list)">
+                          <input type="button" value="삭제" @click="delCartInfo(list,idx)">
                         </div>
                       </td>
                     </tr>
@@ -120,9 +120,12 @@
         for(let i of this.selected){
           let result = await axios.delete('/apiproduct/cart/' + i.cart_cd)
             .catch(err => console.log(err));
+            for(let j=0; j<this.cartList.length;j++){
+              if(i.cart_cd == this.cartList[j].cart_cd){
+                this.cartList.splice(j, 1);
+              }
+            }
             console.log(result)
-          let list = result.data;
-          this.cartList = list;
         }
       },
       // 장바구니 수량수정
@@ -137,18 +140,44 @@
         let sendInfo = { method,url,data}
         console.log(lists);
         let result = await axios(sendInfo)
+        .then(res => {
+          if(res.data.affectedRows != 0){
+            Swal.fire({
+              position: "center-center",
+              icon: "success",
+              title: "상품의 수량이 변경되었습니다.",
+              showConfirmButton: false,
+              timer: 1500
+            });
+          }
+        })
           .catch(err => console.log(err));
-          console.log(result)
+        
       },
-      //수량 변경
+      //직접입력 수량 변경
       cartQty(event, idx) {
-        this.cartList[idx].cart_qty = event.target.value;
+        if(event.target.value < 1){
+          this.cartList[idx].cart_qty = 1;
+          event.target.value = 1;
+        }else{
+          this.cartList[idx].cart_qty = event.target.value;
+        }
       },
       //단건삭제
-      async delCartInfo(lists) {
+      async delCartInfo(lists,idx) {
           let result = await axios.delete('/apiproduct/cart/' + lists.cart_cd)
             .catch(err => console.log(err));
             console.log(result)
+          this.cartList.splice(idx, 1);
+      },
+      //음수 제한
+      minusQty(event,idx){
+        if(this.cartList[idx].cart_qty <= 1){
+          this.cartList[idx].cart_qty = 1;
+          event.target.value = 1;
+        }else{
+          this.cartList[idx].cart_qty--;
+        }
       }
     }
   }
