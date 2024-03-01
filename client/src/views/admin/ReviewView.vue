@@ -83,7 +83,7 @@ import axios from 'axios'
  </script>-->
 <script>
  import axios from 'axios'
- import CommentList from '../components/CommentList.vue';
+ import CommentList from '../../components/CommentList.vue';
  
  export default {
      data() {
