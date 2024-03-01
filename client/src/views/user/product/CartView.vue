@@ -3,9 +3,9 @@
         <h1>장바구니</h1>
     </div>
     <section class="py-5">
-          <h2 class="h5 text-uppercase mb-4">장바구니 목록</h2>
+          <h2 class="h5 text-uppercase mb-4"><span class="bg-light" style="float: left;padding: 0 10px;">장바구니 목록</span></h2>
           <div class="row" style="display: block;">
-            <div class="col-lg-8 mb-4 mb-lg-0" style="margin: 0 auto;">
+            <div class="mb-4 mb-lg-0" style="margin: 0 auto;">
               <!-- CART TABLE-->
               <div class="table-responsive mb-4">
                 <table class="table text-nowrap">
@@ -39,7 +39,7 @@
                           <div class="quantity">
                             <button class="dec-btn p-0 glyphicon glyphicon-chevron-left" @click="minusQty($event,idx)"></button>
                             <input class="form-control form-control-sm border-0 shadow-0 p-0" min="1" type="number" :value="list.cart_qty" :key="idx" @input="cartQty($event,idx)" style="-moz-appearance: textfield;"/>
-                            <button class="dec-btn p-0 glyphicon glyphicon-chevron-right" @click="list.cart_qty++"></button>
+                            <button class="dec-btn p-0 glyphicon glyphicon-chevron-right" @click="addQty(idx)"></button>
                           </div>
                         </div>
                         <input class="form-control form-control-sm border-0 shadow-0 p-0" type="button" value="수정" @click="modCartQty(list)"/>
@@ -61,13 +61,17 @@
                     <tr style="border-style : none;">
                       <td style="border-style : none;"><input type="button" value="선택삭제" @click="delCartList()"></td>
                     </tr>
+                    <tr>
+                      <!--페이징 컴포넌트 자리-->
+                    </tr>
                   </tfoot>
                 </table>
               </div>
             </div>
           </div>
         </section>
-        <!--주문금액 컴포넌트 자리-->
+        <!--주문금액 컴포넌트-->
+        <TotalOrderPrice v-bind:list="cartList"/>
         <div>
           <button>계속 쇼핑하기</button>
           <button>선택상품 주문하기</button>
@@ -76,111 +80,121 @@
   </template>
   
   <script>
-  import axios from 'axios';
+  import TotalOrderPrice from '@/components/totalOrderPrice.vue';
+import axios from 'axios';
   
   export default {
     data() {
-      return {
-        cartList: [],
-        selected: []
-      }
+        return {
+            cartList: [],
+            selected: []
+        };
     },
     created() {
-      this.getCartList();
+        this.getCartList();
     },
-    computed:{
-  	selectAll: {
-      get() {
-        return this.cartList ? (this.selected ? (this.selected.length === this.cartList.length) : false) : false;
-      },
-      set(value) {
-        const selected = [];
-
-        if (value && this.cartList != []) {
-          this.cartList.forEach((list) => {
-            selected.push(list);
-          });
-        }
-
-        this.selected = selected;
+    computed: {
+        selectAll: {
+            get() {
+                return this.cartList ? (this.selected ? (this.selected.length === this.cartList.length) : false) : false;
+            },
+            set(value) {
+                const selected = [];
+                if (value && this.cartList != []) {
+                    this.cartList.forEach((list) => {
+                        selected.push(list);
+                    });
+                }
+                this.selected = selected;
+            },
         },
-      },
     },
     methods: {
-      //장바구니 목록
-      async getCartList() {
-        let result = await axios.get('/apiproduct/cart/1')
-          .catch(err => console.log(err));
-          console.log(result)
-        let list = result.data;
-        this.cartList = list;
-      },
-      // 장바구니 선택삭제
-      async delCartList() {
-        for(let i of this.selected){
-          let result = await axios.delete('/apiproduct/cart/' + i.cart_cd)
-            .catch(err => console.log(err));
-            for(let j=0; j<this.cartList.length;j++){
-              if(i.cart_cd == this.cartList[j].cart_cd){
-                this.cartList.splice(j, 1);
-              }
-            }
-            console.log(result)
-        }
-      },
-      // 장바구니 수량수정
-      async modCartQty(lists) {
-        let method = 'put';
-        let url = `/apiproduct/cart/` + lists.cart_cd;
-        let data = {
-                    "param": {
-                      "cart_qty": lists.cart_qty
+        //장바구니 목록
+        async getCartList() {
+            let result = await axios.get('/apiproduct/cart/1')
+                .catch(err => console.log(err));
+            console.log(result);
+            let list = result.data;
+            this.cartList = list;
+        },
+        // 장바구니 선택삭제
+        async delCartList() {
+            for (let i of this.selected) {
+                let result = await axios.delete('/apiproduct/cart/' + i.cart_cd)
+                    .catch(err => console.log(err));
+                for (let j = 0; j < this.cartList.length; j++) {
+                    if (i.cart_cd == this.cartList[j].cart_cd) {
+                        this.cartList.splice(j, 1);
                     }
                 }
-        let sendInfo = { method,url,data}
-        console.log(lists);
-        let result = await axios(sendInfo)
-        .then(res => {
-          if(res.data.affectedRows != 0){
-            Swal.fire({
-              position: "center-center",
-              icon: "success",
-              title: "상품의 수량이 변경되었습니다.",
-              showConfirmButton: false,
-              timer: 1500
-            });
-          }
-        })
-          .catch(err => console.log(err));
-        
-      },
-      //직접입력 수량 변경
-      cartQty(event, idx) {
-        if(event.target.value < 1){
-          this.cartList[idx].cart_qty = 1;
-          event.target.value = 1;
-        }else{
-          this.cartList[idx].cart_qty = event.target.value;
+                console.log(result);
+            }
+        },
+        // 장바구니 수량수정
+        async modCartQty(lists) {
+            let method = 'put';
+            let url = `/apiproduct/cart/` + lists.cart_cd;
+            let data = {
+                "param": {
+                    "cart_qty": lists.cart_qty
+                }
+            };
+            let sendInfo = { method, url, data };
+            console.log(lists);
+            let result = await axios(sendInfo)
+                .then(res => {
+                if (res.data.affectedRows != 0) {
+                    Swal.fire({
+                        position: "center-center",
+                        icon: "success",
+                        title: "상품의 수량이 변경되었습니다.",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
+                .catch(err => console.log(err));
+            setTimeout(() => {
+                this.$router.go(0);
+            }, 1000);
+        },
+        //직접입력 수량 변경
+        cartQty(event, idx) {
+            if (event.target.value < 1) {
+                this.cartList[idx].cart_qty = 1;
+                event.target.value = 1;
+            }
+            else {
+                this.cartList[idx].cart_qty = event.target.value;
+            }
+        },
+        //단건삭제
+        async delCartInfo(lists, idx) {
+            let result = await axios.delete('/apiproduct/cart/' + lists.cart_cd)
+                .catch(err => console.log(err));
+            console.log(result);
+            this.cartList.splice(idx, 1);
+        },
+        //음수 제한
+        minusQty(event, idx) {
+            if (this.cartList[idx].cart_qty <= 1) {
+                this.cartList[idx].cart_qty = 1;
+                event.target.value = 1;
+            }
+            else {
+                this.cartList[idx].cart_qty--;
+                // this.cartList[idx].total_price = this.cartList[idx].total_price - this.cartList[idx].sale_price;
+            }
+        },
+        //더하기
+        addQty(idx) {
+                this.cartList[idx].cart_qty++;
+                // this.cartList[idx].total_price = this.cartList[idx].total_price + this.cartList[idx].sale_price;
         }
-      },
-      //단건삭제
-      async delCartInfo(lists,idx) {
-          let result = await axios.delete('/apiproduct/cart/' + lists.cart_cd)
-            .catch(err => console.log(err));
-            console.log(result)
-          this.cartList.splice(idx, 1);
-      },
-      //음수 제한
-      minusQty(event,idx){
-        if(this.cartList[idx].cart_qty <= 1){
-          this.cartList[idx].cart_qty = 1;
-          event.target.value = 1;
-        }else{
-          this.cartList[idx].cart_qty--;
-        }
-      }
-    }
-  }
+    },
+    components: { TotalOrderPrice }
+}
   </script>
     
   <style>

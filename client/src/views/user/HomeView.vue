@@ -9,7 +9,7 @@
     <router-link to="/login">로그인 화이팅화이팅!!</router-link> |
     <router-link to="/userJoin">회원가입 힘내힘내!!</router-link>
   </nav>
-  <router-view/>
+  <router-view :key="$route.fullPath"/>
   <Footer />
 </template>
 
@@ -30,7 +30,7 @@ export default {
 }
 </script>
 <style>
-  @import '../../assets/style.default.css';
+  @import '../../assets/user/style.default.css';
 
   #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
