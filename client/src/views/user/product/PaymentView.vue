@@ -50,10 +50,8 @@
         </section>
         <!--주문금액 컴포넌트-->
         <TotalOrderPrice v-bind:list="paymentList"/>
-        <!--주문고객정보 컴포넌트-->
+        <!--주문고객정보,배송지정보 컴포넌트-->
         <OrderCustomerInfo v-bind:list="paymentList"/>
-        <!--배송지정보 컴포넌트-->
-        <DeliveryAddressInfo v-bind:list="paymentList"/>
         
         
   </template>
@@ -61,7 +59,6 @@
 <script>
 import OrderCustomerInfo from '@/components/OrderCustomerInfo.vue';
 import TotalOrderPrice from '@/components/totalOrderPrice.vue';
-import DeliveryAddressInfo from '@/components/DeliveryAddressInfo.vue';
 import axios from 'axios';
 
 export default {
@@ -87,7 +84,7 @@ export default {
           this.paymentList = list;
       },
     },
-  components: { TotalOrderPrice, OrderCustomerInfo,DeliveryAddressInfo }
+  components: { TotalOrderPrice, OrderCustomerInfo }
 }
 </script>
   
