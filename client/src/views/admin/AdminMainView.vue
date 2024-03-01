@@ -4,7 +4,7 @@
     <router-link to="/admin/review">리뷰</router-link> |
     <router-link to="/admin/delivery">배송</router-link> |
     <router-link to="/admin/notice">test</router-link> |
-    <router-link to="/admin">admin</router-link> |
+    <router-link to="/admin">admin</router-link>
   </nav>
   <Header />
   <router-view/>
