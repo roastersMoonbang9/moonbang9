@@ -27,7 +27,7 @@
                       <th class="border-0 p-3" scope="col"><input type="checkbox" v-model="selected" :key="idx" :value="list"></th>
                       <th class="border-0 p-3" scope="col"><strong class="text-sm text-uppercase">{{list.prdt_cd}}</strong></th>
                       <th class="ps-0 py-3 border-light" scope="row">
-                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="../../assets/product-detail-3.jpg" alt="..." width="70"/></a>
+                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="../../../assets/product-detail-3.jpg" alt="..." width="70"/></a>
                           <div class="ms-3"><p class="mb-0 small">{{list.prdt_name}}</p><p class="mb-0 small" v-if="list.opt_name != null">옵션 : {{list.opt_name}}</p></div>
                         </div>
                       </th>
