@@ -2,7 +2,10 @@
     <div class="sidebar pe-4 pb-3">
     <nav class="navbar bg-light navbar-light">
         <div class="navbar-nav w-100">
-            <a href="index.html" class="nav-item nav-link active">메인 화면</a>
+            <a href="#" class="nav-item nav-link active">
+                <img class="rounded-circle me-lg-2" src="../../assets/admin/img/moonbang9.png" alt="" style="width: 120px; height: 120px;">
+            </a>
+            <a href="#" class="nav-item nav-link active">메인 화면</a>
             <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">회원 관리</a>
                 <div class="dropdown-menu bg-transparent border-0">

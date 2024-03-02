@@ -18,7 +18,7 @@ noticeRouter.post("/", async (request, response)=>{
 });
 
 
-noticeRouter.get("/noticeCount", async (request,response)=>{
+noticeRouter.get("/", async (request,response)=>{
   let result = await db.connection('notice','noticeCount');
   response.send(result);
 })
