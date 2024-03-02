@@ -1,7 +1,7 @@
 <template>
     <div class="overHidden tMar60">
         <div class="ftLt" style="width:690px">
-            <div class="overHidden">
+            <div class="overHidden" style="margin: 0 2%;">
                 <h3 class="crRed">할인 정보</h3>
             </div>
             <table class="baseTable orderForm payForm tMar10" style="width:690px">
@@ -56,24 +56,6 @@
                     </tr>
                 </tbody>
             </table>
-            <dl class="note01 tPad30 lPad20">
-                <dt><strong class="fs13">유의사항</strong></dt>
-                <dd>
-                    <ul class="list01">
-
-                        <li>마일리지는 상품금액 30,000원 이상 결제시 사용 가능합니다.</li>
-                        <li>예치금의 적립, 사용 내역 확인 및 무통장입금 신청은 마이텐바이텐에서 가능합니다.</li>
-                        <li>Gift 카드는 인증번호 등록 후 사용할 수 있으며, 등록 및 사용 내역 확인은 마이텐바이텐에서 가능합니다.</li>
-
-                        <li>상품쿠폰과 보너스쿠폰은 중복사용이 불가능합니다.</li>
-                        <li>무료배송 보너스 쿠폰은 텐바이텐 주문 금액 기준입니다.</li>
-                        <li>보너스쿠폰 중 %할인쿠폰은 이미 할인을 하는 상품에 대해서는 중복 적용이 되지 않습니다.</li>
-                        <li>정상판매가 상품 중 일부 상품은 %할인쿠폰이 적용되지 않습니다.</li>
-                        <li>보너스쿠폰 중 금액할인쿠폰을 사용하여 복수의 상품을 구매 하시는 경우, 상품별 판매가에 따라 쿠폰할인금액이 각각 분할되어 적용됩니다.</li>
-
-                    </ul>
-                </dd>
-            </dl>
             <input type="hidden" name="availitemcouponlist" value="">
             <input type="hidden" name="checkitemcouponlist" value="">
         </div>
@@ -135,7 +117,8 @@ export default {
     overflow: hidden;
 }
 .tMar60 {
-    margin-top: 60px;
+    width: 98%;
+    margin: 60px auto;
 }
 .ftLt {
     float: left;
@@ -269,5 +252,45 @@ div.orderWrap div.payForm {
 }
 .tMar10 {
     margin-top: 10px;
+}
+.payForm {
+    background:#f5f5f5; 
+    border-top:2px solid #d50c0c; 
+    padding:0 10px;
+}
+.payForm th, .payForm td {
+    border-bottom:1px solid #eaeaea; 
+    padding-top:12px; 
+    padding-bottom:12px; 
+    color:#555;
+}
+.payForm th {
+    font-size:13px; 
+    text-align:left; 
+    font-weight:normal; 
+    padding-left:10px;
+}
+.payForm td {
+    font-size:13px; 
+    text-align:right; 
+    font-weight:bold; 
+    padding-right:10px;
+}
+.payForm tfoot th, .payForm tfoot td {
+    padding-top:30px; 
+    padding-bottom:30px;
+    border-bottom:none;
+}
+.payForm tr.midTotal th, .payForm tr.midTotal td {
+    border-bottom:none; 
+    padding-top:15px; 
+    padding-bottom:0; 
+    color:#555;
+}
+.payForm tr.midMilieage th, .payForm tr.midMilieage td {
+    border-bottom:1px solid #eaeaea; 
+    padding-top:12px; 
+    padding-bottom:40px; 
+    color:#555;
 }
 </style>

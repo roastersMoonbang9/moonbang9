@@ -97,7 +97,7 @@
 
 <style>
 .tMar80 {
-    margin-top: 80px;
+    margin: 80px 2% 0 2%;
 }
 .overHidden {
     overflow: hidden;
