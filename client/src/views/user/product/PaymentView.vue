@@ -1,6 +1,8 @@
 <template>
     <div>
         <h1>주문결제</h1>
+        {{ paymentList }}
+        {{ userInfo }}
     </div>
     <section class="py-5">
           <h2 class="h5 text-uppercase mb-4"><span class="bg-light" style="float: left;padding: 0 10px;">주문리스트 확인</span></h2>
@@ -51,7 +53,7 @@
         <!--주문금액 컴포넌트-->
         <TotalOrderPrice v-bind:list="paymentList"/>
         <!--주문고객정보,배송지정보 컴포넌트-->
-        <OrderCustomerInfo v-bind:list="paymentList"/>
+        <OrderCustomerInfo v-bind:list="userInfo"/>
         <!--주문 할인정보 및 결제내역확인 컴포넌트-->
         <DiscountAndFinalPrice v-bind:list="paymentList"/>
         
@@ -78,25 +80,39 @@ import axios from 'axios';
 export default {
   data() {
       return {
-          paymentList: []
+          paymentList: [],
+          userInfo: []
+
       };
   },
   created() {
     //받아온 수량으로 설정
-      this.getCartList();
+    this.paymentList = JSON.parse(this.$route.query.payList);
+    this.getUserInfo();
+    if (this.paymentList == []) {
+      this.$router.go(-1);
+    }
   },
   computed: {
       
   },
   methods: {
       //주문 목록(수정 필요)
-      async getCartList() {
+      async getPaymentList() {
           let result = await axios.get('/apiproduct/cart/1')
               .catch(err => console.log(err));
           console.log(result);
           let list = result.data;
           this.paymentList = list;
       },
+      //회원정보
+      async getUserInfo() {
+            let result = await axios.get('/apiuser/userInfo/1')
+                .catch(err => console.log(err));
+            console.log(result);
+            let list = result.data;
+            this.userInfo = list;
+        }
     },
   components: { TotalOrderPrice, OrderCustomerInfo,DiscountAndFinalPrice }
 }

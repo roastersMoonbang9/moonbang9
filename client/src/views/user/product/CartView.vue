@@ -74,8 +74,8 @@
         <TotalOrderPrice v-bind:list="cartList"/>
         <div>
           <button>계속 쇼핑하기</button>
-          <button>선택상품 주문하기</button>
-          <button>전체상품 주문하기</button>
+          <button @click="goToPayment(selected)">선택상품 주문하기</button>
+          <button @click="goToPayment(cartList)">전체상품 주문하기</button>
         </div>
   </template>
   
@@ -95,19 +95,28 @@ import axios from 'axios';
     },
     computed: {
         selectAll: {
-            get() {
-                return this.cartList ? (this.selected ? (this.selected.length === this.cartList.length) : false) : false;
+          get() {
+                return this.selected.length === this.cartList.length;
             },
             set(value) {
-                const selected = [];
-                if (value && this.cartList != []) {
-                    this.cartList.forEach((list) => {
-                        selected.push(list);
-                    });
-                }
-                this.selected = selected;
-            },
+                this.selected = value ? this.cartList : [];
+            }
         },
+
+        // selectAll: {
+        //     get() {
+        //         return this.cartList ? (this.selected ? (this.selected.length === this.cartList.length) : false) : false;
+        //     },
+        //     set(value) {
+        //         const selected = [];
+        //         if (value && this.cartList != []) {
+        //             this.cartList.forEach((list) => {
+        //                 selected.push(list);
+        //             });
+        //         }
+        //         this.selected = selected;
+        //     },
+        // },
     },
     methods: {
         //장바구니 목록
@@ -191,6 +200,10 @@ import axios from 'axios';
         addQty(idx) {
                 this.cartList[idx].cart_qty++;
                 // this.cartList[idx].total_price = this.cartList[idx].total_price + this.cartList[idx].sale_price;
+        },
+        //결제페이지 이동
+        goToPayment(payList) {
+            this.$router.push({ name: 'payment', query: { payList: JSON.stringify(payList ) } });
         }
     },
     components: { TotalOrderPrice }

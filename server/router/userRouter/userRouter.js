@@ -14,7 +14,7 @@ userRouter.get("/userList", async (request, response) => {
 // 회원 개별 조회
 userRouter.get("/userInfo/:mem_no", async (request, response) => {
   let data = request.params.mem_no;
-  let result = await db.connection('user', 'userInfo', data);
+  let result = (await db.connection('user', 'userInfo', data))[0];
   response.send(result);
 })
 
