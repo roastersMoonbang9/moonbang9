@@ -1,12 +1,12 @@
 <template>
-  <h1>배송관리</h1>
     <div class="container">
+      <h1>배송관리</h1>
       <div class="search" style="float: left;">
       <p>주문번호<input type="text"></p>
       <p>주문 기간<input type="date">-<input type="date"></p>
       <button style="float: right;">검색</button><button style="float: right;">초기화</button>
     </div>
-    
+    <div>
       <button style="float: right">수정</button>
       <button style="float: right">배송 완료</button>
       <table class="table">
@@ -35,6 +35,7 @@
       </table>
       <button style="float: right;">주문서 출력</button>
     </div>
+  </div>
   </template>
   
   <script>
