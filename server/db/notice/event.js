@@ -1,9 +1,9 @@
 //event.js
 // 예시
-const boardList = 
+const eventList = 
 `select count(*) from dual`;
 
 
 module.exports = {
-    boardList
+   eventList
 }
