@@ -1,8 +1,6 @@
 <template>
     <div>
         <h1>주문결제</h1>
-        {{ paymentList }}
-        {{ userInfo }}
     </div>
     <section class="py-5">
           <h2 class="h5 text-uppercase mb-4"><span class="bg-light" style="float: left;padding: 0 10px;">주문리스트 확인</span></h2>
@@ -52,9 +50,90 @@
         </section>
         <!--주문금액 컴포넌트-->
         <TotalOrderPrice v-bind:list="paymentList"/>
-        <!--주문고객정보,배송지정보 컴포넌트-->
-        <OrderCustomerInfo :userInfo="userInfo" @userEvent="updateUser"/>
+        <!--주문고객 정보-->
+<div class="overHidden tMar80">
+    <h3>주문고객 정보</h3>
+</div>
+<table class="baseTable orderForm tMar10">
+    <caption>주문고객 정보 입력</caption>
+    <colgroup>
+        <col width="12%"><col width="38%"><col width="12%"><col width="">
+    </colgroup>
+    <tbody>
+    <tr>
+        <th><label for="sendName">보내시는 분</label></th>
+        <td><input type="text" class="txtInp" name="buyname" maxlength="32" v-model="userInfo.name" id="sendName" readonly></td>
+        <th>이메일</th>
+        <td>
+            <p>
+                <input type="text" class="txtInp" name="buyemail_Pre" value="hereherehere" title="이메일 아이디 입력" style="width:120px;">
+                @
+                <input name="buyemail_Tx" type="text" title="이메일 직접 입력" class="txtInp" style="width:118px;display:none;" value="">
+                <select name="buyemail_Bx" id="select3" title="이메일 서비스 선택" class="select offInput emailSelect" style="width:102px;">
+                    <option value="naver.com">naver.com</option>
+                    <option value="daum.net">daum.net</option>
+                    <option value="hanmail.net">hanmail.net</option>
+                    <option value="gmail.com">gmail.com</option>
+                    <option value="nate.com">nate.com</option>
+                    <option value="empal.com">empal.com</option>
+                    <option value="etc">직접 입력</option>
+                </select>
+            </p>
+            <p class="tPad05">주문정보를 이메일로 보내드립니다.</p>
+        </td>
+    </tr>
+    <tr>
+        <th><label for="hp01">휴대전화</label></th>
+        <td>
+            <p>                  
+              <input type="text" class="txtInp" name="buyhp1" v-model="userInfo.phone" oninput="javascript: this.value = this.value.replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);" title="주문고객 휴대전화번호 국번 입력" maxlength="12" id="hp01" readonly>
+            </p>
+            </td>
+    </tr>
+    </tbody>
+</table>
+<!--배송지 정보-->
+<div class="overHidden tMar80">
+        <h3>배송지 정보</h3>
+        
+    </div>
+    <table class="baseTable orderForm tMar10">
+        <caption>주문고객 정보 입력</caption>
+        <colgroup>
+            <col width="12%"><col width="38%"><col width="12%"><col width="">
+        </colgroup>
+        <tbody>
+        <tr>
+            <th><label for="sendName">받으시는 분</label></th>
+            <td><input type="text" class="txtInp" name="buyname" maxlength="32" v-model="deliInfo.name" id="sendName"></td>
+        </tr>
+        <tr>
+            <th>주소</th>
+            <td colspan="3">
+                <!--주소 컴포넌트-->
+                <p>
+                  <input type="text" name="buyZip" v-model='deliInfo.post_cd' readonly title="우편번호" class="txtInp focusOn" style="width:100px; margin-right:1rem;">
+                  <AddrsPost v-on:userEvent="updateUser"/>
+    </p>
+    <p class="tPad05">
+        <input name="buyAddr1" type="text" class="txtInp" style="width:420px;" v-model='deliInfo.addr' title="동까지의 주소 입력" readonly>
+    </p>
+                <p><input name="buyAddr2" type="text" class="txtInp" style="width:440px;" v-model="deliInfo.addrdt" title="상세주소 입력" @change="detailAddr"></p>
+            </td>
+        </tr>
+        {{ addrs }}
+        <tr>
+            <th><label for="hp01">휴대전화</label></th>
+            <td>
+                <p>
+                  <input type="text" class="txtInp" name="buyhp1" v-model="deliInfo.phone" oninput="javascript: this.value = this.value.replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);" title="주문고객 휴대전화번호 국번 입력" maxlength="12" id="hp01">
+                </p>
+                </td>
+        </tr>
+        </tbody>
+    </table>
         {{ userInfo }}
+        {{ deliInfo }}
         <!--주문 할인정보 및 결제내역확인 컴포넌트-->
         <DiscountAndFinalPrice v-bind:list="paymentList"/>
         
@@ -73,29 +152,32 @@
   </template>
 
 <script>
-import OrderCustomerInfo from '@/components/OrderCustomerInfo.vue';
 import TotalOrderPrice from '@/components/totalOrderPrice.vue';
 import DiscountAndFinalPrice from '@/components/DiscountAndFinalPrice.vue';
+import AddrsPost from '@/components/AddrsPost.vue';
 import axios from 'axios';
 
 export default {
   data() {
       return {
           paymentList: [],
-          userInfo: {}
-
+          userInfo: {},
+          deliInfo:{},
+          emailValid:false
       };
+  },
+  computed:{
+    // output(email) {
+    //   email
+    // }
   },
   created() {
     //받아온 수량으로 설정
-    this.paymentList = JSON.parse(this.$route.query.payList);
+    this.paymentList = JSON.parse(sessionStorage.getItem("payList"));
    this.getUserInfo();
     if (this.paymentList == []) {
       this.$router.go(-1);
     }
-  },
-  computed: {
-      
   },
   methods: {
       //주문 목록(수정 필요)
@@ -112,16 +194,31 @@ export default {
                 .catch(err => console.log(err));
             let list = result.data;
             this.userInfo = list;
+            this.deliInfo = { ...this.userInfo }
       },
       //배송지 업데이트
       updateUser(value){
         console.log(value)
-        this.userInfo.addr = value.addr;
-        this.userInfo.addrdt = value.addrdt;
-        this.userInfo.post_cd = value.post_cd;
+        this.deliInfo.addr = value.addrr;
+        this.deliInfo.post_cd = value.zip;
+      },
+      checkEmail() {
+      // 이메일 형식 검사
+      const validateEmail = /^[A-Za-z0-9_\\.\\-]+@[A-Za-z0-9\\-]+\.[A-Za-z0-9\\-]+/
+
+      if (!validateEmail.test(this.userInfo.email) || !this.userInfo.email) {
+        this.emailValid = true
+        return
+      } 
+      this.emailValid = false
       }
     },
-  components: { TotalOrderPrice, OrderCustomerInfo,DiscountAndFinalPrice }
+    watch: {
+    'email': function() {
+      this.checkEmail()
+    }
+  },
+  components: { TotalOrderPrice,DiscountAndFinalPrice, AddrsPost }
 }
 </script>
   
@@ -212,4 +309,94 @@ em {
     border: 1px solid #d50c0c;
 }
 
+.tMar80 {
+    margin: 80px 2% 0 2%;
+}
+.overHidden {
+    overflow: hidden;
+}
+.cartBox h3 {
+    float: left;
+    color: #000;
+    font-size: 12px;
+}
+div.orderWrap .orderForm {
+    border-top: 2px solid #555;
+}
+.baseTable {
+    border-bottom: 1px solid #eaeaea;
+}
+.baseTable {
+    border-bottom: none;
+    text-align: center;
+}
+caption {
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+    text-indent: -9999px;
+}
+.baseTable {
+    border-bottom:none; 
+    text-align:center;    
+    width: 96%;
+    margin: 0 2%;
+}
+.baseTable th {
+    font-weight:bold;
+    background:#fff; 
+    font-size:13px;
+}
+.baseTable td {
+    padding:15px 0px; 
+    border-top:1px solid #eaeaea; 
+    font-size:13px; 
+    color:#888; 
+    line-height:16px;
+}
+.baseTable {
+    border-bottom:1px solid #eaeaea;
+}
+.orderForm {
+    border-top:2px solid #555;
+}
+.orderForm th {
+    background:#f5f5f5; 
+    color:#666; 
+    padding:12px 0px;
+}
+.orderForm td {
+    padding:10px 0px;
+}
+.orderForm tbody th {
+    border-top:1px solid #eaeaea; 
+    font-size:12px; 
+    padding-left:20px; 
+    padding-right:20px; 
+    text-align:left;
+}
+.orderForm tbody td {
+    font-size:12px; 
+    border-top:1px solid #eaeaea; 
+    padding-left:20px; 
+    padding-right:20px; 
+    text-align:left;
+}
+.orderForm .txtInp {
+    height:20px; 
+    padding:0 5px; 
+    font-size:12px; 
+    font-weight:normal;
+}
+.orderForm .txtInp {
+    height:15px\9; 
+    padding:5px 5px 0 5px\9;
+}
+.orderForm select {
+    height:22px; 
+    font-size:12px; 
+    font-weight:normal;
+}
 </style>
