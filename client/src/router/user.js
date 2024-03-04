@@ -1,4 +1,4 @@
-import MainView from '../views/user/MainView.vue'
+import MainView from '../views/user/HomeView.vue'
 import ProductList from '../views/user/product/ProductListView.vue';
 import ProductInfo from '../views/user/product/ProductInfoView.vue';
 import CartView from '../views/user/product/CartView.vue'

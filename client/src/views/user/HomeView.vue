@@ -20,7 +20,6 @@
 import Header from '@/layouts/user/HeaderComponent.vue'
 import Footer from '@/layouts/user/FooterComponent.vue'
 
-
 export default {
   name: 'HomeView',
   components: {
