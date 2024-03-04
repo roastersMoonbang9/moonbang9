@@ -55,10 +55,29 @@
               <ul class="navbar-nav ms-auto">               
                 <li class="nav-item"><a class="nav-link" href="cart.html"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small class="text-gray fw-normal">(2)</small></a></li>
                 <li class="nav-item"><a class="nav-link" href="#!"> <i class="far fa-heart me-1"></i><small class="text-gray fw-normal"> (0)</small></a></li>
-                <li class="nav-item"><a class="nav-link" href="#!"> <i class="fas fa-user me-1 text-gray fw-normal"></i>Login</a></li>
-              </ul>
+                <li v-if="isLogin" class="nav-item"><a class="nav-link" href="/"> <i class="fas fa-user me-1 text-gray fw-normal"></i>마이페이지</a></li>
+                <li v-else class="nav-item"><a class="nav-link" href="/userJoin"> <i class="fas fa-user me-1 text-gray fw-normal"></i>회원가입</a></li>
+                <li v-if="isLogin" class="nav-item"><a class="nav-link" href="/logout"><i class="fas fa-user me-1 text-gray fw-normal"></i>로그아웃</a></li>
+                <li v-else class="nav-item"><a class="nav-link" href="/login"><i class="fas fa-user me-1 text-gray fw-normal"></i>로그인</a></li>                
+              </ul>      
             </div>
           </nav>
         </div>
     </header>
 </template>
+
+<script>
+import { computed } from 'vue';
+import { useStore } from 'vuex'; // Vuex store 사용
+
+export default {
+  setup() {
+    const store = useStore();
+    const isLogin = computed(() => store.state.isLogin);
+
+    return {
+      isLogin
+    };
+  }
+}
+</script>

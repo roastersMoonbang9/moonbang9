@@ -1,8 +1,8 @@
+<!-- loginView.vue -->
+
 <template>
   <!-- HTML 코드를 포함 -->
   <div class="login">
-    <h1>로그인 페이지입니다. 보이나요.....</h1>
-
     <head>
       <meta charset="utf-8" />
       <title>DASHMIN - Bootstrap Admin Template</title>
@@ -68,17 +68,17 @@
                             <h3>로그인</h3>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                            <input type="text" class="form-control" id="floatingInput" v-model="id">
                             <label for="floatingInput">아이디</label>
                         </div>
                         <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                            <input type="password" class="form-control" id="floatingPassword" v-model="pwd">
                             <label for="floatingPassword">비밀번호</label>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mb-4">                            
                             <a href="">아이디/비밀번호 찾기</a>
                         </div>
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">로그인</button>
+                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4" @click="login()" >로그인</button>
                         <p class="text-center mb-0">아직 문방구 회원이 아니신가요? <br> <a href="/userJoin">회원가입하기</a></p>
                     </div>
                 </div>
@@ -92,18 +92,54 @@
 
 <script>
 //자바스크립트 코드를 포함
-</script>
-<!-- 필요한건지 아닌지 모르겠는데 넣으면 에러나서 일단 주석처리하고 넣어둠. -->
-<!-- JavaScript Libraries -->
-    <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/chart/chart.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script> -->
+import axios from 'axios';
 
-    <!-- Template Javascript -->
-    <!-- <script src="js/main.js"></script> -->
+ export default {
+    data() {
+        return {
+            id:"",
+            pwd:"",
+            name:""
+        };
+    },
+    created() {
+        
+    },
+    methods:{
+      loginData(){
+        let methods = 'post';
+        let url ='/api/user/userLogin';
+        let data= {"param":{
+          id:this.id,
+          pwd:this.pwd
+        }};
+
+        return {
+          method : methods,
+          url,
+          data
+        }
+      },
+      async login(){
+        let data =this.loginData();
+        let result = await axios(data).then(result => {
+          console.log("이건 뭐지", result);
+          if (result.data[0].loginCheck > 0){
+            this.$store.commit('user', {id:this.id, mem_no:result.data[0].mem_no, name:result.data[0].name, isLogin:true})
+            this.$router.push('/')
+            alert( this.$store.state.name + "님 로그인 되었습니다.")
+            console.log(this.$store.state.isLogin);
+            console.log(this.$store.state.id);
+            console.log(this.$store.state.mem_no);
+            console.log(this.$store.state.name);
+            
+          }else{
+            alert('아이디/비밀번호를 확인해주세요.')
+            this.$router.go(0)
+          }
+        })
+        .catch(err => console.log(err))
+      }
+    }
+ }
+</script>
