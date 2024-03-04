@@ -66,9 +66,9 @@
         <th>이메일</th>
         <td>
             <p>
-                <input type="text" class="txtInp" name="buyemail_Pre" value="hereherehere" title="이메일 아이디 입력" style="width:120px;">
+                <input type="text" class="txtInp" name="buyemail_Pre" value="hereherehere" title="이메일 아이디 입력" style="width:120px;" v-model="email1">
                 @
-                <input name="buyemail_Tx" type="text" title="이메일 직접 입력" class="txtInp" style="width:118px;display:none;" value="">
+                <input name="buyemail_Tx" type="text" title="이메일 직접 입력" class="txtInp" style="width:118px;display:none;" v-model="email2">
                 <select name="buyemail_Bx" id="select3" title="이메일 서비스 선택" class="select offInput emailSelect" style="width:102px;">
                     <option value="naver.com">naver.com</option>
                     <option value="daum.net">daum.net</option>
@@ -162,22 +162,23 @@ export default {
       return {
           paymentList: [],
           userInfo: {},
-          deliInfo:{},
-          emailValid:false
+          deliInfo:{}
       };
   },
   computed:{
-    // output(email) {
-    //   email
-    // }
+    
   },
   created() {
     //받아온 수량으로 설정
     this.paymentList = JSON.parse(sessionStorage.getItem("payList"));
-   this.getUserInfo();
+    this.getUserInfo();
     if (this.paymentList == []) {
       this.$router.go(-1);
-    }
+    };
+    // this.emails = this.userInfo.email.split('@');
+  },
+  mounted(){
+
   },
   methods: {
       //주문 목록(수정 필요)
@@ -201,22 +202,7 @@ export default {
         console.log(value)
         this.deliInfo.addr = value.addrr;
         this.deliInfo.post_cd = value.zip;
-      },
-      checkEmail() {
-      // 이메일 형식 검사
-      const validateEmail = /^[A-Za-z0-9_\\.\\-]+@[A-Za-z0-9\\-]+\.[A-Za-z0-9\\-]+/
-
-      if (!validateEmail.test(this.userInfo.email) || !this.userInfo.email) {
-        this.emailValid = true
-        return
-      } 
-      this.emailValid = false
       }
-    },
-    watch: {
-    'email': function() {
-      this.checkEmail()
-    }
   },
   components: { TotalOrderPrice,DiscountAndFinalPrice, AddrsPost }
 }
