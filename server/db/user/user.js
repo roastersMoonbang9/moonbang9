@@ -32,9 +32,21 @@ const userInfo =
         email,
         addr,
         addrdt,
-        point
+        point,
+        post_cd
 FROM    member
 WHERE mem_no = ?`;
+
+
+// 회원 로그인
+const userLogin = 
+`SELECT 
+        COUNT(*) AS loginCheck ,
+        mem_no,
+        name
+FROM    member 
+WHERE   id = ? 
+AND     pwd = ?`;
 
 // 회원 가입
 const userJoin = 
@@ -58,5 +70,6 @@ const userUpdate =
     userList,
     userInfo,
     userJoin,
-    userUpdate
+    userUpdate,
+    userLogin
 }
