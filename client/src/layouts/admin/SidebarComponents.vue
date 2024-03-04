@@ -110,7 +110,7 @@
             </li>
             <li>
                 <a href="#">
-                <i class="bi bi-circle"></i><span>이벤트</span>
+                <i class="bi bi-circle"></i> <router-link to="/admin/event"><span>이벤트</span></router-link>
                 </a>
             </li>
             </ul>

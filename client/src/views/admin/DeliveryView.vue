@@ -1,18 +1,18 @@
 <template>
     <div class="container">
-      <h1>배송관리</h1>
-      <div class="search" style="float: left;">
-      <p>주문번호<input type="text"></p>
+      <h1 style="padding: 15px; font-size: 27px;">배송관리</h1>
+      <p>주문번호<input type="text" id="inputDelNo"></p>
       <p>주문 기간<input type="date">-<input type="date"></p>
-      <button style="float: right;">검색</button><button style="float: right;">초기화</button>
+      <button type="button" class="btn btn-secondary m-2" style="float: right;">검색</button>
+      <button type="button" class="btn btn-secondary m-2" style="float: right;">초기화</button>
     </div>
-    <div>
-      <button style="float: right">수정</button>
-      <button style="float: right">배송 완료</button>
-      <table class="table">
+    <div class="container">
+      <button type="button" class="btn btn-outline-secondary m-2">수정</button>
+      <button type="button" class="btn btn-outline-secondary m-2">배송완료</button>
+      <table class="table table-hover" style="font-size: 15px;">
         <thead>
-          <tr>
-            <input type="checkbox">
+          <tr class="table-primary">
+            <th><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></th>
             <th>주문번호</th>
             <th>주문일자</th>
             <th>배송정보</th>
@@ -23,7 +23,7 @@
         </thead>
         <tbody>
           <tr v-for="(delivery, idx) in deliveryList" :key="idx">
-            <input type="checkbox">
+            <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
             <td>{{ delivery.deli_no }}</td>
             <td>{{ delivery.ord_dt }}</td>
             <td>{{ delivery.fulladdr }}</td>
@@ -33,9 +33,8 @@
           </tr>
         </tbody>
       </table>
-      <button style="float: right;">주문서 출력</button>
+      <button type="button" class="btn btn-outline-secondary m-2" style="float: right;">주문서 출력</button>
     </div>
-  </div>
   </template>
   
   <script>
@@ -43,7 +42,7 @@
     export default {
     data () {
       return {
-        deliveryList : [],
+        deliveryList : []
       }
     },
     created() {

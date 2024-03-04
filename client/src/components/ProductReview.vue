@@ -16,26 +16,11 @@
               <div class="p-4 p-lg-5 bg-white">
                 <div class="row">
                   <div class="col-lg-8">
-                    <div class="d-flex mb-3">
-                      <div class="flex-shrink-0"><img class="rounded-circle" src="img/customer-1.png" alt="" width="50"/></div>
-                      <div class="ms-3 flex-shrink-1">
-                        <h6 class="mb-0 text-uppercase">Jason Doe</h6>
-                        <p class="small text-muted mb-0 text-uppercase">20 May 2020</p>
-                        <ul class="list-inline mb-1 text-xs">
-                          <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                          <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                          <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                          <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                          <li class="list-inline-item m-0"><i class="fas fa-star-half-alt text-warning"></i></li>
-                        </ul>
-                        <p class="text-sm mb-0 text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                      </div>
-                    </div>
-                    <div class="d-flex">
+                    <div class="d-flex" v-for="(review,idx) in reviewList" :key="idx">
                       <div class="flex-shrink-0"><img class="rounded-circle" src="img/customer-2.png" alt="" width="50"/></div>
                       <div class="ms-3 flex-shrink-1">
-                        <h6 class="mb-0 text-uppercase">Jane Doe</h6>
-                        <p class="small text-muted mb-0 text-uppercase">20 May 2020</p>
+                        <h6 class="mb-0 text-uppercase">{{review.mem_no}}</h6>
+                        <p class="small text-muted mb-0 text-uppercase">{{review.prdt_cd}}</p>
                         <ul class="list-inline mb-1 text-xs">
                           <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
                           <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
@@ -43,7 +28,11 @@
                           <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
                           <li class="list-inline-item m-0"><i class="fas fa-star-half-alt text-warning"></i></li>
                         </ul>
-                        <p class="text-sm mb-0 text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        <p class="text-sm mb-0 text-muted">{{review.content}}</p>
+                        <form action="http://localhost:3000/file" method="post" enctype="multipart/form-data">
+                                <input type="file" name="photos" />
+                                <input type="submit" value="업로드" /> 
+                            </form>  
                       </div>
                     </div>
                   </div>
@@ -54,7 +43,7 @@
           <div class="row">
             <!--해당 게시글이 댓글이 있다면-->
             <!-- 이거 수정해서 상품 리뷰목록 출력하기 -->
-            <CommentList v-if="boardInfo.comment > 0" 
+            <reviewList v-if="productInfo.comment > 0" 
                 v-bind:bno="boardInfo.no" /> <!--등록 후 컴포넌트로 등록해주면 됨-->
             <!--해당 게시글에 댓글이 존재하지 않는다면. v-if사이에는 아무런 태그 없어야함. 중간에 연결이 되지 않으면 에러남-->
             <div v-else class="card text-center">
@@ -85,7 +74,7 @@ import axios from 'axios'
  </script>-->
 <script>
  import axios from 'axios'
- import CommentList from '../../components/CommentList.vue';
+ //import CommentList from '../../components/CommentList.vue';
  
  export default {
      data() {

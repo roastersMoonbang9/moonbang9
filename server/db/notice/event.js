@@ -1,9 +1,35 @@
 //event.js
 // 예시
-const eventList = 
-`select count(*) from dual`;
 
+
+// 페이징 용 카운트
+const eventCount = 
+`SELECT count(event_cd) as count
+FROM event`;
+
+// 이벤트 목록 출력
+const eventList = 
+`SELECT * 
+FROM event
+order by event_cd desc
+limit ? 
+offset ?`;
+
+// 이벤트 배너 활성화 
+const updateEvent = 
+`UPDATE event  
+SET status= 1
+WHERE event_cd = ?`
+
+// 이벤트 삭제
+
+  const DelEvent = 
+`DELETE FROM event
+WHERE event_cd= ?`
 
 module.exports = {
-   eventList
+   eventCount,
+   eventList,
+   updateEvent,
+   DelEvent
 }
