@@ -37,15 +37,15 @@ const storage = multer.diskStorage({
 });
 
 //사진 폴더에 저장 - 전달하고  미리보기 
-reviewRouter.post("/img",upload.array("img",4),async (req, res) => {
-		console.log("파일이름:" ,req.files);
-    let urlArr = new Array();
-    for( let i = 0; i < req.files.length; i++){
-      urlArr.push(`img/${req.files[i].filename}`);
-      console.log(urlArr[i]);
-    }
-    let jsonUrl = JSON.stringify(urlArr);
-    res.json(jsonUrl);
-  });
+// reviewRouter.post("/img",upload.array("img",4),async (req, res) => {
+// 		console.log("파일이름:" ,req.files);
+//     let urlArr = new Array();
+//     for( let i = 0; i < req.files.length; i++){
+//       urlArr.push(`img/${req.files[i].filename}`);
+//       console.log(urlArr[i]);
+//     }
+//     let jsonUrl = JSON.stringify(urlArr);
+//     res.json(jsonUrl);
+//   });
 
 const upload = multer({storage : storage});
