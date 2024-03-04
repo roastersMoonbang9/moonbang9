@@ -53,7 +53,8 @@
         <!--주문금액 컴포넌트-->
         <TotalOrderPrice v-bind:list="paymentList"/>
         <!--주문고객정보,배송지정보 컴포넌트-->
-        <OrderCustomerInfo v-bind:list="userInfo"/>
+        <OrderCustomerInfo :userInfo="userInfo" @userEvent="updateUser"/>
+        {{ userInfo }}
         <!--주문 할인정보 및 결제내역확인 컴포넌트-->
         <DiscountAndFinalPrice v-bind:list="paymentList"/>
         
@@ -81,14 +82,14 @@ export default {
   data() {
       return {
           paymentList: [],
-          userInfo: []
+          userInfo: {}
 
       };
   },
   created() {
     //받아온 수량으로 설정
     this.paymentList = JSON.parse(this.$route.query.payList);
-    this.getUserInfo();
+   this.getUserInfo();
     if (this.paymentList == []) {
       this.$router.go(-1);
     }
@@ -109,10 +110,16 @@ export default {
       async getUserInfo() {
             let result = await axios.get('/apiuser/userInfo/1')
                 .catch(err => console.log(err));
-            console.log(result);
             let list = result.data;
             this.userInfo = list;
-        }
+      },
+      //배송지 업데이트
+      updateUser(value){
+        console.log(value)
+        this.userInfo.addr = value.addr;
+        this.userInfo.addrdt = value.addrdt;
+        this.userInfo.post_cd = value.post_cd;
+      }
     },
   components: { TotalOrderPrice, OrderCustomerInfo,DiscountAndFinalPrice }
 }
