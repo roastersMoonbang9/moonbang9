@@ -2,6 +2,7 @@
     <div class="container">
       <h1 style="padding: 15px; font-size: 27px;">공지사항</h1>
       <table class="table table-hover" style="font-size: 15px;">
+        <!-- 복붙해서 thead/tbody 항목 수정-->
         <thead>
           <tr class="table-primary">
             <th>No.</th>
@@ -11,7 +12,6 @@
           </tr>
         </thead>
         <tbody>
-          <!--for 과 if를 같이 사용은 불가능하다고 생각해라-->
           <tr v-for="(table, idx) in tableList" :key="idx">
             <td>{{ table.notice_no }}</td>
             <td>{{ table.title }}</td>
@@ -64,6 +64,7 @@
       this.getTableList();    
     },
     methods : {
+        // 테이블 데이터 가져오기 /api/~~ 만 수정해서 사용.
       async getTableList(curPage) {
         curPage = this.judgePage(curPage);
         if (!curPage || curPage <= 0) 
@@ -102,9 +103,3 @@
   }
   </script>
   
-  <style scoped>
-    .selected {
-      background-color: #ddd;
-      font-weight: bold;
-    }
-  </style>

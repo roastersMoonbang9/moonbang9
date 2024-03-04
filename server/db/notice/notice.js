@@ -9,7 +9,7 @@ const noticeList =
 `select * 
 from notice 
 order by notice_no desc
-limit 5
+limit ?
 offset ?`;
 
 const noticeInsert = 

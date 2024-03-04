@@ -2,7 +2,7 @@
 <!--주문고객 정보-->
 <div class="overHidden tMar80">
     <h3>주문고객 정보</h3>
-    
+    {{ list}}
 </div>
 <table class="baseTable orderForm tMar10">
     <caption>주문고객 정보 입력</caption>
@@ -12,7 +12,7 @@
     <tbody>
     <tr>
         <th><label for="sendName">보내시는 분</label></th>
-        <td><input type="text" class="txtInp" name="buyname" maxlength="32" value="파란강아지" id="sendName"></td>
+        <td><input type="text" class="txtInp" name="buyname" maxlength="32" :value='list.name' id="sendName" readonly></td>
         <th>이메일</th>
         <td>
             <p>
@@ -48,7 +48,7 @@
     <tr>
         <th><label for="hp01">휴대전화</label></th>
         <td>
-            <p><input type="text" class="txtInp" style="width:30px;" name="buyhp1" maxlength="4" value="010" default="010" title="주문고객 휴대전화번호 국번 입력" id="hp01"> -
+            <p><input type="text" class="txtInp" style="width:30px;" name="buyhp1" maxlength="4" :value='list.phone' default="010" title="주문고객 휴대전화번호 국번 입력" id="hp01"> -
             <input type="text" class="txtInp" style="width:40px;" name="buyhp2" maxlength="4" value="1111" default="1112" title="주문고객 휴대전화번호 가운데 자리 번호 입력"> -
             <input type="text" class="txtInp" style="width:40px;" name="buyhp3" maxlength="4" value="2222" default="3333" title="주문고객 휴대전화번호 뒷자리 번호 입력"></p>
             </td>
@@ -75,9 +75,11 @@
             <th>주소</th>
             <td colspan="3">
                 <p>
-                <input type="text" name="buyZip" value="       " readonly title="우편번호" class="txtInp focusOn" style="width:60px;">
-                <a href="#" class="btn btnS5 btnGry2 fn lMar5">우편번호 찾기</a>
-                
+                <input type="text" name="buyZip" :value='list.phone' readonly title="우편번호" class="txtInp focusOn" style="width:60px;">
+                <button @click="addrSearch()" class="btn btnS5 btnGry2 fn lMar5">우편번호 찾기</button>
+                {{ extraAddress }}
+                {{ addr }}
+                {{ zip }}
                 </p><p class="tPad05"><input name="buyAddr1" type="text" class="txtInp" style="width:420px;background-color:#EEEEEE;" value="" title="동까지의 주소 입력" readonly>
                 <input name="buyAddr2" type="text" class="txtInp" style="width:440px;" value="" title="상세주소 입력"></p>
             </td>
@@ -95,9 +97,52 @@
     </table>
 </template>
 
+<script>
+import axios from 'axios';
+
+export default {
+    props : ['list']
+    ,data(){
+        return{
+            extraAddress:"",
+            addr:"",
+            zip:""
+
+        };
+    },
+    mounted(){
+    const script = document.createElement('script');    //script 변수 선언해서 <scrpit /> 얘를 만들어가지고 담는다
+    script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';   //script의 src속성에 카카오에서 제공한 주소값을 넣어준다
+    document.head.appendChild(script);    //head에 src 속성까지 만들어진 script소스를 append한다
+  },
+    methods: {
+        addrSearch(){
+            new window.daum.Postcode({
+        oncomplete: (data) => {
+          if (this.extraAddress !== '') {
+            this.extraAddress = '';
+        }
+        if (data.userSelectedType === 'R') {
+            // 사용자가 도로명 주소를 선택했을 경우
+            this.addr = data.roadAddress;
+          } else {
+            // 사용자가 지번 주소를 선택했을 경우(J)
+            this.addr = data.jibunAddress;
+          }
+
+          // 우편번호를 입력한다.
+          this.zip = data.zonecode;
+        },
+      }).open();
+
+    }
+    }
+}
+</script>
+
 <style>
 .tMar80 {
-    margin-top: 80px;
+    margin: 80px 2% 0 2%;
 }
 .overHidden {
     overflow: hidden;
