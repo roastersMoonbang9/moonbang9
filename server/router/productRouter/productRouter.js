@@ -22,8 +22,8 @@ const db = require("../../db.js");
 
 
 // 상품목록페이지 - 인기상품순 정렬 목록
-productRouter.get("/popular/:large_code", async (request,response)=>{
-  let data = request.params.large_code;
+productRouter.get("/popular/:category", async (request,response)=>{
+  let data = request.params.category;
   let result = await db.connection('product','popularProductList', data);
   response.send(result);
 });

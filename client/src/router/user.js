@@ -12,11 +12,6 @@ export default {
         component: MainView,
         children: [
             {
-                path: 'about',
-                name: 'about',
-                component: () => import(/* webpackChunkName: "about" */ '../views/user/AboutView.vue')
-            },
-            {
                 path: 'cart',
                 name: 'cart',
                 component: CartView
@@ -37,12 +32,12 @@ export default {
                 component: userJoinView
             },
             {
-                path: 'product/list',
+                path: 'product',
                 name: 'productList',
                 component: ProductList
             },
             {
-                path: 'product/info',
+                path: 'info',
                 name: 'productInfo',
                 component: ProductInfo
             }

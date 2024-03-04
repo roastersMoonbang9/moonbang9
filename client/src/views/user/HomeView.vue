@@ -1,4 +1,5 @@
 <template>
+  <div>
   <Header />
   <nav>
     <router-link to="/">Home</router-link> |
@@ -11,6 +12,7 @@
   </nav>
   <router-view :key="$route.fullPath"/>
   <Footer />
+  </div>
 </template>
 
 <script>
