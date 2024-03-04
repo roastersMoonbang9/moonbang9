@@ -1,4 +1,5 @@
 <template>
+  <div class="container">
     <!-- DETAILS TABS-->
     <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
             <li class="nav-item"><a class="nav-link text-uppercase active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Description</a></li>
@@ -60,6 +61,7 @@
                 댓글 없음
             </div>
         </div>
+      </div>
 </template>
 <!-- <script>
 import axios from 'axios'
