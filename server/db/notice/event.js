@@ -1,7 +1,6 @@
 //event.js
 // 예시
 
-
 // 페이징 용 카운트
 const eventCount = 
 `SELECT count(event_cd) as count
@@ -32,4 +31,5 @@ module.exports = {
    eventList,
    updateEvent,
    DelEvent
+
 }

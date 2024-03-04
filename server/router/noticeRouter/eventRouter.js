@@ -2,7 +2,6 @@ const express = require('express');
 const eventRouter = express.Router();
 const db = require("../../db.js");
 
-
  //이벤트 배너 전체조회 
 eventRouter.get("/event/:offset/:limit", async (request,response)=>{
   let data = parseInt(request.params.limit);
@@ -28,4 +27,8 @@ eventRouter.get("/event", async (request,response)=>{
 })
 
 
+  eventRouter.get("/event", async (request,response)=>{
+    let result = await db.connection('event','eventCount');
+    response.send(result);
+  })
   module.exports = eventRouter;

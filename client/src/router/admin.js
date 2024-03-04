@@ -2,6 +2,8 @@ import DeliveryView from '../views/admin/DeliveryView.vue'
 import testView from '../views/admin/testjeonView.vue'
 import EventView from '../views/admin/eventView.vue'
 import adminView from '../views/admin/AdminMainViews.vue'
+import orderListView from '../views/admin/OrderListView.vue'
+import memberlistView from '../views/admin/MemberListView.vue'
 
 export default {
     path: '/admin',
@@ -19,9 +21,21 @@ export default {
             component: testView
         },
         {
+
+            path: 'orderlist',
+            name: 'orderlist',
+            component: orderListView
+        },
+        {
+            path: 'memberlist',
+            name: 'memberlist',
+            component: memberlistView
+        },
+        {
             path: 'event',
             name: 'event',
             component: EventView
+
         }
     ]
 }

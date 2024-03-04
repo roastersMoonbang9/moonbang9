@@ -84,7 +84,7 @@
   <script>
   import TotalOrderPrice from '@/components/totalOrderPrice.vue';
 import axios from 'axios';
-  
+
   export default {
     data() {
         return {

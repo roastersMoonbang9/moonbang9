@@ -16,7 +16,8 @@
             <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
                 <a href="#">
-                <i class="bi bi-circle"></i><span>회원 목록</span>
+                <i class="bi bi-circle"></i>
+                <router-link to="/admin/memberList"><span>회원 목록</span></router-link>
                 </a>
             </li>
             <li>
@@ -67,7 +68,8 @@
             <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
                 <a href="#">
-                <i class="bi bi-circle"></i><span>주문 목록</span>
+                <i class="bi bi-circle"></i>
+                <router-link to="/admin/orderList"><span>주문 목록</span></router-link>
                 </a>
             </li>
             <li>
@@ -105,12 +107,14 @@
             <li>
                 <a href="#">
                 <i class="bi bi-circle"></i>
-                <router-link to="/admin/notice"><span>공지사항</span></router-link>
+                <router-link to="/admin/notice/"><span>공지사항</span></router-link>
                 </a>
             </li>
             <li>
                 <a href="#">
+
                 <i class="bi bi-circle"></i> <router-link to="/admin/event"><span>이벤트</span></router-link>
+
                 </a>
             </li>
             </ul>
