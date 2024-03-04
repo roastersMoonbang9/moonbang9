@@ -112,8 +112,9 @@
             </li>
             <li>
                 <a href="#">
-                <i class="bi bi-circle"></i>
-                <router-link to="/admin/testlist"><span>테스트</span></router-link>
+
+                <i class="bi bi-circle"></i> <router-link to="/admin/event"><span>이벤트</span></router-link>
+
                 </a>
             </li>
             </ul>

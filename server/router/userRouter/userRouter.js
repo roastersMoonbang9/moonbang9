@@ -18,6 +18,14 @@ userRouter.get("/userInfo/:mem_no", async (request, response) => {
   response.send(result);
 })
 
+//회원 로그인 확인
+userRouter.post("/userLogin", async (request, response) => {
+  let data = [request.body.param.id, request.body.param.pwd];
+  console.log(data)
+  let result = (await db.connection('user', 'userLogin', data));
+  response.send(result);
+})
+
 //회원 가입 : post => body
 userRouter.post("/userJoin", async (request, response) => {
   let data = request.body.param;

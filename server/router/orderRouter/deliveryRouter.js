@@ -12,6 +12,7 @@ deliveryRouter.get("/delivery", async (request,response)=>{
                    .catch(err=>{console.log(err)});
   })
   //운송장조회 
+  deliveryRouter.get("")
   // https://info.sweettracker.co.kr/api/v1/trackingInfo?t_code=04&t_invoice=1234567890&t_key=KtscB1fMYANFKsVeIAXEkQ
   //API -> 운송장 번호 / 택배사 입력 시 배송상태 출력. 적용 HOW?? 
 

@@ -1,4 +1,5 @@
 <template>
+<div>
     <div>
         <h1>장바구니</h1>
     </div>
@@ -76,6 +77,7 @@
           <button>계속 쇼핑하기</button>
           <button @click="goToPayment(selected)">선택상품 주문하기</button>
           <button @click="goToPayment(cartList)">전체상품 주문하기</button>
+        </div>
         </div>
   </template>
   

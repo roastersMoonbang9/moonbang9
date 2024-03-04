@@ -1,10 +1,9 @@
-import DeliveryView from '../views/admin/TestingDelivery.vue'
-import ProductReview from '../views/admin/TestingDelivery.vue'
+import DeliveryView from '../views/admin/DeliveryView.vue'
 import testView from '../views/admin/testjeonView.vue'
+import EventView from '../views/admin/eventView.vue'
 import adminView from '../views/admin/AdminMainViews.vue'
 import orderListView from '../views/admin/OrderListView.vue'
 import memberlistView from '../views/admin/MemberListView.vue'
-import testlistView from '../views/admin/TestViewss.vue'
 
 export default {
     path: '/admin',
@@ -17,16 +16,12 @@ export default {
             component: DeliveryView
         },
         {
-            path: 'review',
-            name: 'review',
-            component: ProductReview
-        },
-        {
             path: 'notice',
             name: 'notice',
             component: testView
         },
         {
+
             path: 'orderlist',
             name: 'orderlist',
             component: orderListView
@@ -37,9 +32,10 @@ export default {
             component: memberlistView
         },
         {
-            path: 'testlist',
-            name: 'testlist',
-            component: testlistView
+            path: 'event',
+            name: 'event',
+            component: EventView
+
         }
     ]
 }
