@@ -1,6 +1,6 @@
-import DeliveryView from '../views/admin/TestingDelivery.vue'
-import ProductReview from '../views/admin/TestingDelivery.vue'
+import DeliveryView from '../views/admin/DeliveryView.vue'
 import testView from '../views/admin/testjeonView.vue'
+import EventView from '../views/admin/eventView.vue'
 import adminView from '../views/admin/AdminMainViews.vue'
 
 export default {
@@ -14,14 +14,14 @@ export default {
             component: DeliveryView
         },
         {
-            path: 'review',
-            name: 'review',
-            component: ProductReview
-        },
-        {
             path: 'notice',
             name: 'notice',
             component: testView
+        },
+        {
+            path: 'event',
+            name: 'event',
+            component: EventView
         }
     ]
 }

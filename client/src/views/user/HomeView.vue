@@ -30,7 +30,7 @@ export default {
 }
 </script>
 <style>
-  @import '../../assets/user/style.default.css';
+@import '../../assets/user/style.default.css';
 
   #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
