@@ -32,7 +32,8 @@ const userInfo =
         email,
         addr,
         addrdt,
-        point
+        point,
+        post_cd
 FROM    member
 WHERE mem_no = ?`;
 

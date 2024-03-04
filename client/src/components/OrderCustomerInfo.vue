@@ -12,7 +12,7 @@
     <tbody>
     <tr>
         <th><label for="sendName">보내시는 분</label></th>
-        <td><input type="text" class="txtInp" name="buyname" maxlength="32" :value='list.name' id="sendName" readonly></td>
+        <td><input type="text" class="txtInp" name="buyname" maxlength="32" :value='userInfo.name' id="sendName" readonly></td>
         <th>이메일</th>
         <td>
             <p>
@@ -33,7 +33,7 @@
         </td>
     </tr>
     
-    <tr>
+    <!-- <tr>
         <th>주소</th>
         <td colspan="3">
             <p>
@@ -43,14 +43,14 @@
             </p><p class="tPad05"><input name="buyAddr1" type="text" class="txtInp" style="width:420px;background-color:#EEEEEE;" value="" title="동까지의 주소 입력" readonly>
             <input name="buyAddr2" type="text" class="txtInp" style="width:440px;" value="" title="상세주소 입력"></p>
         </td>
-    </tr>
+    </tr> -->
     
     <tr>
         <th><label for="hp01">휴대전화</label></th>
         <td>
-            <p><input type="text" class="txtInp" style="width:30px;" name="buyhp1" maxlength="4" :value='list.phone' default="010" title="주문고객 휴대전화번호 국번 입력" id="hp01"> -
-            <input type="text" class="txtInp" style="width:40px;" name="buyhp2" maxlength="4" value="1111" default="1112" title="주문고객 휴대전화번호 가운데 자리 번호 입력"> -
-            <input type="text" class="txtInp" style="width:40px;" name="buyhp3" maxlength="4" value="2222" default="3333" title="주문고객 휴대전화번호 뒷자리 번호 입력"></p>
+            <p><input type="text" class="txtInp" style="width:30px;" name="buyhp1" maxlength="4" :value='userInfo.phone' default="010" title="주문고객 휴대전화번호 국번 입력" id="hp01" readonly> -
+            <input type="text" class="txtInp" style="width:40px;" name="buyhp2" maxlength="4" value="1111" default="1112" title="주문고객 휴대전화번호 가운데 자리 번호 입력" readonly> -
+            <input type="text" class="txtInp" style="width:40px;" name="buyhp3" maxlength="4" value="2222" default="3333" title="주문고객 휴대전화번호 뒷자리 번호 입력" readonly></p>
             </td>
     </tr>
     </tbody>
@@ -68,23 +68,19 @@
         <tbody>
         <tr>
             <th><label for="sendName">받으시는 분</label></th>
-            <td><input type="text" class="txtInp" name="buyname" maxlength="32" value="파란강아지" id="sendName"></td>
+            <td><input type="text" class="txtInp" name="buyname" maxlength="32" :value="userInfo.name" id="sendName"></td>
         </tr>
-        
         <tr>
             <th>주소</th>
             <td colspan="3">
                 <p>
-                <input type="text" name="buyZip" :value='list.phone' readonly title="우편번호" class="txtInp focusOn" style="width:60px;">
+                <input type="text" name="buyZip" :value='addrs.zip != "" ? addrs.zip : userInfo.post_cd' readonly title="우편번호" class="txtInp focusOn" style="width:60px;">
                 <button @click="addrSearch()" class="btn btnS5 btnGry2 fn lMar5">우편번호 찾기</button>
-                {{ extraAddress }}
-                {{ addr }}
-                {{ zip }}
-                </p><p class="tPad05"><input name="buyAddr1" type="text" class="txtInp" style="width:420px;background-color:#EEEEEE;" value="" title="동까지의 주소 입력" readonly>
-                <input name="buyAddr2" type="text" class="txtInp" style="width:440px;" value="" title="상세주소 입력"></p>
+                </p><p class="tPad05"><input name="buyAddr1" type="text" class="txtInp" style="width:420px;" :value='addrs.addr != "" ? addrs.addr : userInfo.addr' title="동까지의 주소 입력" readonly>
+                <input name="buyAddr2" type="text" class="txtInp" style="width:440px;" :value='addrs.addrDetail != "" ? addrs.addrDetail : userInfo.addrdt' title="상세주소 입력" @change="detailAddr"></p>
             </td>
         </tr>
-        
+        {{ addrs }}
         <tr>
             <th><label for="hp01">휴대전화</label></th>
             <td>
@@ -101,41 +97,70 @@
 import axios from 'axios';
 
 export default {
-    props : ['list']
-    ,data(){
+    props: {
+        userInfo:
+        {
+            type: Object
+        }
+    },
+    data(){
         return{
-            extraAddress:"",
-            addr:"",
-            zip:""
-
+            addrs:{
+                extraAddress:"",
+                addrDetail:"",
+                addr:"",
+                zip:""
+            }
         };
     },
     mounted(){
     const script = document.createElement('script');    //script 변수 선언해서 <scrpit /> 얘를 만들어가지고 담는다
     script.src = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';   //script의 src속성에 카카오에서 제공한 주소값을 넣어준다
     document.head.appendChild(script);    //head에 src 속성까지 만들어진 script소스를 append한다
-  },
+    },
     methods: {
         addrSearch(){
             new window.daum.Postcode({
         oncomplete: (data) => {
-          if (this.extraAddress !== '') {
-            this.extraAddress = '';
+          if (this.addrs.extraAddress !== '') {
+            this.addrs.extraAddress = '';
         }
         if (data.userSelectedType === 'R') {
             // 사용자가 도로명 주소를 선택했을 경우
-            this.addr = data.roadAddress;
+            this.addrs.addr = data.roadAddress;
           } else {
             // 사용자가 지번 주소를 선택했을 경우(J)
-            this.addr = data.jibunAddress;
+            this.addrs.addr = data.jibunAddress;
           }
+        
+        if(data.userSelectedType === 'R'){
+            
+            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                this.addrs.extraAddress += data.bname;
+            }
+            
+            if(data.buildingName !== '' && data.apartment === 'Y'){
+                this.addrs.extraAddress += (this.addrs.extraAddress !== '' ? ', ' + data.buildingName : data.buildingName);
+            }
+            
+            if(this.addrs.extraAddress !== ''){
+                this.addrs.extraAddress = ' (' + this.addrs.extraAddress + ')';
+            }
+		} else {
+            this.addrs.extraAddress = "";
+		}
+        this.addrs.addr += this.addrs.extraAddress;
 
-          // 우편번호를 입력한다.
-          this.zip = data.zonecode;
-        },
-      }).open();
-
+        // 우편번호를 입력한다.
+        this.addrs.zip = data.zonecode;
+        this.$emit('userEvent',this.addrs);
+        
     }
+}).open();
+},
+detailAddr(){
+    this.$emit('userEvent',this.addrs);
+}
     }
 }
 </script>
