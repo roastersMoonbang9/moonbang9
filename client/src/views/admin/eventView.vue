@@ -124,6 +124,7 @@
                     event_name : this.bannerInfo.name,
                     path : this.bannerInfo.path,
                     status : this.bannerInfo.status,
+
                     type_cd: this.bannerInfo.type_cd,
                     event_name: this.fileList.event_name,
                     event_impt: '',
