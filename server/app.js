@@ -12,12 +12,14 @@ const noticeRouter =require('./router/noticeRouter/noticeRouter.js');
 const eventRouter =require('./router/noticeRouter/eventRouter.js');
 const productRouter =require('./router/productRouter/productRouter.js');
 const cartRouter =require('./router/productRouter/cartRouter.js');
-const productQeuryRouter =require('./router/productRouter/productQeuryRouter.js');
+const productQueryRouter =require('./router/productRouter/productQueryRouter.js');
 const reviewRouter =require('./router/productRouter/reviewRouter.js');
 const orderRouter =require('./router/orderRouter/orderRouter.js');
 const orderDetailRouter =require('./router/orderRouter/orderDetailRouter.js');
 const deliveryRouter =require('./router/orderRouter/deliveryRouter.js');
 const returnRouter =require('./router/orderRouter/returnRouter.js');
+const fileUploadRouter =require('./router/commonRouter/uploadRouter.js');
+
 
 app.use(express.json());
 app.use(express.json()).use(express.urlencoded({extended : false}));
@@ -31,12 +33,13 @@ app.use('/notice',noticeRouter);
 app.use('/notice',eventRouter);
 app.use('/product',productRouter);
 app.use('/product',cartRouter);
-app.use('/product',productQeuryRouter);
+app.use('/product',productQueryRouter);
 app.use('/product',reviewRouter);
 app.use('/order',orderRouter);
 app.use('/order',orderDetailRouter);
 app.use('/order',deliveryRouter);
 app.use('/order',returnRouter);
+app.use('/upload',fileUploadRouter);
 
 app.listen(port, () => {
     console.log(`서버가 실행됩니다. http://localhost:${port}`)

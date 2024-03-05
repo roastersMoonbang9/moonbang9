@@ -12,6 +12,8 @@ const order = require('./order/order.js');
 const delivery = require('./order/delivery.js');
 const order_detail = require('./order/order_detail.js');
 const returns = require('./order/returns.js');
+const file = require('./common/common.js');
+
 
 module.exports = {
         user,
@@ -27,5 +29,6 @@ module.exports = {
         review,
         delivery,
         order_detail,
-        returns
+        returns,
+        file
 }

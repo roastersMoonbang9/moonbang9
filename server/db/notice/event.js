@@ -26,10 +26,16 @@ WHERE event_cd = ?`
 `DELETE FROM event
 WHERE event_cd= ?`
 
+//배너 추가 
+const InsertBanner = 
+`INSERT INTO event 
+SET ?`
+
 module.exports = {
    eventCount,
    eventList,
    updateEvent,
-   DelEvent
+   DelEvent,
+   InsertBanner
 
 }
