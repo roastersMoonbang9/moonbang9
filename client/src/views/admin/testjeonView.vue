@@ -40,12 +40,17 @@
         </ul>
       </div>
     </div>
+    <paging />
   </template>
   
   <script>
   import axios from 'axios'
+  import Paging from '@/components/PagingComponent.vue';  
   
   export default {
+    components : {
+      Paging
+    },
     data () {
       return {
         tableList : [],
