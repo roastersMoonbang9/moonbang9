@@ -12,6 +12,7 @@
   </nav>
   <div class="container">
   <router-view :key="$route.fullPath"/>
+  <h1>메인페이지 작업중</h1>
   </div>
   <Footer />
   </div>
