@@ -30,7 +30,7 @@
           </tr>
         </tbody>
       </table>
-  
+
         <!-- 모달창 -->
 <div class="black-bg" v-if="modalOpen === true">
   <div class="bg-light rounded h-100 p-4">                
