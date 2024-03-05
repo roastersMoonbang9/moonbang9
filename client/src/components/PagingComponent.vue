@@ -1,41 +1,21 @@
 <template>
     <div class="container">
-      <h1 style="padding: 15px; font-size: 27px;">공지사항</h1>
-      <table class="table table-hover" style="font-size: 15px;">
-        <!-- 복붙해서 thead/tbody 항목 수정-->
-        <thead>
-          <tr class="table-primary">
-            <th>No.</th>
-            <th>제목</th>
-            <th>내용</th>
-            <th>작성일자</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(table, idx) in tableList" :key="idx">
-            <td>{{ table.notice_no }}</td>
-            <td>{{ table.title }}</td>
-            <td>{{ table.content }}</td>
-            <td>{{ table.notice_dt }}</td>
-          </tr>
-        </tbody>
-      </table>
       <div>
         <ul class="pagination justify-content-center" style="font-size: 15px;">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#" @click="getTableList(1)" style="color: black;">&lt;&lt;</a>
+            <a class="nav-link" aria-current="page" href="#" @click="getTableList(1)" style="color: black;">&lt;&lt;</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#" @click="getTableList(this.startPage - 1)" style="color: black;">&lt;</a>
+            <a class="nav-link" aria-current="page" href="#" @click="getTableList(--this.curPage)" style="color: black;">&lt;</a>
           </li>
-          <li v-for="(page, idx) in paging" :key="idx" class="nav-item">
-            <a class="nav-link active d-inline-flex focus-ring px-4 text-decoration-none border rounded-2" aria-current="page" href="#" @click="getTableList(page)" style="color: black;">{{ page }}</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#" @click="getTableList(this.startPage + this.navSize)" style="color: black;">&gt;</a>
+          <li v-for="(page, idx) in paging" :key="idx" class="nav-item" v-bind:class="{'active' : isSelect}">
+            <a v-bind:value="checkPage" class="nav-link d-inline-flex focus-ring px-4 text-decoration-none border rounded-2" aria-current="page" href="#" @click="getTableList(page)" style="color: black;">{{ page }}</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#" @click="getTableList(this.lastPage)" style="color: black;">&gt;&gt;</a>
+            <a class="nav-link" aria-current="page" href="#" @click="getTableList(++this.curPage)" style="color: black;">&gt;</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#" @click="getTableList(this.lastPage)" style="color: black;">&gt;&gt;</a>
           </li>
         </ul>
       </div>
@@ -44,7 +24,7 @@
   
   <script>
   import axios from 'axios'
-  
+
   export default {
     data () {
       return {
@@ -58,13 +38,13 @@
         curPage : 1,  // 현재 페이지
         startPage : 1,  // 페이지네이션 시작번호
         endPage : 1,  // 페이지네이션 끝번호
+        isSelect : false
       }
     },
     mounted() {
       this.getTableList();    
     },
     methods : {
-        // 테이블 데이터 가져오기 /api/~~ 만 수정해서 사용.
       async getTableList(curPage) {
         curPage = this.judgePage(curPage);
         if (!curPage || curPage <= 0) 
@@ -102,4 +82,11 @@
     }
   }
   </script>
+  
+  <style scoped>
+    .selected {
+      background-color: #ddd;
+      font-weight: bold;
+    }
+  </style>
   
