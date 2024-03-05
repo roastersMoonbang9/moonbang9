@@ -10,8 +10,10 @@
     <router-link to="/login">로그인 화이팅화이팅!!</router-link> |
     <router-link to="/userJoin">회원가입 힘내힘내!!</router-link>
   </nav>
+  <div class="container">
   <router-view :key="$route.fullPath"/>
   <h1>메인페이지 작업중</h1>
+  </div>
   <Footer />
   </div>
 </template>
