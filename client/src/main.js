@@ -15,3 +15,5 @@ import store from './store'
 // .mount('#app')
 
 createApp(App).use(store).use(router).mount('#app')
+//카카오 자바스크립트 앱키
+window.Kakao.init("4af03599b8f41968bc3354daf33bc2ca"); 
