@@ -11,6 +11,7 @@
     <router-link to="/userJoin">회원가입 힘내힘내!!</router-link>
   </nav>
   <router-view :key="$route.fullPath"/>
+  <h1>메인페이지 작업중</h1>
   <Footer />
   </div>
 </template>
