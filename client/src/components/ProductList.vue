@@ -47,17 +47,19 @@ import axios from 'axios';
       }
     },
     created() {
-      let cate = this.$route.query.category;
-      console.log(cate);
-      this.getProductList(cate);
+      let large_code = this.$route.query.large_code;
+      let small_code = this.$route.query.small_code;
+      console.log(large_code);
+      console.log(small_code);
+      this.getProductList(large_code, small_code);
     },
     mounted() {
 
     },
     methods : {
-        async getProductList(cate){
-            console.log(cate);
-            let result = await axios.get('/api/product/popular/'+cate)
+        async getProductList(large, small){
+            console.log(large, small);
+            let result = await axios.get(`/api/product/${large}/${small}`)
                                     .catch(err => console.log(err));
             console.log(result);
             this.productList = result.data;

@@ -8,13 +8,14 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                  <!-- Link--><router-link to="/" class="nav-link active" href="index.html">Home</router-link>
+                  <!-- Link--><router-link to="/" class="nav-link active">Home</router-link>
                 </li>
                 <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" 
-                 @click="goToList('A')">다이어리</a>
+                 @click="goToList('A', null)">다이어리</a>
                   <div class="dropdown-menu mt-3 shadow-sm" aria-labelledby="pagesDropdown">
-                    <a class="dropdown-item border-0 transition-link" href="index.html">다이어리</a>
+                    <a class="dropdown-item border-0 transition-link" href="index.html" @click="goToList('A', 'A')">다이어리</a>
                     <a class="dropdown-item border-0 transition-link" href="shop.html">플래너</a>
+                    <router-link to="product/" class="dropdown-item border-0 transition-link" >플래너</router-link>
                     <a class="dropdown-item border-0 transition-link" href="detail.html">달력</a>
                   </div>
                 </li>
@@ -82,15 +83,19 @@ export default {
   },
    data () {
       return {
-        category: null
+        large_code : null,
+        small_code : null
       }
     },
     methods : {
-      goToList(cate) {
-        console.log(cate);
-        this.category = cate;
-        console.log(this.category) ;
-        this.$router.push({ path : '/product', query : { 'category' : this.category }})
+      goToList(large, small) {
+        console.log('goToList의 라지코드' + large);
+        console.log('goToList의 스몰코드' + small);
+        this.large_code = large;
+        this.small_code = small;
+        console.log(this.large_code);
+        console.log(this.small_code);
+        this.$router.push({ path : '/product', query : { 'large_code' : this.large_code , 'small_code' : this.small_code }})
       }
     }
 }
