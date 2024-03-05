@@ -65,11 +65,17 @@ const userUpdate =
 
  //const userDelete = 
  
+ // 보유 포인트 확인
+ const userPoint = 
+`SELECT * 
+ FROM   member 
+ WHERE mem_no = ?`;
 
  module.exports = {
     userList,
     userInfo,
     userJoin,
     userUpdate,
-    userLogin
+    userLogin,
+    userPoint
 }

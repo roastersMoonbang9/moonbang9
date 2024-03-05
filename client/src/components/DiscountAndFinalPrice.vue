@@ -1,6 +1,6 @@
 <template>
     <div class="overHidden tMar60">
-        <div class="ftLt" style="width:1100px">
+        <div class="ftLt">
             <div class="overHidden" style="float: left;">
             <div class="overHidden" style="margin: 0 2%;">
                 <h3 class="crRed">할인 정보</h3>
@@ -18,117 +18,162 @@
                                 class="radio" id="bonusCp" checked=""> 
                                 <label for="bonusCp">상품쿠폰</label></th>
                         <td width="315px">
-                            <select name="sailcoupon" class="select offInput" title="보너스 쿠폰 선택하세요" style="width:310px;">
-
-                                <option value="">사용 하실 보너스 쿠폰을 선택하세요!</option>
-
-                                <!-- Valid Sail Coupon -->
-
-                                <!-- Not Mobile Coupon -->
-
-                                <option style="color:#CCCCCC" value="569188961" id="0|0|0">코닥 5000원 쿠폰 (일부상품)(2024-03-02까지
-                                    100,000이상구매시 5,000원 할인)</option>
-
-                                <!-- Not Mobile Coupon -->
-
-                                <option style="color:#CCCCCC" value="569188963" id="0|0|0">라이프썸 2천원 할인 쿠폰(2024-03-03까지
-                                    40,000이상구매시)</option>
-
-                                <!-- Not Mobile Coupon -->
-
-                                <option style="color:#CCCCCC" value="569188962" id="0|0|0">라이프썸 1천원 할인 쿠폰 (2024-03-03까지
-                                    20,000이상구매시)</option>
-
-                                <!-- Not Mobile Coupon -->
-
-                                <option style="color:#CCCCCC" value="569188960" id="0|0|0">[화이트] 2,000원 할인(5만원이상
-                                    구매시)(2024-04-01까지 50,000이상구매시)</option>
-
+                            <select name="sailcoupon" class="select offInput" title="보너스 쿠폰 선택하세요" style="width:310px;" v-model="selected" :on-change="couponSelect">
+                                <option value="">없음</option>
+                                <option v-for="(list, idx) in couponList" :key="idx" :value="list">{{ list.cpn_name }}</option>
                             </select>
                         </td>
-                        <td><span class="cmt02 cr555 nowrap">적용가능 보너스 쿠폰 : <strong>0</strong>장</span></td>
+                        <td><span class="cmt02 cr555 nowrap">적용가능 보너스 쿠폰 : <strong>{{ couponList.length }}</strong>장</span></td>
                     </tr>
                     <tr>
                         <th width="95px" class="nowrap"><label for="mileage">포인트</label></th>
                         <td width="315px">
-                            <p><input name="spendmileage" value="0" type="text" class="txtInp"
-                                    style="width:75px; background-color:#EEEEEE;" id="mileage" readonly> Point</p>
+                            <p><input name="spendmileage" v-model="points" type="number" class="txtInp"
+                                    style="width:75px;" id="mileage" :on-change="pointSelect"> Point</p>
+                                    <p>포인트는 한번에 최대 10000포인트까지 사용가능합니다.</p>
+                        </td>
+                        <td>
+                            <p>보유 포인트 : {{ point }}점</p>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <dl class="note01 tPad30 lPad20">
-                <dt><strong class="fs13">유의사항</strong></dt>
-                <dd>
-                    <ul class="list01">
-
-                        <li>마일리지는 상품금액 30,000원 이상 결제시 사용 가능합니다.</li>
-                        <li>예치금의 적립, 사용 내역 확인 및 무통장입금 신청은 마이텐바이텐에서 가능합니다.</li>
-                        <li>Gift 카드는 인증번호 등록 후 사용할 수 있으며, 등록 및 사용 내역 확인은 마이텐바이텐에서 가능합니다.</li>
-
-                        <li>상품쿠폰과 보너스쿠폰은 중복사용이 불가능합니다.</li>
-                        <li>무료배송 보너스 쿠폰은 텐바이텐 주문 금액 기준입니다.</li>
-                        <li>보너스쿠폰 중 %할인쿠폰은 이미 할인을 하는 상품에 대해서는 중복 적용이 되지 않습니다.</li>
-                        <li>정상판매가 상품 중 일부 상품은 %할인쿠폰이 적용되지 않습니다.</li>
-                        <li>보너스쿠폰 중 금액할인쿠폰을 사용하여 복수의 상품을 구매 하시는 경우, 상품별 판매가에 따라 쿠폰할인금액이 각각 분할되어 적용됩니다.</li>
-
-                    </ul>
-                </dd>
-            </dl>
             <input type="hidden" name="availitemcouponlist" value="">
             <input type="hidden" name="checkitemcouponlist" value="">
         </div>
-
-        <div class="ftRt" style="width:340px">
-            <div class="overHidden">
-                <h3 class="crRed">결제 금액</h3>
-            </div>
-            <div class="payForm tMar10">
-                <table>
-                    <caption>결제 금액 보기</caption>
-                    <colgroup>
-                        <col width="50%">
-                        <col width="">
-                    </colgroup>
-                    <tbody>
-                        <tr>
-                            <th>총 주문금액</th>
-                            <td>6,550원</td>
-                        </tr>
-                        <tr>
-                            <th>배송비</th>
-                            <td><span id="DISP_DLVPRICE">2,500</span>원</td>
-                        </tr>
-                        <tr>
-                            <th>상품쿠폰 사용</th>
-                            <td><span class="crRed"><span id="DISP_SAILCOUPON_TOTAL">0</span>원</span></td>
-                        </tr>
-                        <tr class="midMilieage"><!--midTotal-->
-                            <th><strong class="fs13">구매 확정액</strong></th>
-                            <td><span class="crRed"><em class="fs18"><span id="DISP_FIXPRICE">9,050</span></em>원</span></td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th><strong class="fs13">최종 결제액</strong></th>
-                            <td><span class="crRed"><em class="fs20"><span id="DISP_SUBTOTALPRICE">9,050</span></em>원</span>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+        {{ couponList }}
+    </div>
+    <div class="ftRt" style="width:340px">
+        <div class="overHidden">
+            <h3 class="crRed">결제 금액</h3>
+        </div>
+        <div class="payForm">
+            <table style="width: 100%;">
+                <caption>결제 금액 보기</caption>
+                <colgroup>
+                    <col width="50%">
+                    <col width="">
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th>총 주문금액</th>
+                        <td>{{ totalPrices }}원</td>
+                    </tr>
+                    <tr>
+                        <th>배송비</th>
+                        <td><span id="DISP_DLVPRICE">{{fee}}</span>원</td>
+                    </tr>
+                    <tr>
+                        <th>상품쿠폰 사용</th>
+                        <td><span class="crRed"><span id="DISP_SAILCOUPON_TOTAL">{{usedCoupon}}</span>원</span></td>
+                    </tr>
+                    <tr>
+                        <th>포인트 사용</th>
+                        <td><span class="crRed"><span id="DISP_SAILCOUPON_TOTAL">{{usedPoint}}</span>원</span></td>
+                    </tr>
+                    <tr class="midMilieage"><!--midTotal-->
+                        <th><strong class="fs13">구매 확정액</strong></th>
+                        <td><span class="crRed"><em class="fs18"><span id="DISP_FIXPRICE">{{totalPayment}}</span></em>원</span></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th><strong class="fs13">최종 결제액</strong></th>
+                        <td><span class="crRed"><em class="fs20"><span id="DISP_SUBTOTALPRICE">{{totalPayment}}</span></em>원</span>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            {{ list }}
         </div>
     </div>
 </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
+    props:{
+        list: {
+        type: Object
+        },
+        point : Number
+    },
     data() {
         return {
+            couponList:[],
+            selected:{},
+            newPoint:0,
+            totalPrice:0
         };
     },
-    created() { },
-    methods: {}
+    created() {
+        this.getCouponList();
+    },
+     computed:{
+        points: {
+        get() {
+            return this.newPoint
+        },
+        set(newValue) {
+            console.log(newValue)
+            this.newPoint = newValue
+            if(this.newPoint > this.point){
+                alert('보유포인트의 최대값을 넘게 사용할 수 없습니다.')
+                this.newPoint = this.point
+                this.points = this.point
+            }else if(this.newPoint < 0){
+                alert('포인트 사용값은 0이하로 내려갈 수 없습니다.')
+                this.newPoint = 0
+                this.points = 0
+            }
+            }
+        },
+        totalPrices(){
+            let totalPrice = 0;
+            for(let i=0; i<this.list.length;i++){
+                totalPrice += this.list[i].total_price;
+            }
+            return totalPrice;
+        },
+        fee(){
+            return this.totalPrices >= 50000 ? 0 : 3000;
+        },
+        totalSum(){
+            return this.totalPrices + this.fee;
+        },
+        usedCoupon(){
+            if(this.selected.dc_pct > 0 && this.selected.dc_price > 0){
+                return (this.totalSum  - (this.totalSum * (this.selected.dc_pct / 100))) < (this.totalSum - this.selected.dc_price) ? this.selected.dc_price : (this.totalSum * (this.selected.dc_pct / 100));
+            }else if(this.selected.dc_pct > 0 || this.selected.dc_pct != undefined){
+                return (this.totalSum * (this.selected.dc_pct / 100));
+            }else if(this.selected.dc_price > 0 || this.selected.dc_price != undefined){
+                return this.selected.dc_price;
+            }else{
+                return 0
+            }
+        },
+        usedPoint(){
+            return this.newPoint;
+        },
+        totalPayment(){
+            return this.totalSum - this.usedCoupon - this.usedPoint;
+        }
+    },
+    methods: {
+        async getCouponList(){
+          let result = await axios.get('/apiuser/coupon/1/0')
+              .catch(err => console.log(err));
+          let list = result.data;
+          this.couponList = list;
+        },
+        pointSelect(){
+            this.$emit('pointEvent',this.newPoint);
+        },
+        couponSelect(){
+            this.$emit('couponEvent',this.selected);
+        }
+    }
 }
 </script>
 
@@ -313,5 +358,10 @@ div.orderWrap div.payForm {
     padding-top:12px; 
     padding-bottom:40px; 
     color:#555;
+}
+input::-webkit-inner-spin-button {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
 }
 </style>
