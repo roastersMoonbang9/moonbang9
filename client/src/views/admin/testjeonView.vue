@@ -1,6 +1,7 @@
 <template>
     <div class="container">
       <h1 style="padding: 15px; font-size: 27px;">공지사항</h1>
+      <p>{{ this.allSize }}</p>
       <table class="table table-hover" style="font-size: 15px;">
         <thead>
           <tr class="table-primary">
@@ -20,27 +21,14 @@
           </tr>
         </tbody>
       </table>
-      <div>
-        <ul class="pagination justify-content-center" style="font-size: 15px;">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#" @click="getTableList(1)" style="color: black;">&lt;&lt;</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#" @click="getTableList(--this.curPage)" style="color: black;">&lt;</a>
-          </li>
-          <li v-for="(page, idx) in paging" :key="idx" class="nav-item" v-bind:class="{'active' : isSelect}">
-            <a v-bind:value="checkPage" class="nav-link d-inline-flex focus-ring px-4 text-decoration-none border rounded-2" aria-current="page" href="#" @click="getTableList(page)" style="color: black;">{{ page }}</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#" @click="getTableList(++this.curPage)" style="color: black;">&gt;</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#" @click="getTableList(this.lastPage)" style="color: black;">&gt;&gt;</a>
-          </li>
-        </ul>
-      </div>
+      <Paging 
+      :pagination="pagination"
+      v-on:prevPage="prevPage"
+      v-on:nextPage="nextPage"
+      v-on:firstPage="firstPage"
+      v-on:lastPaging="lastPaging"
+      v-on:changeNowPage="changeNowPage"/>
     </div>
-    <paging />
   </template>
   
   <script>
@@ -55,7 +43,7 @@
       return {
         tableList : [],
         paging : [],
-
+        pagination : {},
         allSize : 1,  // 모든 데이터 수
         pageSize : 5, // 한 페이지에서 보여줄 데이터 수
         navSize : 5,  // 페이지네이션이 보여줄 최대 페이지 수
@@ -63,8 +51,10 @@
         curPage : 1,  // 현재 페이지
         startPage : 1,  // 페이지네이션 시작번호
         endPage : 1,  // 페이지네이션 끝번호
-        isSelect : false
       }
+    },
+    created() {
+      this.getTableCount();
     },
     mounted() {
       this.getTableList();    
@@ -78,13 +68,7 @@
         this.startPage = this.judgePage(curPage - gap);
         this.endPage = this.startPage + this.navSize - 1;
         await this.getTableCount(curPage);
-        if (this.lastPage < this.endPage)
-        this.endPage = this.lastPage;
 
-        this.paging = [];
-        for (let i = this.startPage; i <= this.endPage; i++) {
-          this.paging.push(i)
-        }
         this.curPage = curPage;
         let result = await axios.get(`/api/notice/${(curPage - 1) * this.pageSize}/${this.pageSize}`)
                                 .catch(err => console.log(err));
@@ -96,6 +80,12 @@
                                 .catch(err => console.log(err));
         this.allSize = result.data[0].count;
         this.lastPage = Math.ceil(this.allSize / this.pageSize);
+        this.pagination = {
+                          lastPage : this.lastPage, 
+                          startPage : this.startPage, 
+                          endPage : this.endPage, 
+                          curPage : this.curPage
+                        }
       },
       judgePage(page) {
         if (!page || page <= 0) 
@@ -103,14 +93,32 @@
         else if (page > this.lastPage) 
           page = this.lastPage
         return page
+      },
+
+      // 페이징
+      prevPage(){
+        this.getTableList(--this.curPage);
+      },
+
+      nextPage(){
+        this.getTableList(++this.curPage);
+      },
+
+      firstPage(){
+        this.curPage = 1;
+        this.getTableList(this.curPage);
+      },
+
+      lastPaging(){
+        this.curPage = this.lastPage;
+        this.getTableList(this.curPage);
+        
+      },
+      
+      changeNowPage(page){
+        this.curPage = page
+        this.getTableList(this.curPage);
       }
     }
   }
   </script>
-  
-  <style scoped>
-    .selected {
-      background-color: #ddd;
-      font-weight: bold;
-    }
-  </style>
