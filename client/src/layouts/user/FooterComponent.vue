@@ -3,7 +3,7 @@
         <div class="container py-4">
           <div class="row py-5">
             <div class="col-md-4 mb-3 mb-md-0">
-              <img src="../../assets/moonbang9_3.png" alt="moonbang9" style="width: 115px;">
+              <img src="../../public/moonbang9_3.png" alt="moonbang9" style="width: 115px;">
             </div>
             <div class="col-md-4 mb-3 mb-md-0">
               <h6 class="text-uppercase mb-3">Company</h6>

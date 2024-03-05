@@ -187,12 +187,12 @@
 import ProductList from '../../../components/ProductList.vue'
 
     export default{
-        data() {
-            return {
-            };
-        },
-        components: {
-            ProductList
-        }
+      components: {
+          ProductList
+      },
+      data() {
+          return {
+          };
+      }
     }
 </script>

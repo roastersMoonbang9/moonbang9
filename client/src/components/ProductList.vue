@@ -7,7 +7,7 @@
         <div class="mb-3 position-relative">
           <div class="badge text-white bg-"></div>
           <a class="d-block" href="detail.html">
-            <img class="img-fluid w-100" src="img/product-1.jpg" alt="...">
+            <img class="img-fluid w-100" src="./assets/user/img/{{ product.image }}" alt="..."> 
             </a>
           <div class="product-overlay">
             <ul class="mb-0 list-inline">
@@ -38,11 +38,13 @@
 </template>
 <script>
 import axios from 'axios';
-
+//./../assets/user/img/{{ product.image }}
   export default {
 
     data() {
-      productList : [];
+      return {
+        productList : []
+      }
     },
     created() {
       let cate = this.$route.query.category;
@@ -59,6 +61,7 @@ import axios from 'axios';
                                     .catch(err => console.log(err));
             console.log(result);
             this.productList = result.data;
+            console.log(this.productList);
         }
     }        
     
