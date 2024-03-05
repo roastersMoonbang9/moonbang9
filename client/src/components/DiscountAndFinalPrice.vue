@@ -1,7 +1,7 @@
 <template>
     <div class="overHidden tMar60">
-        <div class="ftLt" style="width:690px">
-            <div class="overHidden" >
+        <div class="ftLt" style="width:1100px">
+            <div class="overHidden" style="float: left;">
             <div class="overHidden" style="margin: 0 2%;">
                 <h3 class="crRed">할인 정보</h3>
             </div>

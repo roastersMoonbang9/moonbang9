@@ -1,18 +1,17 @@
 <template>
 <div>
     <div>
-        <h1>장바구니</h1>
+        <h1 class="cartt">장바구니</h1>
     </div>
     <section class="py-5">
-          <h2 class="h5 text-uppercase mb-4"><span class="bg-light" style="float: left;padding: 0 10px;">장바구니 목록</span></h2>
           <div class="row" style="display: block;">
             <div class="mb-4 mb-lg-0" style="margin: 0 auto;">
               <!-- CART TABLE-->
               <div class="table-responsive mb-4">
-                <table class="table text-nowrap">
+                <table class="table text-nowrap" style="text-align: center; font-size: 12px;">
                   <thead class="bg-light">
                     <tr>
-                      <th class="border-0 p-3" scope="col"><input type="checkbox" name="cart_checkbox" v-model="selectAll"></th>
+                      <th class="border-0 p-3" scope="col" style="width: 1rem;"><input type="checkbox" name="cart_checkbox" v-model="selectAll"></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">상품코드</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">상품정보</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">판매가격</strong></th>
@@ -43,7 +42,7 @@
                             <button class="dec-btn p-0 glyphicon glyphicon-chevron-right" @click="addQty(idx)"></button>
                           </div>
                         </div>
-                        <input class="form-control form-control-sm border-0 shadow-0 p-0" type="button" value="수정" @click="modCartQty(list)"/>
+                        <input class="form-control form-control-sm border-0 shadow-0 p-0 btn btn-secondary" type="button" value="수정" @click="modCartQty(list)"/>
                       </td>
                       <td class="p-3 align-middle border-light">
                         <p class="mb-0 small">{{list.total_price}}</p>
@@ -60,7 +59,7 @@
                   </tbody>
                   <tfoot style="border : none; border-style : none;">
                     <tr style="border-style : none;">
-                      <td style="border-style : none;"><input type="button" value="선택삭제" @click="delCartList()"></td>
+                      <td style="border-style : none;"><button type="button" class="btn btn-secondary btn btnWhite2 btnW185 lMar10 sece" @click="delCartList()">선택삭제</button></td>
                     </tr>
                     <tr>
                       <!--페이징 컴포넌트 자리-->
@@ -73,17 +72,20 @@
         </section>
         <!--주문금액 컴포넌트-->
         <TotalOrderPrice v-bind:list="cartList"/>
-        <div>
-          <button>계속 쇼핑하기</button>
-          <button @click="goToPayment(selected)">선택상품 주문하기</button>
-          <button @click="goToPayment(cartList)">전체상품 주문하기</button>
+
+        <div class="overHidden tPad20 bPad20">
+          <div class="ftRt">
+          <button type="button" class="btn btn-secondary btn btnB1 btnWhite2 btnW185">계속 쇼핑하기</button>
+          <button type="button" class="btn btn-secondary btn btnB1 btnWhite2 btnW185 lMar10" @click="goToPayment(selected)">선택상품 주문하기</button>
+          <button type="button" class="btn btn-danger btn btnB1 btnRed btnW185 lMar10" @click="goToPayment(cartList)">전체상품 주문하기</button>
+          </div>
         </div>
         </div>
   </template>
   
   <script>
   import TotalOrderPrice from '@/components/totalOrderPrice.vue';
-import axios from 'axios';
+  import axios from 'axios';
 
   export default {
     data() {
@@ -205,7 +207,8 @@ import axios from 'axios';
         },
         //결제페이지 이동
         goToPayment(payList) {
-            this.$router.push({ name: 'payment', query: { payList: JSON.stringify(payList ) } });
+          sessionStorage.setItem("payList", JSON.stringify(payList ))
+            this.$router.push({ name: 'payment'});
         }
     },
     components: { TotalOrderPrice }
@@ -213,4 +216,39 @@ import axios from 'axios';
   </script>
     
   <style>
+  .lMar10 {
+    margin-left: 10px;
+  }
+  .bPad20 {
+    padding-bottom: 20px;
+    margin: 30px;
+}
+
+.tPad20 {
+    padding-top: 20px;
+}
+.ftRt {
+    float: right;
+}
+.btnW185 {
+    width: 183px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.btnB1 {
+    font-size: 13px;
+    line-height: 13px;
+    padding: 18px 45px;
+}
+.sece{
+  width: 125px;
+  border-radius: 20px;
+  padding: 14px 36px;
+  font-size: 13px;
+  line-height: 13px;
+}
+.cartt{
+  margin-left: 3rem;
+}
   </style>
