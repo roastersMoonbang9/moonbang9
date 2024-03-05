@@ -66,18 +66,7 @@
         <th>이메일</th>
         <td>
             <p>
-                <input type="text" class="txtInp" name="buyemail_Pre" value="hereherehere" title="이메일 아이디 입력" style="width:120px;" v-model="email1">
-                @
-                <input name="buyemail_Tx" type="text" title="이메일 직접 입력" class="txtInp" style="width:118px;display:none;" v-model="email2">
-                <select name="buyemail_Bx" id="select3" title="이메일 서비스 선택" class="select offInput emailSelect" style="width:102px;">
-                    <option value="naver.com">naver.com</option>
-                    <option value="daum.net">daum.net</option>
-                    <option value="hanmail.net">hanmail.net</option>
-                    <option value="gmail.com">gmail.com</option>
-                    <option value="nate.com">nate.com</option>
-                    <option value="empal.com">empal.com</option>
-                    <option value="etc">직접 입력</option>
-                </select>
+                <input type="text" class="txtInp" name="buyemail_Pre" title="이메일 아이디 입력" style="width:120px;" v-model="userInfo.email" @change="emailState(userInfo.email)">
             </p>
             <p class="tPad05">주문정보를 이메일로 보내드립니다.</p>
         </td>
@@ -86,7 +75,7 @@
         <th><label for="hp01">휴대전화</label></th>
         <td>
             <p>                  
-              <input type="text" class="txtInp" name="buyhp1" v-model="userInfo.phone" oninput="javascript: this.value = this.value.replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);" title="주문고객 휴대전화번호 국번 입력" maxlength="12" id="hp01" readonly>
+              <input type="text" class="txtInp" name="buyhp1" v-model="userInfo.phone" oninput="javascript: this.value = this.value.replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);" title="주문고객 휴대전화번호 국번 입력" maxlength="12" id="hp01" readonly @change="phoneState(userInfo.phone)">
             </p>
             </td>
     </tr>
@@ -126,23 +115,22 @@
             <th><label for="hp01">휴대전화</label></th>
             <td>
                 <p>
-                  <input type="text" class="txtInp" name="buyhp1" v-model="deliInfo.phone" oninput="javascript: this.value = this.value.replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);" title="주문고객 휴대전화번호 국번 입력" maxlength="12" id="hp01">
+                  <input type="text" class="txtInp" name="buyhp1" v-model="phoneNum" title="주문고객 휴대전화번호 국번 입력" maxlength="11" id="hp01">
                 </p>
                 </td>
         </tr>
         </tbody>
     </table>
-        {{ userInfo }}
-        {{ deliInfo }}
+    {{ userInfo }}
         <!--주문 할인정보 및 결제내역확인 컴포넌트-->
-        <DiscountAndFinalPrice v-bind:list="paymentList"/>
+        <DiscountAndFinalPrice v-bind:list="paymentList" v-bind:point="userInfo.point" :pointEvent="updateSale" :couponEvent="updateSale2"/>
         
         <div class="orderNotiV21 tMar30">
-						<p class="txtArrow">품절 발생 시 별도의 연락을 하지 않고 선택하신 결제 방법으로 안전하게 환불해 드립니다.</p>
-						<p class="txtArrow tMar15">
-							주문 진행을 위해 다음의 판매자(제3자)에게 개인정보를 제공합니다.
-						</p>
-						<div class="chkAgreeV21 tMar30"><label for="agreeAll"><input type="checkbox" id="agreeAll">모든 내용을 확인하였으며 구매조건에 동의합니다.</label></div>
+            <p class="txtArrow">품절 발생 시 별도의 연락을 하지 않고 선택하신 결제 방법으로 안전하게 환불해 드립니다.</p>
+            <p class="txtArrow tMar15">
+                주문 진행을 위해 다음의 판매자(제3자)에게 개인정보를 제공합니다.
+            </p>
+            <div class="chkAgreeV21 tMar30"><label for="agreeAll"><input type="checkbox" id="agreeAll">모든 내용을 확인하였으며 구매조건에 동의합니다.</label></div>
 					</div>
 
           <div class="ct tPad30 bPad20" id="nextbutton1" name="nextbutton1" style="display: flex;justify-content: center;">
@@ -162,11 +150,30 @@ export default {
       return {
           paymentList: [],
           userInfo: {},
-          deliInfo:{}
+          deliInfo:{},
+          point:0,
+          couponSelected:{}
       };
   },
   computed:{
-    
+    phoneNum: {
+        get() {
+    return this.deliInfo.phone
+  },
+  set(newValue) {
+    if(newValue.length ==11){
+        this.deliInfo.phone = newValue.replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`)
+    }
+  }
+    },
+    email1: {
+        get() {
+    return this.deliInfo.email
+  },
+  set(newValue) {
+        this.deliInfo.phone = newValue.split('@')
+  }
+    }
   },
   created() {
     //받아온 수량으로 설정
@@ -202,6 +209,28 @@ export default {
         console.log(value)
         this.deliInfo.addr = value.addrr;
         this.deliInfo.post_cd = value.zip;
+      },
+      //이메일 유효성 확인
+      emailState(value){
+        if(value.indexOf('@')==-1 && (value.indexOf('.com')==-1 || value.indexOf('.net')==-1)){
+            Swal.fire("부정확한 이메일입니다. \n 정확한 이메일로 작성해주세요.");
+            this.userInfo.email = '';
+        }
+      },
+      //휴대폰번호 유효성 확인
+      phoneState(value){
+        const phoneRule = /^(01[016789]{1})[0-9]{3,4}[0-9]{4}$/;
+        if(value != "" && !phoneRule.test(value)){
+            Swal.fire("부정확한 휴대폰 번호입니다. \n 정확한 휴대폰 번호로 작성해주세요.");
+            this.deliInfo.phone = '';
+        }	
+      },
+      //쿠폰 및 포인트 내역 조회
+      updateSale(value){
+        this.point = value.point;
+      },
+      updateSale2(value){
+        this.couponSelected = value.coupon;
       }
   },
   components: { TotalOrderPrice,DiscountAndFinalPrice, AddrsPost }
@@ -213,10 +242,10 @@ export default {
     margin-top: 30px;
 }
 .orderNotiV21 .txtArrow {
-  padding-left:10px; 
-  font-weight:500; 
-  font-size:13px; 
-  color:#000; 
+  padding-left:10px;
+  font-weight:500;
+  font-size:13px;
+  color:#000;
   background:url(//fiximage.10x10.co.kr/web2013/common/blt_btn_arr_red03.gif) left 8px no-repeat;
 }
 .orderNotiV21 .txtArrow small {
@@ -359,7 +388,7 @@ caption {
 .orderForm tbody th {
     border-top:1px solid #eaeaea; 
     font-size:12px; 
-    padding-left:20px; 
+    padding-left:12px; 
     padding-right:20px; 
     text-align:left;
 }

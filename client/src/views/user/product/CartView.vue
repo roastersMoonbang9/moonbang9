@@ -37,9 +37,9 @@
                       <td class="p-3 align-middle border-light">
                         <div class="border align-items-center justify-content-between px-0">
                           <div class="quantity">
-                            <button class="dec-btn p-0 glyphicon glyphicon-chevron-left" @click="minusQty($event,idx)"></button>
+                            <button class="bi bi-chevron-left" @click="minusQty($event,idx)"></button>
                             <input class="form-control form-control-sm border-0 shadow-0 p-0" min="1" type="number" :value="list.cart_qty" :key="idx" @input="cartQty($event,idx)" style="-moz-appearance: textfield;"/>
-                            <button class="dec-btn p-0 glyphicon glyphicon-chevron-right" @click="addQty(idx)"></button>
+                            <button class="bi bi-chevron-right" @click="addQty(idx)"></button>
                           </div>
                         </div>
                         <input class="form-control form-control-sm border-0 shadow-0 p-0 btn btn-secondary" type="button" value="수정" @click="modCartQty(list)"/>
