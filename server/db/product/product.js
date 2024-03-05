@@ -1,36 +1,8 @@
 //product.js
 // 예시
 
-// 메인 페이지 - 인기상품 3개 목록
-const mainPopularProductList =
-`SELECT  p.prdt_cd,
-         p.prdt_name,
-         p.price,
-         p.sale_price,
-         p.dc_pct,
-         p.image,
-         d.sell
-FROM  product p LEFT OUTER JOIN (SELECT COUNT(*) as sell, 
-                                        prdt_cd
-                                 FROM order_detail
-                                 GROUP BY prdt_cd) d
-                ON p.prdt_cd = d.prdt_cd
-ORDER BY d.sell`;
-
-// 메인 페이지 - 신상품 6개 목록
-const mainNewProductList = 
-`SELECT prdt_cd,
-        prdt_name,
-        price,
-        sale_price,
-        dc_pct,
-        image,
-        regis_dt
-FROM  product
-ORDER BY regis_dt DESC`;
-
-// 상품목록페이지 - 인기상품순 정렬 목록
-const popularProductList = 
+// 상품 목록 동적 쿼리 만드는 중
+const productList = 
 `SELECT  p.prdt_cd,
          p.prdt_name,
          p.brand,
@@ -46,23 +18,7 @@ FROM  product p LEFT OUTER JOIN (SELECT COUNT(*) as sell,
                                         prdt_cd
                                  FROM order_detail
                                  GROUP BY prdt_cd) d
-                ON p.prdt_cd = d.prdt_cd
-WHERE large_code = ?`;
-
-// 상품목록페이지 - 신상품순/낮은가격순/높은가격순/할인율순 정렬 목록
-const generalProductList = 
-`SELECT prdt_cd,
-        prdt_name,
-        brand,
-        large_code,
-        small_code,
-        price,
-        sale_price,
-        dc_pct,
-        image,
-        regis_dt
-FROM  product
-WHERE large_code = ?`;
+                ON p.prdt_cd = d.prdt_cd`;
 
 // 상품상세 페이지 - (이미지 제외) 상품정보
 const productInfo = 
@@ -105,10 +61,7 @@ ORDER BY opt_number`;
 
 
 module.exports = {    
-    mainPopularProductList,
-    mainNewProductList,
-    popularProductList,
-    generalProductList,
+    productList,
     productInfo,
     productInfoImages,
     productInfoOptions

@@ -32,6 +32,9 @@
       </table>
   
         <!-- 배너추가창 -->
+
+        <!-- 모달창 -->
+        
 <div class="black-bg" v-if="modalOpen === true">
   <div class="bg-light rounded h-100 p-4">                
     <h6 class="mb-4">배너추가</h6>
