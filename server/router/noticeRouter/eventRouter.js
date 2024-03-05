@@ -64,7 +64,7 @@ eventRouter.post("/event", upload.array('photos',4),async (req, response)=>{
 
     /* [Object: null prototype] { table_cd: '3', type_cd: '' }
 [
-  {
+  { 
     fieldname: 'photos',
     originalname: '1.png',
     encoding: '7bit',
