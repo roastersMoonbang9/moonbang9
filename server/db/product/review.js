@@ -13,6 +13,7 @@ const reviewDel =
 `DELETE FROM event
 WHERE event_cd= ?`;
 
+
 module.exports = {
     reviewList,
     reviewUpdate,
