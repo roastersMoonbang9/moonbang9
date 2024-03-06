@@ -23,6 +23,7 @@ FROM    member`;
 // 회원 개별 조회
 const userInfo = 
 `SELECT
+        mem_no,
         id,
         name,
         pwd,
@@ -34,7 +35,10 @@ const userInfo =
         addr,
         addrdt,
         point,
-        post_cd
+        token,
+        mem_status,
+        grade_no,
+        (select rwd_pct from grade where grd_no = member.grade_no) as rwd_pct
 FROM    member
 WHERE mem_no = ?`;
 

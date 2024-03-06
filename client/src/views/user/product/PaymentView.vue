@@ -110,7 +110,6 @@
                 <p><input name="buyAddr2" type="text" class="txtInp" style="width:440px;" v-model="deliInfo.addrdt" title="상세주소 입력" @change="detailAddr"></p>
             </td>
         </tr>
-        {{ addrs }}
         <tr>
             <th><label for="hp01">휴대전화</label></th>
             <td>
@@ -121,21 +120,20 @@
         </tr>
         </tbody>
     </table>
-    {{ userInfo }}
         <!--주문 할인정보 및 결제내역확인 컴포넌트-->
-        <DiscountAndFinalPrice v-bind:list="paymentList" v-bind:point="userInfo.point" :pointEvent="updateSale" :couponEvent="updateSale2"/>
-        
+        <DiscountAndFinalPrice v-bind:list="paymentList" v-bind:point="userInfo.point" @selected="updateSale1" @point="updateSale2" @finalPrice="updateSale3" @fee="updateSale4" @couponPrice="updateSale5"/>
+        <button @click="test">제발</button>
         <div class="orderNotiV21 tMar30">
             <p class="txtArrow">품절 발생 시 별도의 연락을 하지 않고 선택하신 결제 방법으로 안전하게 환불해 드립니다.</p>
             <p class="txtArrow tMar15">
                 주문 진행을 위해 다음의 판매자(제3자)에게 개인정보를 제공합니다.
             </p>
-            <div class="chkAgreeV21 tMar30"><label for="agreeAll"><input type="checkbox" id="agreeAll">모든 내용을 확인하였으며 구매조건에 동의합니다.</label></div>
+            <div class="chkAgreeV21 tMar30"><label for="agreeAll"><input type="checkbox" id="agreeAll" v-model="checkItem" ref="checkTerms">모든 내용을 확인하였으며 구매조건에 동의합니다.</label></div>
+            <!--:true-value="trueValueMethod()" :false-value="falseValueMethod()"-->
 					</div>
-
           <div class="ct tPad30 bPad20" id="nextbutton1" name="nextbutton1" style="display: flex;justify-content: center;">
-						<a href="http://www.10x10.co.kr/inipay/ShoppingBag.asp" class="btn btnB2 btnWhite2 btnW220"><em class="gryArr02">이전 페이지</em></a>
-						<a href="#" name="btnPay" id="btnPay" class="lMar10 btn btnB2 btnRed btnW220">결제하기</a>
+						<button class="btn btnB2 btnWhite2 btnW220"><em class="gryArr02">이전 페이지</em></button>
+						<button name="btnPay" id="btnPay" class="lMar10 btn btnB2 btnRed btnW220" @click="PaymentBtn">결제하기</button>
 					</div>
   </template>
 
@@ -148,32 +146,47 @@ import axios from 'axios';
 export default {
   data() {
       return {
-          paymentList: [],
-          userInfo: {},
-          deliInfo:{},
-          point:0,
-          couponSelected:{}
+          paymentList: [], //구매리스트 정보
+          userInfo: {}, //보내는이 정보
+          deliInfo:{}, //배송지 정보
+          point:0, //포인트 사용정보
+          couponSelected:{}, //쿠폰정보
+          finalPrice : 0, //결제금액
+          checkItem : false, //약관확인
+          fee : 0,  //배송비
+          total_prices : 0, //총 합계
+          couponPrice : 0 //쿠폰할인액
       };
   },
   computed:{
     phoneNum: {
-        get() {
-    return this.deliInfo.phone
-  },
-  set(newValue) {
-    if(newValue.length ==11){
-        this.deliInfo.phone = newValue.replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`)
-    }
-  }
+      get() {
+        return this.deliInfo.phone
+      },
+      set(newValue) {
+        if(newValue.length ==11){
+          this.deliInfo.phone = newValue.replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`)
+        }
+      }
     },
     email1: {
-        get() {
-    return this.deliInfo.email
-  },
-  set(newValue) {
-        this.deliInfo.phone = newValue.split('@')
-  }
-    }
+      get() {
+        return this.deliInfo.email
+      },
+      set(newValue) {
+            this.deliInfo.phone = newValue.split('@')
+      }
+    },
+    //DB로 저장될 포인트 금액
+    updatePoint(){
+      return this.userInfo.point - this.point + 1;
+    },
+    //등급별 포인트 적립액
+    accountPoint(){
+        let persent = this.userInfo.rwd_pct;
+        console.log(persent)
+        return this.finalPrice * (persent /100);
+      },
   },
   created() {
     //받아온 수량으로 설정
@@ -182,10 +195,13 @@ export default {
     if (this.paymentList == []) {
       this.$router.go(-1);
     };
-    // this.emails = this.userInfo.email.split('@');
   },
   mounted(){
-
+    //결제 금액 초기화
+    for(let list of this.paymentList){
+      this.finalPrice += list.total_price
+      this.total_prices += list.total_price
+    }
   },
   methods: {
       //주문 목록(수정 필요)
@@ -225,14 +241,116 @@ export default {
             this.deliInfo.phone = '';
         }	
       },
-      //쿠폰 및 포인트 내역 조회
-      updateSale(value){
-        this.point = value.point;
+      //쿠폰 내역 조회
+      updateSale1(value){
+        this.couponSelected = value;
       },
+      //포인트 내역 조회
       updateSale2(value){
-        this.couponSelected = value.coupon;
+        this.point = value;
+      },
+      // 최종결제 조회
+      updateSale3(value){
+        this.finalPrice = value;
+      },
+      //배송비 조회
+      updateSale4(value){
+        this.fee = value;
+      },
+      //쿠폰 할인액 조회
+      updateSale5(value){
+        this.couponPrice = value;
+      },
+      //결제 처리
+      async PaymentBtn(){
+        if(!this.checkItem){
+          Swal.fire("약관에 동의해주세요.");
+          this.$refs.checkTerms.focus();
+          return
+        }
+        
+      IMP.init("imp42374167");
+
+      const data = {
+        pg: 'html5_inicis',                           // PG사
+        pay_method: 'card',                           // 결제수단
+        merchant_uid: `odr_${new Date().getTime()}`,   // 주문번호 
+        amount: 100,                                 // 결제금액  this.finalPrice
+        name: '아임포트 결제 데이터 분석',                  // 주문명
+        buyer_name: this.userInfo.name,                           // 구매자 이름
+        buyer_tel: this.userInfo.phone,                     // 구매자 전화번호
+        buyer_email: this.userInfo.email,               // 구매자 이메일
+        buyer_addr: this.deliInfo.addr + " " +  this.deliInfo.addrdt,  // 구매자 주소
+        buyer_postcode: this.deliInfo.post_cd                      // 구매자 우편번호
+      };
+        
+      const vue = this;
+      IMP.request_pay(data, rsp => { // callback
+        console.log(rsp);
+        if (rsp.success) {
+
+          //등록, 수정, 삭제
+          axios({
+            url: '/order',
+            method: "post",
+            headers: { "Content-Type": "application/json" },
+            data:  vue.payData(rsp)
+            
+          }).then((data) => {
+            // 서버 결제 API 성공시 로직
+            console.log(data);
+            console.log("결제 성공");
+          })
+          
+        } else {
+          console.log("결제 실패");
+        }
+      });
+    },
+    payData(rsp){
+      const orderData = {
+        "OrderTable" : {
+          deli_addr : this.deliInfo.addr,
+          deli_addrdt : this.deliInfo.addrdt,
+          deli_cost : this.fee,
+          // ord_dt : 오늘날짜,
+          rcv_name : this.deliInfo.name,
+          rcv_email : this.deliInfo.email,
+          rcv_phone : this.deliInfo.phone,
+          status : 1,
+          total_price : this.total_prices,
+          used_point : this.point,
+          total_payment : this.finalPrice,
+          // payment_no : rsp.imp_uid,
+          // ord_no : rsp.merchant_uid,
+          payment_no : 'asd222515a',
+          ord_no : 'asd51asd51',
+          accu_pnt : this.accountPoint,
+          cpn_disc : this.couponPrice
+      },
+      "paymentList" : this.paymentList,
+      "userUpdates" : {
+          point : this.userInfo.point + this.accountPoint - this.point,
       }
-  },
+      }
+      return orderData
+    },
+    async test(){
+      //등록
+      let rsp = 1;
+      await axios({
+            url: '/apiorder/orderList',                                   //본인웹서버 route
+            method: "post",
+            headers: { "Content-Type": "application/json" },
+            data:  this.payData(rsp)
+            
+          }).then((data) => {
+            // 서버 결제 API 성공시 로직
+            console.log(data);
+            console.log("결제 성공");
+          })
+    }
+},
   components: { TotalOrderPrice,DiscountAndFinalPrice, AddrsPost }
 }
 </script>
