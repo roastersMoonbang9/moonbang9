@@ -1,22 +1,22 @@
 //grade.js
 
-// 등급별 할인율 조회
+// 회원등급 조회
 const getGrade = 
-`SELECT rwd_pct from grade
+`SELECT * from grade
 WHERE grd_no=?`;
-// 예시
+
 //등급 출력
 const gradeList = 
 `select * from grade`;
 
-
+//회원등급 수정
 const gradeUpdate = 
 `UPDATE grade 
-SET rwd_pct = ?
+SET ?
 WHERE grd_no = ?`;
 
 module.exports = {
-    getGrade
+    getGrade,
     gradeList,
     gradeUpdate
 }

@@ -65,6 +65,7 @@ userRouter.get("/userList/:offset/:limit", async (request, response) => {
 userRouter.get("/userInfo/:mem_no", async (request, response) => {
   let data = request.params.mem_no;
   let result = (await db.connection('user', 'userInfo', data))[0];
+  console.log(result)
   response.send(result);
 })
 
@@ -96,4 +97,7 @@ userRouter.get("/userCount", async (request,response)=>{
   let result = await db.connection('user','userCount');
   response.send(result);
 })
+
+
+
 module.exports = userRouter;
