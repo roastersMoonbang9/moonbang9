@@ -38,6 +38,7 @@
 <div class="black-bg" v-if="modalOpen === true">
   <div class="bg-light rounded h-100 p-4">                
     <h6 class="mb-4">배너추가</h6>
+    <!-- event.preventdefault와 같은 효과-->
     <form>
         <div class="row mb-3">
             <label for="inputEmail3" class="col-sm-2 col-form-label">배너 이름</label>
@@ -64,11 +65,9 @@
         </fieldset>
         <div class="mb-3">
           <form action="http://localhost:3000/upload/" method="post" enctype="multipart/form-data">
-    
-    <input type="file" name="photos" />
+    <input class="form-control" type="file" name="photos" multiple ref="images" />
     <input type="hidden" name="table_cd" value="3">
-    <input type="hidden" name= "type_cd" v-model="bannerInfo.no"> 
-    <input type="submit" value="업로드" /> 
+    <input type="hidden" name= "type_cd" value="eventList.event_cd">  
 </form>
         </div>
         <button type="reset" class="btn btn-primary">취소하기</button>
@@ -86,26 +85,28 @@
     data () {
       return {
         eventList : [],
-        fileList:[{
-          event_cd: '',
-          event_name: '',
-          event_impt: '',
-          path: '',
-          crd_date: '',
-          status:'',
-          image: ''
-        }
-        ],
         modalOpen: false,
         bannerInfo: {
           no: '',
           name: '',
           path: '',
           status: 0, 
+          table_cd: '',
           type_cd: '',
           img: '',
           created_date: '',
         },
+        fileList:[{
+          event_cd: '',
+          event_name: '',
+          event_impt: '',
+          path: '',
+          crd_date: '',
+          extn: '',
+          status:'',
+          image: ''
+        }
+        ],
         paging : [],
         allSize : 1,  // 모든 데이터 수
         pageSize : 5, // 한 페이지에서 보여줄 데이터 수
@@ -127,21 +128,26 @@
                     event_name : this.bannerInfo.name,
                     path : this.bannerInfo.path,
                     status : this.bannerInfo.status,
-
                     type_cd: this.bannerInfo.type_cd,
-                    event_name: this.fileList.event_name,
-                    event_impt: '',
-                    path: '',
-                    crd_date: '',
-                    status:'',
-                    image: ''
-   
-                } 
+                    image: this.fileList.filename,
+                } ,
             };
 
             let result = await axios.post("/api/notice/event", data)
                                .catch(err => console.log(err));
-                  console.log(result.data);
+                  console.log('data는:'+result.data);
+                  this.$router.go(1); //해당 페이지 재호출
+        },
+        fileUpload(){
+        axios.get('/upload')
+              .then(result => {
+                this.fileList = result.data[0];
+                let dbImgUrl = `${result.data[0].file_path}/${result.data[0].file_name}.${result.data[0].file_extn}`;
+                console.log(dbImgUrl);
+                let localhost = "http://localhost:3000/";
+                this.imgUrl = localhost + dbImgUrl;
+                this.$router.go(1);
+              });
         },
         
       async getTableList(curPage) {

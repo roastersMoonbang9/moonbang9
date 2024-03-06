@@ -1,5 +1,6 @@
 //coupon.js
 // 예시
+//보유 쿠폰 목록 
 const possCouponList = 
 `SELECT p.poss_no,
         p.cpn_no,
@@ -16,6 +17,9 @@ const possCouponList =
 FROM poss_coupon p 
 JOIN coupon c ON p.cpn_no = c.cpn_no 
 WHERE p.mem_no=? and p.status=?`;
+
+const couponList = 
+``
 
 
 module.exports = {

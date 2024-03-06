@@ -1,9 +1,16 @@
 //grade.js
 // 예시
-const boardList = 
-`select * from customers`;
+//등급 출력
+const gradeList = 
+`select * from grade`;
 
+
+const gradeUpdate = 
+`UPDATE grade 
+SET rwd_pct = ?
+WHERE grd_no = ?`;
 
 module.exports = {
-    boardList
+    gradeList,
+    gradeUpdate
 }
