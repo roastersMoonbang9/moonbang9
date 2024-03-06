@@ -18,8 +18,7 @@ const userList =
         token,
         mem_status,
         grade_no
-FROM    member
-ORDER BY mem_no`;
+FROM    member`;
 
 // 회원 개별 조회
 const userInfo = 
@@ -73,11 +72,17 @@ const userUpdate =
  FROM   member 
  WHERE mem_no = ?`;
 
+ // 회원수 확인
+ const userCount = 
+`SELECT count(mem_no) as count
+FROM member`;
+
  module.exports = {
     userList,
     userInfo,
     userJoin,
     userUpdate,
     userLogin,
-    userPoint
+    userPoint,
+    userCount
 }
