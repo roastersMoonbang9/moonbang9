@@ -12,6 +12,7 @@ const dbInfo = {
 
 const dbPool = mysql.createPool(dbInfo);
 
+
 // module.exports = {
 //   connection(table,alias, param = []) {
 //    console.log(table)
@@ -25,7 +26,6 @@ const dbPool = mysql.createPool(dbInfo);
 //    }));
 //  }
 // };
-
 module.exports = {
   connection(table, alias, param = [], where="") {
     return new Promise((resolve, reject) => dbPool.query(sql[table][alias] + where, param, (error, results) => {

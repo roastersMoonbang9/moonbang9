@@ -18,7 +18,7 @@
                                 class="radio" id="bonusCp" checked=""> 
                                 <label for="bonusCp">상품쿠폰</label></th>
                         <td width="315px">
-                            <select name="sailcoupon" class="select offInput" title="보너스 쿠폰 선택하세요" style="width:310px;" v-model="selected" :on-change="couponSelect">
+                            <select name="sailcoupon" class="select offInput" title="보너스 쿠폰 선택하세요" style="width:310px;" v-model="selected">
                                 <option value="">없음</option>
                                 <option v-for="(list, idx) in couponList" :key="idx" :value="list">{{ list.cpn_name }}</option>
                             </select>
@@ -29,7 +29,7 @@
                         <th width="95px" class="nowrap"><label for="mileage">포인트</label></th>
                         <td width="315px">
                             <p><input name="spendmileage" v-model="points" type="number" class="txtInp"
-                                    style="width:75px;" id="mileage" :on-change="pointSelect"> Point</p>
+                                    style="width:75px;" id="mileage"> Point</p>
                                     <p>포인트는 한번에 최대 10000포인트까지 사용가능합니다.</p>
                         </td>
                         <td>
@@ -41,7 +41,6 @@
             <input type="hidden" name="availitemcouponlist" value="">
             <input type="hidden" name="checkitemcouponlist" value="">
         </div>
-        {{ couponList }}
     </div>
     <div class="ftRt" style="width:340px">
         <div class="overHidden">
@@ -84,7 +83,6 @@
                     </tr>
                 </tfoot>
             </table>
-            {{ list }}
         </div>
     </div>
 </div>
@@ -99,16 +97,31 @@ export default {
         },
         point : Number
     },
-    data() {
+    emits:['selected','point','finalPrice','fee']
+    ,data() {
         return {
             couponList:[],
             selected:{},
             newPoint:0,
-            totalPrice:0
+            couponPrice:0
         };
     },
     created() {
         this.getCouponList();
+    },
+    watch:{
+        selected(){
+            this.$emit('selected',this.selected);
+        },
+        totalPayment(){
+            this.$emit('finalPrice',this.totalPayment);
+        },
+        fee(){
+            this.$emit('fee',this.fee);
+        },
+        usedCoupon(){
+            this.$emit('couponPrice',this.usedCoupon);
+        }
     },
      computed:{
         points: {
@@ -127,6 +140,7 @@ export default {
                 this.newPoint = 0
                 this.points = 0
             }
+            this.$emit('point',this.newPoint);
             }
         },
         totalPrices(){
@@ -166,12 +180,6 @@ export default {
               .catch(err => console.log(err));
           let list = result.data;
           this.couponList = list;
-        },
-        pointSelect(){
-            this.$emit('pointEvent',this.newPoint);
-        },
-        couponSelect(){
-            this.$emit('couponEvent',this.selected);
         }
     }
 }
