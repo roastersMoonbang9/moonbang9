@@ -7,7 +7,7 @@ const url = require('url');
 //예시
 //쿼리형태로 받음
 
-//상품목록 동적쿼리 만드는 중
+// 상품목록 동적쿼리
 productRouter.get("/", async (request,response)=>{
   let data = [];
   let where = " WHERE 1=1";
@@ -110,26 +110,28 @@ productRouter.get("/", async (request,response)=>{
 // });
 
 
-// // 상품상세 페이지 - (이미지 제외) 상품정보
-// productRouter.get("/info/:prdt_cd", async (request,response)=>{
-//   let data = request.params.prdt_cd;
-//   let result = await db.connection('product','productInfo', data)[0];
-//   response.send(result);
-// });
+// 상품상세 페이지 - (이미지 제외) 상품정보
+productRouter.get("/productInfo/:prdt_cd", async (request,response)=>{
+  let data = request.params.prdt_cd;
+  let result = await db.connection('product','productInfo', data);
+  response.send(result[0]);
+  console.log('결과는 ' + result);
+});
 
-// // 상품상세 페이지 - 나머지 이미지들
-// productRouter.get("/infoImages/:prdt_cd", async (request,response)=>{
-//   let data = request.params.prdt_cd;
-//   let result = await db.connection('product','productInfoImages', data);
-//   response.send(result);
-// });
+// 상품상세 페이지 - 상품의 옵션들 목록
+productRouter.get("/productOptions/:prdt_cd", async (request,response)=>{
+  let data = request.params.prdt_cd;
+  let result = await db.connection('product','productOptions', data);
+  response.send(result);
+});
 
-// // 상품상세 페이지 - 상품의 옵션들 목록
-// productRouter.get("/infoOptions/:prdt_cd", async (request,response)=>{
-//   let data = request.params.prdt_cd;
-//   let result = await db.connection('product','productInfoOptions', data);
-//   response.send(result);
-// });
+// 상품상세 페이지 - 나머지 이미지들
+productRouter.get("/productImages/:prdt_cd", async (request,response)=>{
+  let data = request.params.prdt_cd;
+  let result = await db.connection('product','productImages', data);
+  response.send(result);
+});
+
 
 
 

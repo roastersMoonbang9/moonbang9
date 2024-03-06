@@ -1,7 +1,7 @@
 //product.js
 // 예시
 
-// 상품 목록 동적 쿼리 만드는 중
+// 상품 목록 동적 쿼리 (WHERE 검색키워드/카테고리 + ORDER BY 인기순/신상품순/낮은가격순/높은가격순/할인율순 + LIMIT 갯수제한 )
 const productList = 
 `SELECT  p.prdt_cd,
          p.prdt_name,
@@ -20,7 +20,7 @@ FROM  product p LEFT OUTER JOIN (SELECT COUNT(*) as sell,
                                  GROUP BY prdt_cd) d
                 ON p.prdt_cd = d.prdt_cd`;
 
-// 상품상세 페이지 - (이미지 제외) 상품정보
+// 상품상세 페이지 내부 : 상품상세 컴포넌트 => (이미지 제외) 상품정보
 const productInfo = 
 `SELECT prdt_cd,
         prdt_name,
@@ -35,8 +35,17 @@ const productInfo =
 FROM  product
 WHERE prdt_cd = ?`;
 
-// 상품상세 페이지 - 나머지 이미지들
-const productInfoImages =
+// 상품상세 페이지 내부 : 상품상세 컴포넌트 => 옵션 목록
+const productOptions =
+`SELECT SUBSTR(o.opt_cd,8,2) as opt_number
+        , o.opt_name
+FROM product p JOIN options o
+               ON p.prdt_cd = o.prdt_cd
+WHERE p.prdt_cd = ?
+ORDER BY opt_number`;
+
+// 상품상세 페이지 안 : 나머지 이미지들
+const productImages =
 `SELECT p.prdt_cd
         , f.table_cd
         , f.type_cd
@@ -49,20 +58,12 @@ FROM product p JOIN file f
 WHERE p.prdt_cd = ?
 ORDER BY ranks`;
 
-// 상품상세 페이지 - 상품의 옵션들 목록
-const productInfoOptions =
-`SELECT SUBSTR(o.opt_cd,8,2) as opt_number
-        , o.opt_name
-FROM product p JOIN options o
-               ON p.prdt_cd = o.prdt_cd
-WHERE p.prdt_cd = ?
-ORDER BY opt_number`;
 
 
 
 module.exports = {    
     productList,
     productInfo,
-    productInfoImages,
-    productInfoOptions
+    productOptions,
+    productImages
 }

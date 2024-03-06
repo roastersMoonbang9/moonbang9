@@ -43,7 +43,7 @@ export default {
                 component: ProductList
             },
             {
-                path: 'info',
+                path: 'productInfo',
                 name: 'productInfo',
                 component: ProductInfo
             }

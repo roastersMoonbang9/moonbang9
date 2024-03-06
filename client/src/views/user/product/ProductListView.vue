@@ -153,11 +153,11 @@
                       <li class="list-inline-item text-muted me-3"><a class="reset-anchor p-0" href="#!"><i class="fas fa-th"></i></a></li>
                       <li class="list-inline-item">
                         <select class="selectpicker" data-customclass="form-control form-control-sm">
-                          <option value>Sort By </option>
-                          <option value="default">Default sorting </option>
-                          <option value="popularity">Popularity </option>
-                          <option value="low-high">Price: Low to High </option>
-                          <option value="high-low">Price: High to Low </option>
+                          <option value>신상품순</option>
+                          <option value="default" selected>인기상품순</option>
+                          <option value="popularity">낮은가격순</option>
+                          <option value="low-high">높은가격순</option>
+                          <option value="high-low">할인율순</option>
                         </select>
                       </li>
                     </ul>

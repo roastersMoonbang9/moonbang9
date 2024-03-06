@@ -6,8 +6,58 @@ const db = require("../../db.js");
 
 
 //회원 전체 조회
-userRouter.get("/userList", async (request, response) => {
-  let result = await db.connection('user', 'userList');
+userRouter.get("/userList/:offset/:limit", async (request, response) => {
+  let limit = parseInt(request.params.limit);
+  let offset = parseInt(request.params.offset);
+  let checkSearch = request.params.checkSearch;
+  let searched = request.params.searched
+  // let getDate1 = request.params.getDate1
+  // let getDate2 = request.params.getDate2
+  let checkDate = request.params.checkDate
+  let checkLv = request.params.checkLv
+
+  let data = [];
+  let where = " WHERE 1=1";
+  // var queryData = url.parse(request.url, true).query;
+  // let large_code = queryData.large_code;
+
+    // 키워드(검색어) 있는 경우
+    if(searched){
+      if(checkSearch == "1"){
+        where += " AND id LIKE ? "
+        data.push("%" + searched + "%");
+      } else if(checkSearch == "2"){
+        where += " AND name LIKE ? "
+        data.push("%" + searched + "%");
+      }
+    }
+  
+    // 가입일자 / 탈퇴일자 있는 경우
+    // if(large_code){
+    //   where += " AND p.large_code = ? "
+    //   data.push(large_code);
+    // }
+  
+    // 소분류(카테고리) 있는 경우
+    if(grade_no){
+      where += " AND grade_no = ? "
+      data.push(grade_no);
+    }
+  
+
+
+    // ORDER BY 절 추가
+    where += "order by mem_no desc"
+  
+    // LIMIT / OFFSET 절 추가
+    where += " LIMIT ?"
+    data.push(limit);
+  
+    where += " OFFSET ?"
+    data.push(offset);
+    
+  
+  let result = await db.connection('user', 'userList', data, where);
   response.send(result);
 })
 
@@ -40,4 +90,10 @@ userRouter.put("/userUpdate/:mem_no", async (request, response) => {
   let result = await db.connection('user', 'userUpdate', data);
   response.send(result);
 });
+
+// 회원 수 조회
+userRouter.get("/userCount", async (request,response)=>{
+  let result = await db.connection('user','userCount');
+  response.send(result);
+})
 module.exports = userRouter;
