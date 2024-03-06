@@ -6,7 +6,8 @@
       <router-link to="/admin">admin</router-link> |
       <router-link to="/cart">cart</router-link> |
       <router-link to="/login">로그인 화이팅화이팅!!</router-link> |
-      <router-link to="/userJoin">회원가입 힘내힘내!!</router-link>
+      <router-link to="/userJoin">회원가입 힘내힘내!!</router-link> |
+      <router-link to="/productReview">상품리뷰/문의</router-link>
     </nav>
     <h1>메인페이지 작업중</h1>
     <div class="container">

@@ -16,7 +16,7 @@ SET rwd_pct = ?
 WHERE grd_no = ?`;
 
 module.exports = {
-    getGrade
+    getGrade,
     gradeList,
     gradeUpdate
 }
