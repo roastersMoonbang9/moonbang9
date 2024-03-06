@@ -56,6 +56,26 @@
       changeNowPage(page){
         this.$emit("changeNowPage", page);
       }
+
+      // prevPage(){
+      //   this.getTableList(--this.curPage);
+      // },
+
+      // nextPage(){
+      //   this.getTableList(++this.curPage);
+      // },
+
+      // firstPage(){
+      //   this.curPage = 1;
+      //   this.getTableList(this.curPage);
+      // },
+
+      // lastPaging(){
+      //   this.curPage = this.lastPage;
+      //   this.getTableList(this.curPage);
+        
+      // },
+      
     }
   }
   </script>
