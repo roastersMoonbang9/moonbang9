@@ -21,7 +21,14 @@ WHERE p.mem_no=? and p.status=?`;
 const couponList = 
 ``
 
+//쿠폰 상태변경
+const couponMod = 
+`UPDATE poss_coupon
+SET ?
+WHERE pass_no=?`
+
 
 module.exports = {
-    possCouponList
+    possCouponList,
+    couponMod
 }

@@ -122,7 +122,6 @@
     </table>
         <!--주문 할인정보 및 결제내역확인 컴포넌트-->
         <DiscountAndFinalPrice v-bind:list="paymentList" v-bind:point="userInfo.point" @selected="updateSale1" @point="updateSale2" @finalPrice="updateSale3" @fee="updateSale4" @couponPrice="updateSale5"/>
-        <button @click="test">제발</button>
         <div class="orderNotiV21 tMar30">
             <p class="txtArrow">품절 발생 시 별도의 연락을 하지 않고 선택하신 결제 방법으로 안전하게 환불해 드립니다.</p>
             <p class="txtArrow tMar15">
@@ -132,7 +131,7 @@
             <!--:true-value="trueValueMethod()" :false-value="falseValueMethod()"-->
 					</div>
           <div class="ct tPad30 bPad20" id="nextbutton1" name="nextbutton1" style="display: flex;justify-content: center;">
-						<button class="btn btnB2 btnWhite2 btnW220"><em class="gryArr02">이전 페이지</em></button>
+						<button class="btn btnB2 btnWhite2 btnW220" @click="backBtn"><em class="gryArr02">이전 페이지</em></button>
 						<button name="btnPay" id="btnPay" class="lMar10 btn btnB2 btnRed btnW220" @click="PaymentBtn">결제하기</button>
 					</div>
   </template>
@@ -154,7 +153,7 @@ export default {
           finalPrice : 0, //결제금액
           checkItem : false, //약관확인
           fee : 0,  //배송비
-          total_prices : 0, //총 합계
+          total_prices : 0, //총 합계(수정필요)
           couponPrice : 0 //쿠폰할인액
       };
   },
@@ -191,6 +190,7 @@ export default {
   created() {
     //받아온 수량으로 설정
     this.paymentList = JSON.parse(sessionStorage.getItem("payList"));
+    // console.log(this.$store.state.mem_no)
     this.getUserInfo();
     if (this.paymentList == []) {
       this.$router.go(-1);
@@ -206,16 +206,17 @@ export default {
   methods: {
       //주문 목록(수정 필요)
       async getPaymentList() {
-          let result = await axios.get('/apiproduct/cart/1')
+          let result = await axios.get(`/apiproduct/cart/${this.$store.state.userStore.mem_no}`)
               .catch(err => console.log(err));
           console.log(result);
           let list = result.data;
           this.paymentList = list;
-      },
-      //회원정보
-      async getUserInfo() {
-            let result = await axios.get('/apiuser/userInfo/1')
-                .catch(err => console.log(err));
+        },
+        //회원정보
+        async getUserInfo() {
+          let result = await axios.get(`/apiuser/userInfo/${this.$store.state.userStore.mem_no}`)
+          .catch(err => console.log(err));
+          console.log(result);
             let list = result.data;
             this.userInfo = list;
             this.deliInfo = { ...this.userInfo }
@@ -239,7 +240,7 @@ export default {
         if(value != "" && !phoneRule.test(value)){
             Swal.fire("부정확한 휴대폰 번호입니다. \n 정확한 휴대폰 번호로 작성해주세요.");
             this.deliInfo.phone = '';
-        }	
+        }
       },
       //쿠폰 내역 조회
       updateSale1(value){
@@ -274,9 +275,9 @@ export default {
       const data = {
         pg: 'html5_inicis',                           // PG사
         pay_method: 'card',                           // 결제수단
-        merchant_uid: `odr_${new Date().getTime()}`,   // 주문번호 
-        amount: 100,                                 // 결제금액  this.finalPrice
-        name: '아임포트 결제 데이터 분석',                  // 주문명
+        merchant_uid: `M${new Date().getTime()}`,   // 주문번호 
+        amount: this.finalPrice,                                 // 결제금액  this.finalPrice
+        name: '문구야 놀자',                  // 주문명
         buyer_name: this.userInfo.name,                           // 구매자 이름
         buyer_tel: this.userInfo.phone,                     // 구매자 전화번호
         buyer_email: this.userInfo.email,               // 구매자 이메일
@@ -289,9 +290,9 @@ export default {
         console.log(rsp);
         if (rsp.success) {
 
-          //등록, 수정, 삭제
+          //통신
           axios({
-            url: '/order',
+            url: '/order/orderList',
             method: "post",
             headers: { "Content-Type": "application/json" },
             data:  vue.payData(rsp)
@@ -300,20 +301,23 @@ export default {
             // 서버 결제 API 성공시 로직
             console.log(data);
             console.log("결제 성공");
+            this.$router.push({path:'/paymentComplete'});
           })
           
         } else {
           console.log("결제 실패");
+          this.$router.go(-1);
         }
       });
     },
+    //결제시 변경될 데이터
     payData(rsp){
       const orderData = {
         "OrderTable" : {
           deli_addr : this.deliInfo.addr,
           deli_addrdt : this.deliInfo.addrdt,
           deli_cost : this.fee,
-          // ord_dt : 오늘날짜,
+          ord_dt : this.getDate(),
           rcv_name : this.deliInfo.name,
           rcv_email : this.deliInfo.email,
           rcv_phone : this.deliInfo.phone,
@@ -321,35 +325,72 @@ export default {
           total_price : this.total_prices,
           used_point : this.point,
           total_payment : this.finalPrice,
-          // payment_no : rsp.imp_uid,
-          // ord_no : rsp.merchant_uid,
-          payment_no : 'asd222515a',
-          ord_no : 'asd51asd51',
+          payment_no : rsp.imp_uid,
+          ord_no : rsp.merchant_uid,
+          // payment_no : 'asd2213sa21',
+          // ord_no : 'as21asadasdsd51',
           accu_pnt : this.accountPoint,
-          cpn_disc : this.couponPrice
+          cpn_disc : this.couponPrice,
+          mem_no : this.$store.state.userStore.mem_no
       },
-      "paymentList" : this.paymentList,
-      "userUpdates" : {
+      "paymentList" : {
+        paymentLists : this.paymentList,
+        // ord_no : 'as21asadasdsd51'
+        ord_no : rsp.merchant_uid
+      },
+      "cartList" : {
+        cart_cds : this.paymentList
+      },
+      "userPoint" : {
           point : this.userInfo.point + this.accountPoint - this.point,
-      }
+          mem_no : this.$store.state.userStore.mem_no
+      },
+      //userInfo에 사용금액 비교 필요(등급 변경 적용기준)
+      "usergrade" : {
+          grade : this.userInfo.grd_no,
+          mem_no : this.$store.state.userStore.mem_no
+      },
+      "usercoupon" : {
+          poss_no : this.couponSelected.poss_no,
+          end_dt : this.getDate(),
+          status : 1,
+          cpnused_dt : this.getDate()
+      },
       }
       return orderData
     },
-    async test(){
-      //등록
-      let rsp = 1;
-      await axios({
-            url: '/apiorder/orderList',                                   //본인웹서버 route
-            method: "post",
-            headers: { "Content-Type": "application/json" },
-            data:  this.payData(rsp)
-            
-          }).then((data) => {
-            // 서버 결제 API 성공시 로직
-            console.log(data);
-            console.log("결제 성공");
-          })
+    //오늘 날짜 계산
+    getDate() {
+      let res = null;
+      let date = new Date();
+      let y = date.getFullYear();
+      let m = ("0" + (date.getMonth() + 1)).slice(-2);
+      let d = ("0" + date.getDate()).slice(-2);
+
+      res = `${y}-${m}-${d}`;
+      
+      return res;
+    },
+    //뒤로가기 버튼
+    backBtn(){
+      this.$router.go(-1);
     }
+
+    // async test(){
+    //   //등록
+    //   let rsp = 1;
+    //   await axios({
+    //         url: '/apiorder/orderList',                                   //본인웹서버 route
+    //         method: "post",
+    //         headers: { "Content-Type": "application/json" },
+    //         data:  this.payData(rsp)
+            
+    //       }).then((data) => {
+    //         // 서버 결제 API 성공시 로직
+    //         console.log(data);
+    //         console.log("결제 성공");
+    //       })
+    // }
 },
   components: { TotalOrderPrice,DiscountAndFinalPrice, AddrsPost }
 }

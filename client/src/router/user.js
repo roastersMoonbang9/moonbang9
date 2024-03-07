@@ -6,6 +6,7 @@ import PaymentView from '../views/user/product/PaymentView.vue'
 import loginView from '../views/user/login/loginView.vue'
 import kakaoLoginView from '../views/user/login/kakaoLoginView.vue'
 import userJoinView from '../views/user/login/userJoinView.vue'
+import ProductReview from '../views/user/product/productReview.vue'
 
 export default {
         path: '/',
@@ -46,6 +47,11 @@ export default {
                 path: 'productInfo',
                 name: 'productInfo',
                 component: ProductInfo
+            },
+            {
+                path: 'productReview',
+                name: 'productReview',
+                component: ProductReview
             }
         ]
 }

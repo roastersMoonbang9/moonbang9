@@ -38,7 +38,6 @@
 <div class="black-bg" v-if="modalOpen === true">
   <div class="bg-light rounded h-100 p-4">                
     <h6 class="mb-4">배너추가</h6>
-    <!-- event.preventdefault와 같은 효과-->
     <form>
         <div class="row mb-3">
             <label for="inputEmail3" class="col-sm-2 col-form-label">배너 이름</label>
@@ -135,7 +134,7 @@
 
             let result = await axios.post("/api/notice/event", data)
                                .catch(err => console.log(err));
-                  console.log('data는:'+result.data);
+                               console.log(' Result출력:', result.data);
                   this.$router.go(1); //해당 페이지 재호출
         },
         fileUpload(){
@@ -143,10 +142,10 @@
               .then(result => {
                 this.fileList = result.data[0];
                 let dbImgUrl = `${result.data[0].file_path}/${result.data[0].file_name}.${result.data[0].file_extn}`;
-                console.log(dbImgUrl);
+                //console.log(dbImgUrl);
                 let localhost = "http://localhost:3000/";
                 this.imgUrl = localhost + dbImgUrl;
-                this.$router.go(1);
+                //this.$router.go(1);
               });
         },
         
