@@ -56,8 +56,8 @@
                 <li class="nav-item"><a class="nav-link" href="#!"> <i class="far fa-heart me-1"></i><small class="text-gray fw-normal"> (0)</small></a></li>
                 <li v-if="isLogin" class="nav-item"><a class="nav-link" href="/"> <i class="fas fa-user me-1 text-gray fw-normal"></i>마이페이지</a></li>
                 <li v-else class="nav-item"><a class="nav-link" href="/userJoin"> <i class="fas fa-user me-1 text-gray fw-normal"></i>회원가입</a></li>
-                <li v-if="isLogin" class="nav-item"><a class="nav-link" href="/"><i class="fas fa-user me-1 text-gray fw-normal"></i>로그아웃</a></li>
-                <li v-else class="nav-item"><a class="nav-link" href="/login"><i class="fas fa-user me-1 text-gray fw-normal"></i>로그인</a></li>                
+                <li v-if="isLogin" class="nav-item"><a class="nav-link" @click="handleLogout"> <i class="fas fa-user me-1 text-gray fw-normal"></i>로그아웃</a></li>
+                <li v-else class="nav-item"><a class="nav-link" href="/login"> <i class="fas fa-user me-1 text-gray fw-normal"></i>로그인</a></li>              
               </ul>      
             </div>
           </nav>
@@ -85,6 +85,11 @@ export default {
       }
     },
     methods : {
+      handleLogout() {
+        this.$store.commit('userStore/logout'); 
+        alert("로그아웃 되었습니다.");
+        this.$router.push('/login');
+    },
       goToList(large, small) {
         this.large_code = large;
         this.small_code = small;
