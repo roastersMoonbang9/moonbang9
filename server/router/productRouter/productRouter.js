@@ -132,6 +132,16 @@ productRouter.get("/productImages/:prdt_cd", async (request,response)=>{
   response.send(result);
 });
 
+// 상품상세 페이지에서 선택한 상품들 장바구니에 담기
+productRouter.post("/insertCart", async (request, response)=>{
+  let data = request.body.param;
+  let result = '';
+  for(let i in data){
+    result = await db.connection('product','insertCart', data[i])
+    .catch(err => console.log(err));
+  }
+  response.send(result);
+});
 
 
 
