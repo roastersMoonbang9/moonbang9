@@ -71,7 +71,7 @@
           </div>
         </section>
         <!--주문금액 컴포넌트-->
-        <TotalOrderPrice v-bind:list="cartList"/>
+        <TotalOrderPrice v-bind:list="selected"/>
 
         <div class="overHidden tPad20 bPad20">
           <div class="ftRt">

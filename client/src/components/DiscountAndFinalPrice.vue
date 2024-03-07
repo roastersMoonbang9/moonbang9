@@ -27,7 +27,7 @@
                     <tr>
                         <th width="95px" class="nowrap"><label for="mileage">포인트</label></th>
                         <td width="315px">
-                            <p><input name="spendmileage" v-model="points" type="number" class="txtInp"
+                            <p><input name="spendmileage" v-model="newPoint" @input="setPoint()" type="number" class="txtInp"
                                     style="width:75px;" id="mileage"> Point</p>
                                     <p>포인트는 한번에 최대 10000포인트까지 사용가능합니다.</p>
                         </td>
@@ -96,7 +96,7 @@ export default {
         },
         point : Number
     },
-    emits:['selected','point','finalPrice','fee']
+    emits:['selected','newPoint','finalPrice','fee']
     ,data() {
         return {
             couponList:[],
@@ -122,26 +122,29 @@ export default {
             this.$emit('couponPrice',this.usedCoupon);
         }
     },
+    updated(){
+        this.$emit('newPoint',this.newPoint)
+    },
      computed:{
-        points: {
-        get() {
-            return this.newPoint
-        },
-        set(newValue) {
-            console.log(newValue)
-            this.newPoint = newValue
-            if(this.newPoint > this.point){
-                alert('보유포인트의 최대값을 넘게 사용할 수 없습니다.')
-                this.newPoint = this.point
-                this.points = this.point
-            }else if(this.newPoint < 0){
-                alert('포인트 사용값은 0이하로 내려갈 수 없습니다.')
-                this.newPoint = 0
-                this.points = 0
-            }
-            this.$emit('point',this.newPoint);
-            }
-        },
+        // points: {
+        // get() {
+        //     return this.newPoint
+        // },
+        // set(newValue) {
+        //     console.log(newValue)
+        //     this.newPoint = newValue
+        //     if(this.newPoint > this.point){
+        //         alert('보유포인트의 최대값을 넘게 사용할 수 없습니다.')
+        //         this.newPoint = this.point
+        //         this.points = this.point
+        //     }else if(this.newPoint < 0){
+        //         alert('포인트 사용값은 0이하로 내려갈 수 없습니다.')
+        //         this.newPoint = 0
+        //         this.points = 0
+        //     }
+        //     this.$emit('point',this.newPoint);
+        //     }
+        // },
         totalPrices(){
             let totalPrice = 0;
             for(let i=0; i<this.list.length;i++){
@@ -179,6 +182,15 @@ export default {
               .catch(err => console.log(err));
           let list = result.data;
           this.couponList = list;
+        },
+        setPoint(){
+            if(this.newPoint > this.point){
+                alert('보유포인트의 최대값을 넘게 사용할 수 없습니다.')
+                this.newPoint = this.point
+            }else if(this.newPoint < 0){
+                alert('포인트 사용값은 0이하로 내려갈 수 없습니다.')
+                this.newPoint = 0
+            }
         }
     }
 }

@@ -94,10 +94,12 @@
                 </p>
                 </td>
         </tr>
+        {{ this.roundNum(this.userInfo.point + this.accountPoint - this.point) }}
+        {{ couponSelected }}
         </tbody>
     </table>
         <!--주문 할인정보 및 결제내역확인 컴포넌트-->
-        <DiscountAndFinalPrice v-bind:list="paymentList" v-bind:point="userInfo.point" @selected="updateSale1" @point="updateSale2" @finalPrice="updateSale3" @fee="updateSale4" @couponPrice="updateSale5"/>
+        <DiscountAndFinalPrice v-bind:list="paymentList" v-bind:point="userInfo.point" @selected="updateSale1" @newPoint="updateSale2" @finalPrice="updateSale3" @fee="updateSale4" @couponPrice="updateSale5"/>
         <div class="orderNotiV21 tMar30">
             <p class="txtArrow">품절 발생 시 별도의 연락을 하지 않고 선택하신 결제 방법으로 안전하게 환불해 드립니다.</p>
             <p class="txtArrow tMar15">
@@ -302,8 +304,6 @@ export default {
           total_payment : this.finalPrice,
           payment_no : rsp.imp_uid,
           ord_no : rsp.merchant_uid,
-          // payment_no : 'asd2213sa21',
-          // ord_no : 'as21asadasdsd51',
           accu_pnt : this.roundNum(this.accountPoint),
           cpn_disc : this.couponPrice,
           mem_no : this.$store.state.userStore.mem_no
@@ -326,7 +326,7 @@ export default {
       },
       "usercoupon" : {
           poss_no : this.couponSelected.poss_no,
-          end_dt : this.getDate(),
+          // end_dt : this.getDate(),
           status : 1,
           cpnused_dt : this.getDate()
       }
