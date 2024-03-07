@@ -1,6 +1,6 @@
 //user.js
 
-// 회원 전체 조회
+// 회원 전체 조회(관리자)
 const userList = 
 `SELECT
         mem_no,
@@ -17,7 +17,8 @@ const userList =
         point,
         token,
         mem_status,
-        grd_no
+        grd_no,
+        used_payment
 FROM    member`;
 
 // 회원 개별 조회
@@ -76,7 +77,7 @@ const userUpdate =
  FROM   member 
  WHERE mem_no = ?`;
 
- // 회원수 확인
+ // 회원수 확인(관리자)
  const userCount = 
 `SELECT count(mem_no) as count
 FROM member`;

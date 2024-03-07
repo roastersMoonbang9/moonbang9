@@ -75,7 +75,8 @@
             </li>
             <li>
                 <a href="#">
-                <i class="bi bi-circle"></i><span>주문 취소 목록</span>
+                <i class="bi bi-circle"></i>
+                <router-link to="/admin/cancleOrderList"><span>주문 취소 목록</span></router-link>
                 </a>
             </li>
             <li>

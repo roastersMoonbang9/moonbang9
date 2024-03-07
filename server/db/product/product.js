@@ -38,6 +38,7 @@ WHERE prdt_cd = ?`;
 // 상품상세 페이지 내부 : 상품상세 컴포넌트 => 옵션 목록
 const productOptions =
 `SELECT SUBSTR(o.opt_cd,8,2) as opt_number
+        , opt_cd
         , o.opt_name
 FROM product p JOIN options o
                ON p.prdt_cd = o.prdt_cd
@@ -58,12 +59,22 @@ FROM product p JOIN file f
 WHERE p.prdt_cd = ?
 ORDER BY ranks`;
 
-
-
+// 상품상세 페이지에서 선택한 상품들 장바구니에 담기
+const insertCart = 
+// `INSERT INTO cart (
+//                     mem_no,
+//                     prdt_cd 
+//                     opt_cd,
+//                     cart_qty,
+//                     ) 
+// SET ?`;
+`INSERT INTO cart
+SET ?`;
 
 module.exports = {    
     productList,
     productInfo,
     productOptions,
-    productImages
+    productImages,
+    insertCart
 }

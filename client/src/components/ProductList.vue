@@ -10,12 +10,7 @@
           <div class="product-overlay">
             <ul class="mb-0 list-inline">
               <li class="list-inline-item m-0 p-0">
-                <a class="btn btn-sm btn-dark" href="cart.html">장바구니</a>
-              </li>
-              <li class="list-inline-item mr-0">
-                <a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal">
-                  <i class="fas fa-expand"></i>
-                </a>
+                <a class="btn btn-sm btn-dark" href="cart.html">미리보기</a>
               </li>
             </ul>
           </div>
@@ -62,7 +57,6 @@ import axios from 'axios';
       goToProductInfo(prdt_cd){
         this.$router.push({ path : 'productInfo', query : { 'prdt_cd' : prdt_cd }})
       }
-    }
-    
+    }    
   }
 </script>

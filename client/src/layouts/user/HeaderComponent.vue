@@ -1,10 +1,19 @@
 <template>
-    <header class="header bg-white" height="150px">
+    <header class="header bg-white" >
+      <!-- style="height: 150px;" -->
         <div class="container px-lg-3">
+          
           <nav class="navbar navbar-expand-lg navbar-light py-3 px-lg-0">
-            <router-link to="/" class="nav-link active"><img src="/moonbang9_2.png" style="width: 120px;"></router-link>
+            <!-- <router-link to="/" class="nav-link active">
+              <img src="/moonbang9_2.png" style="width: 120px;">
+            </router-link> -->
             <button class="navbar-toggler navbar-toggler-end" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              
+              <router-link to="/" class="nav-link active"><a class="navbar-brand" href="#">
+
+              <span class="fw-bold text-uppercase text-dark">MOONBANG9</span></a></router-link>
+
               <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                   <!-- Link--><router-link to="/" class="nav-link active">Home</router-link>
@@ -53,11 +62,10 @@
               </ul>
               <ul class="navbar-nav ms-auto">               
                 <li class="nav-item"><a class="nav-link"  @click="goToCart"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small class="text-gray fw-normal">(2)</small></a></li>
-                <li class="nav-item"><a class="nav-link" href="#!"> <i class="far fa-heart me-1"></i><small class="text-gray fw-normal"> (0)</small></a></li>
                 <li v-if="isLogin" class="nav-item"><a class="nav-link" href="/"> <i class="fas fa-user me-1 text-gray fw-normal"></i>마이페이지</a></li>
                 <li v-else class="nav-item"><a class="nav-link" href="/userJoin"> <i class="fas fa-user me-1 text-gray fw-normal"></i>회원가입</a></li>
-                <li v-if="isLogin" class="nav-item"><a class="nav-link" href="/"><i class="fas fa-user me-1 text-gray fw-normal"></i>로그아웃</a></li>
-                <li v-else class="nav-item"><a class="nav-link" href="/login"><i class="fas fa-user me-1 text-gray fw-normal"></i>로그인</a></li>                
+                <li v-if="isLogin" class="nav-item"><a class="nav-link" @click="handleLogout"> <i class="fas fa-user me-1 text-gray fw-normal"></i>로그아웃</a></li>
+                <li v-else class="nav-item"><a class="nav-link" href="/login"> <i class="fas fa-user me-1 text-gray fw-normal"></i>로그인</a></li>              
               </ul>      
             </div>
           </nav>
@@ -85,6 +93,11 @@ export default {
       }
     },
     methods : {
+      handleLogout() {
+        this.$store.commit('userStore/logout'); 
+        alert("로그아웃 되었습니다.");
+        this.$router.push('/login');
+    },
       goToList(large, small) {
         this.large_code = large;
         this.small_code = small;
