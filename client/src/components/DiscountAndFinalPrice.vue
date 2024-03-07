@@ -1,9 +1,9 @@
 <template>
     <div class="overHidden tMar60">
         <div class="ftLt">
-            <div class="overHidden" style="float: left;">
+            <div class="overHidden" style="float: left; margin-right: 10rem;">
             <div class="overHidden" style="margin: 0 2%;">
-                <h3 class="crRed">할인 정보</h3>
+                <h3>할인 정보</h3>
             </div>
             <table class="baseTable orderForm payForm tMar10" style="width:690px">
                 <caption>할인 정보 입력</caption>
@@ -41,11 +41,11 @@
             <input type="hidden" name="checkitemcouponlist" value="">
         </div>
     </div>
-    <div class="ftRt" style="width:340px">
-        <div class="overHidden">
-            <h3 class="crRed">결제 금액</h3>
+    <div class="ftLt" style="width:340px">
+        <div class="overHidden" style="margin: 0px 2%;">
+            <h3>결제 금액</h3>
         </div>
-        <div class="payForm">
+        <div class="payForm" style="margin: 0px 2%;">
             <table style="width: 100%;">
                 <caption>결제 금액 보기</caption>
                 <colgroup>
@@ -94,9 +94,10 @@ export default {
         list: {
         type: Object
         },
-        point : Number
+        point : Number,
+        fee : Number
     },
-    emits:['selected','newPoint','finalPrice','fee']
+    emits:['selected','newPoint','finalPrice']
     ,data() {
         return {
             couponList:[],
@@ -115,9 +116,6 @@ export default {
         totalPayment(){
             this.$emit('finalPrice',this.totalPayment);
         },
-        fee(){
-            this.$emit('fee',this.fee);
-        },
         usedCoupon(){
             this.$emit('couponPrice',this.usedCoupon);
         }
@@ -126,34 +124,12 @@ export default {
         this.$emit('newPoint',this.newPoint)
     },
      computed:{
-        // points: {
-        // get() {
-        //     return this.newPoint
-        // },
-        // set(newValue) {
-        //     console.log(newValue)
-        //     this.newPoint = newValue
-        //     if(this.newPoint > this.point){
-        //         alert('보유포인트의 최대값을 넘게 사용할 수 없습니다.')
-        //         this.newPoint = this.point
-        //         this.points = this.point
-        //     }else if(this.newPoint < 0){
-        //         alert('포인트 사용값은 0이하로 내려갈 수 없습니다.')
-        //         this.newPoint = 0
-        //         this.points = 0
-        //     }
-        //     this.$emit('point',this.newPoint);
-        //     }
-        // },
         totalPrices(){
             let totalPrice = 0;
             for(let i=0; i<this.list.length;i++){
                 totalPrice += this.list[i].total_price;
             }
             return totalPrice;
-        },
-        fee(){
-            return this.totalPrices >= 50000 ? 0 : 3000;
         },
         totalSum(){
             return this.totalPrices + this.fee;
@@ -340,7 +316,7 @@ div.orderWrap div.payForm {
 }
 .payForm {
     background:#f5f5f5; 
-    border-top:2px solid #d50c0c; 
+    border-top:2px solid #000; 
     padding:0 10px;
 }
 .payForm th, .payForm td {

@@ -19,7 +19,6 @@
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">주문금액</strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th>
                       <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th>
                     </tr>
                   </thead>
                   <tbody class="border-0">
@@ -47,7 +46,6 @@
                       <td class="p-3 align-middle border-light">
                         <p class="mb-0 small">{{list.total_price}}</p>
                       </td>
-                      <td class="p-3 align-middle border-light"><a class="reset-anchor" href="#!"><i class="fas fa-trash-alt small text-muted"></i></a></td>
                       <td class="p-3 align-middle border-light"></td>
                       <td class="p-3 align-middle border-light">
                         <div class="d-flex flex-column d-grid gap-4 align-items-center">
@@ -75,7 +73,7 @@
 
         <div class="overHidden tPad20 bPad20">
           <div class="ftRt">
-          <button type="button" class="btn btn-secondary btn btnB1 btnWhite2 btnW185" @click="goToback()">계속 쇼핑하기</button>
+          <button type="button" class="btn btn-secondary btn btnB1 btnWhite2 btnW185 lMar10" @click="goToback()">계속 쇼핑하기</button>
           <button type="button" class="btn btn-secondary btn btnB1 btnWhite2 btnW185 lMar10" @click="goToPayment(selected)">선택상품 주문하기</button>
           <button type="button" class="btn btn-danger btn btnB1 btnRed btnW185 lMar10" @click="goToPayment(cartList)">전체상품 주문하기</button>
           </div>
@@ -207,8 +205,12 @@
         },
         //결제페이지 이동
         goToPayment(payList) {
-          sessionStorage.setItem("payList", JSON.stringify(payList ))
-          this.$router.push({ name: 'payment'});
+          if (payList.length == 0) {
+            Swal.fire("선택된 상품이 없습니다.");
+          } else {
+            sessionStorage.setItem("payList", JSON.stringify(payList ));
+            this.$router.push({ name: 'payment'});
+          }
         },
         //뒤로가기
         goToback() {
@@ -243,7 +245,7 @@
 .btnB1 {
     font-size: 13px;
     line-height: 13px;
-    padding: 18px 45px;
+    padding: 18px 36px;
 }
 .sece{
   width: 125px;

@@ -1,5 +1,5 @@
 <template>
-    <button type="button" @click="addrSearch()" class="btn btn-secondary btn btnS5 btnGry2 fn lMar5">우편번호 찾기</button>
+    <button type="button" @click="addrSearch()" class="btn btn-secondary btn btnS5 btnGry2 fn lMar5 fonts">우편번호 찾기</button>
 </template>
 
 <script>
@@ -56,3 +56,8 @@ export default {
 }
 }
 </script>
+<style>
+    .fonts{
+        font-size: 12px;
+    }
+</style>

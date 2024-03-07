@@ -25,7 +25,7 @@
                         <td>2024-03-07 오전 10:34:45</td>
                     </tr>
                     <tr>
-                        <th>입금 예정자명</th>
+                        <th>입금자명</th>
                         <td>최승민</td>
                         <th>결제 금액</th>
                         <td>
@@ -53,31 +53,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    
-                        <tr>
-                            <td>6060421</td>
+                        <tr  v-for="(list, idx) in paymentList" v-bind:key="idx">
+                            <td>{{list.prdt_cd}}</td>
                             <td><img src="http://webimage.10x10.co.kr/image/small/606/S006060421.jpg" width="50px" height="50px" alt="01-Custard [커스터드]"></td>
-                            <td class="lt">
-                                <p class="tPad05">플랫 포켓 스케줄러 (6개월)</p>
-                                <p class="tPad02">
-                                01-Custard [커스터드]
-                                </p>
-                            </td>
-                            
-                                <td>
-                                    5,400원
-                                </td>
-                            
-                                <td>
-                                    1
-                                </td>
-                                <td>5,400원
-                                </td>
-                            
+                            <td class="lt"><p class="tPad05">{{list.prdt_name}}</p><p class="tPad02" v-if="list.opt_name != null">옵션 : {{list.opt_name}}</p></td>
+                            <td> {{list.sale_price}}원 </td>
+                            <td> {{ list.cart_qty }}개 </td>
+                            <td>{{list.total_price}}원 </td>
                         </tr>
-
-
-                        
                     </tbody>
                 </table>
                 <!-- 총 주문금액 컴포넌트 자리-->
@@ -94,13 +77,13 @@
                     <tbody>
                     <tr>
                         <th>보내시는 분</th>
-                        <td>파란강아지</td>
+                        <td>{{userInfo.name}}</td>
                         <th>이메일</th>
-                        <td>dmg04144@naver.com</td>
+                        <td>{{userInfo.email}}</td>
                     </tr>
                     <tr>
                         <th>휴대전화</th>
-                        <td>010-3626-3631</td>
+                        <td>{{userInfo.phone}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -125,14 +108,14 @@
                                 </tr>
                                 <tr>
                                     <th>주소</th>
-                                    <td colspan="3">[42960] 대구광역시 달성군 화원읍 명천로 243 (명곡역미래빌5단지)506/604</td>
+                                    <td colspan="3">[42960] 대구광역시 달성군 화원읍 명천로 243</td>
                                 </tr>
                                 </tbody>
                             </table>
                             
                 <div class="ct tMar60 bPad20">
                     
-                    <button class="btn btnB2 btnWhite2 btnW220">쇼핑 계속하기</button>
+                    <button class="btn btnB2 btnWhite2 btnW220" @click="homeBtn()">쇼핑 계속하기</button>
                     <button class="lMar10 btn btnB2 btnRed btnW220"><em class="whiteArr02">나의 주문내역 확인</em></button>
                     
                 </div>
@@ -140,15 +123,36 @@
 </template>
 <script>
 import TotalOrderPrice from '@/components/totalOrderPrice.vue';
+import axios from 'axios';
 
 export default{ 
     data(){
         return{
-            paymentList: []
+            paymentList: [], //구매리스트 정보
+            userInfo: {} //보내는이 정보
         };
     },
     created(){
         this.paymentList = JSON.parse(sessionStorage.getItem("payList"));
+        this.getUserInfo();
+        if (this.paymentList == []) {
+            this.$router.go(-1);
+        };
+    },
+    methods:{
+        //회원정보
+        async getUserInfo() {
+          let result = await axios.get(`/apiuser/userInfo/${this.$store.state.userStore.mem_no}`)
+          .catch(err => console.log(err));
+          console.log(result);
+          let list = result.data;
+          this.userInfo = list;
+          this.deliInfo = { ...this.userInfo }
+        },
+        //메인가기 버튼
+        homeBtn(){
+            this.$router.push({path:'/'});
+        },
     },
     components: { TotalOrderPrice }
 }
@@ -189,7 +193,7 @@ export default{
     color: #000;
 }
 table.payForm {
-    border-top:2px solid #d50c0c;
+    border-top:2px solid #000;
 }
 table.payForm thead td {
     color:#666; 
