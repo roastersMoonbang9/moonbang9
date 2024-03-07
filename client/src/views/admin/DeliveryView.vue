@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-      <h1 style="padding: 15px; font-size: 27px; margin: 30px;">배송 관리</h1>
+      <h1 style="padding: 15px; font-size: 27px; margin: 30px;">배송 조회</h1>
       <div>
           <h4 style="margin-bottom: 20px;">조건검색</h4>
           <table class="table table-bordered">

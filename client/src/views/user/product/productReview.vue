@@ -6,11 +6,11 @@
         <div class="container">
           <!-- DETAILS TABS-->
           <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
-            <li class="nav-item"><a class="nav-link text-uppercase active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">상품 문의</a></li>
-            <li class="nav-item"><a class="nav-link text-uppercase" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">리뷰</a></li>
+            <li class="nav-item"><a class="nav-link text-uppercase active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description"  @click="reviewOpenTF()" >상품 문의</a></li>
+            <li class="nav-item"><a class="nav-link text-uppercase" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" @click="reviewOpenTF()" >리뷰</a></li>
           </ul>
           <div class="tab-content mb-5" id="myTabContent">
-            <div class="tab-pane fade show active" id ="productQuery" role="tabpanel" aria-labelledby="description-tab">
+            <div class="tab-pane fade show active" id ="productQuery" role="tabpanel" aria-labelledby="description-tab" v-if="queryOpen">
               <div class="p-4 p-lg-5 bg-white" >
                 <!-- 상품 문의 컴포넌트-->
                 <h6 class="text-uppercase">상품문의(이지만 리뷰 테스트중) </h6>
@@ -28,15 +28,26 @@
               </div>
             </div>
             <!-- 리뷰 컴포넌트-->
-            <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+            <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab" v-if="reviewOpen">
               <div class="p-4 p-lg-5 bg-white">
-                <div class="row">
+                <table class="table table-hover">
+            <tbody>
+                <tr :key="i" v-for="(review, i) in reviewInfo"
+                              @click="goToDetail(review.no)">
+                    <td>{{ review.rv_no }}</td>
+                    <td>{{ review.content }}</td>
+                    <td>{{ review.rv_dt }}</td>
+                    <td>{{ review.id }}</td>
+                </tr>
+            </tbody>
+        </table>
+                                <div class="row">
                   <div class="col-lg-8">
                     <div class="d-flex mb-3">
                       <div class="ms-3 flex-shrink-1">
                         <h6 class="mb-0 text-uppercase">Jason Doe</h6>
                         <p class="small text-muted mb-0 text-uppercase">20 May 2020</p>
-                        <ul class="list-inline mb-1 text-xs">
+                                                <ul class="list-inline mb-1 text-xs">
                           <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
                           <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
                           <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
@@ -81,7 +92,9 @@ export default {
                 prdt_cd: '',
                 id: '',
                 ord_no: ''
-            }
+            },
+            reviewOpen : true,
+            queryOpen : false
         };
     },
     created(){
@@ -107,6 +120,17 @@ export default {
        // goToDetail(pno){
       //       this.$router.push({ path : '/boardInfo', query : { 'productNo' : pno}});
       // }
+      reviewOpenTF(){
+        if(this.reviewOpen == true){
+          this.queryOpen = false;
+
+        }else{
+          this.queryOpen = true;
+        }
+      },
+      queryOpenTF(){
+
+      },
     }
 }
 </script>

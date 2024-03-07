@@ -38,24 +38,24 @@
 <div class="black-bg" v-if="modalOpen === true">
   <div class="bg-light rounded h-100 p-4">                
     <h6 class="mb-4">배너추가</h6>
-    <form>
+    <form name="bannerForm">
         <div class="row mb-3">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">배너 이름</label>
+            <label for="banName" class="col-sm-2 col-form-label" >배너 이름</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="bannerName" v-model="bannerInfo.name">
+                <input type="text" class="form-control" name="bannerName" v-model="bannerInfo.name" >
             </div>
         </div>
         <div class="row mb-3">
-            <label for="inputPassword3" class="col-sm-2 col-form-label">이동 url</label>
+            <label for="banUrl" class="col-sm-2 col-form-label">이동 url</label>
             <div class="col-sm-10">
-                <input type="url" class="form-control" id="bannerPath" v-model="bannerInfo.path" >
+                <input type="url" class="form-control" name="bannerPath"  v-model="bannerInfo.path" >
             </div>
         </div>
         <fieldset class="row mb-3">
-            <legend class="col-form-label col-sm-2 pt-0">활성화 여부</legend>
+            <legend for="bannStatus" class="col-form-label col-sm-2 pt-0">활성화 여부</legend>
             <div class="col-sm-10">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" id="bannStatus" value="1" v-model="bannerInfo.status">
+                    <input for="bannSt" class="form-check-input" type="radio" name="bannStatus" value="1" v-model="bannerInfo.status">
                     <label class="form-check-label" for="gridRadios1">
                         활성화
                     </label>
@@ -63,11 +63,10 @@
             </div>
         </fieldset>
         <div class="mb-3">
-          <form action="http://localhost:3000/upload/" method="post" enctype="multipart/form-data">
-    <input class="form-control" type="file" name="photos" multiple ref="images" />
-    <input type="hidden" name="table_cd" value="3">
-    <input type="hidden" name= "type_cd" value="eventList.event_cd">  
-</form>
+    <input for="photosUpl" class="form-control" type="file" name="photos"  multiple ref="images" />
+    <input for="tablecd" type="hidden" name="table_cd" value="3">
+    <input for="type_cd" type="hidden" name= "type_cd" value="eventList.event_cd">  
+
         </div>
         <button type="reset" class="btn btn-primary">취소하기</button>
         <button type="submit" class="btn btn-primary" @click="bannerInsert()">저장하기</button>
@@ -121,34 +120,25 @@
     },
     methods : {
       async bannerInsert(){
-            let data = { 
-                param : {
-                    event_cd: this.bannerInfo.no,
-                    event_name : this.bannerInfo.name,
-                    path : this.bannerInfo.path,
-                    status : this.bannerInfo.status,
-                    type_cd: this.bannerInfo.type_cd,
-                    image: this.fileList.filename,
-                } ,
-            };
+        let formData = new FormData(window.Document.bannerForm); //form 안의 값을 다 넣어줌
+        formData.append('bannerName',this.bannerInfo.name);
+        formData.append('bannerPath',this.bannerInfo.path);
+        formData.append('bannStatus',this.bannerInfo.status);
+        formData.append('photos',this.fileList[{}]);
+        formData.append('table_cd',this.bannerInfo.table_cd);
+        formData.append('type_cd',this.bannerInfo.type_cd);
 
-            let result = await axios.post("/api/notice/event", data)
+
+        let axiosConfig = {  
+        Headers: {
+            "Content-Type": "multipart/form-data",
+          }
+        }
+            let result = await axios.post("/api/upload/event", formData ,axiosConfig)
                                .catch(err => console.log(err));
                                console.log(' Result출력:', result.data);
-                  this.$router.go(1); //해당 페이지 재호출
+                  //this.$router.go(1); //해당 페이지 재호출
         },
-        fileUpload(){
-        axios.get('/upload')
-              .then(result => {
-                this.fileList = result.data[0];
-                let dbImgUrl = `${result.data[0].file_path}/${result.data[0].file_name}.${result.data[0].file_extn}`;
-                //console.log(dbImgUrl);
-                let localhost = "http://localhost:3000/";
-                this.imgUrl = localhost + dbImgUrl;
-                //this.$router.go(1);
-              });
-        },
-        
       async getTableList(curPage) {
         curPage = this.judgePage(curPage);
         if (!curPage || curPage <= 0) 

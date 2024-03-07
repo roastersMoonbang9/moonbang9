@@ -17,4 +17,12 @@ gradeRouter.get("/grade", async (request,response)=>{
     response.send(result);
   })
 
+  //적립률 수정
+  gradeRouter.put("/grade/:gno", async (request, response) => {
+    let data = [request.body.param, request.params.gno];
+    let result = await db.connection('grade','gradeUpdate', data);
+    response.send(result);
+  });
+
+
   module.exports = gradeRouter;
