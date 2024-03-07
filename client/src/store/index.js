@@ -2,36 +2,17 @@
 
 import { createStore } from 'vuex'
 import persistedstate from 'vuex-persistedstate';
+import userStore from '@/store/modules/userStore.js'
 
 const store = createStore({
-  state() {
-    return {
-      id: "",
-      isLogin: false,
-      mem_no:'',
-      name:''
-
-    }
-  },
-  mutations: {
-    user(state, data) {
-      state.id = data.id;
-      state.isLogin = data.isLogin;
-      state.mem_no = data.mem_no;
-      state.name = data.name;
-    },
-        
-  },
 
   plugin: [
     persistedstate({
-      paths: ['user']
+      paths: ['userStore']
     })
   ],
-
-  actions: {
-  },
   modules: {
+    userStore: userStore
   }
 })
 

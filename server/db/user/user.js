@@ -17,7 +17,7 @@ const userList =
         point,
         token,
         mem_status,
-        grade_no
+        grd_no
 FROM    member`;
 
 // 회원 개별 조회
@@ -37,8 +37,8 @@ const userInfo =
         point,
         token,
         mem_status,
-        grade_no,
-        (select rwd_pct from grade where grd_no = member.grade_no) as rwd_pct
+        grd_no,
+        (select rwd_pct from grade where grd_no = member.grd_no) as rwd_pct
 FROM    member
 WHERE mem_no = ?`;
 

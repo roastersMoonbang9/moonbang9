@@ -125,13 +125,13 @@ import axios from 'axios';
         let result = await axios(data).then(result => {
           console.log("이건 뭐지", result);
           if (result.data[0].loginCheck > 0){
-            this.$store.commit('user', {id:this.id, mem_no:result.data[0].mem_no, name:result.data[0].name, isLogin:true})
+            this.$store.commit('userStore/user', {id:this.id, mem_no:result.data[0].mem_no, name:result.data[0].name, isLogin:true})
             this.$router.push('/')
-            alert( this.$store.state.name + "님 로그인 되었습니다.")
-            console.log(this.$store.state.isLogin);
-            console.log(this.$store.state.id);
-            console.log(this.$store.state.mem_no);
-            console.log(this.$store.state.name);
+            alert( this.$store.state.userStore.name + "님 로그인 되었습니다.")
+            console.log(this.$store.state.userStore.isLogin);
+            console.log(this.$store.state.userStore.id);
+            console.log(this.$store.state.userStore.mem_no);
+            console.log(this.$store.state.userStore.name);
             
           }else{
             alert('아이디/비밀번호를 확인해주세요.')

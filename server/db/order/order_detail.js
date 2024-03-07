@@ -40,8 +40,14 @@ JOIN options o ON o.opt_cd = d.opt_cd
 JOIN product p ON d.prdt_cd = p.prdt_cd
 WHERE r.mem_no=?`
 
+// 상세 주문등록
+const orderDetailAdd = 
+`INSERT INTO order_detail
+SET ?`;
+
 
 module.exports = {
     orderDetailList,
-    orderDetailLists
+    orderDetailLists,
+    orderDetailAdd
 }
