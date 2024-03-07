@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1 style="padding: 15px; font-size: 27px; margin: 30px;">주문 목록</h1>
+        <h1 style="padding: 15px; font-size: 27px; margin: 30px;">주문 취소 목록</h1>
         <div>
             <h4 style="margin-bottom: 20px;">조건검색</h4>
             <table class="table table-bordered">
@@ -21,6 +21,7 @@
                     <td>
                         <select class="form-select" v-model="checkDate" aria-label="Default select example">
                             <option value="1">주문일</option>
+                            <option value="2">취소일</option>
                         </select>
                     </td>
                     <td>
@@ -37,53 +38,6 @@
                         <button class="btn btn-outline-dark" @click="getThreeMonthAgo()">3개월</button>
                     </td>
                 </tr>
-                <tr>
-                    <th>상태검색</th>
-                    <td colspan="4">
-                        <ul class="nav">
-                            <li class="nav-item">
-                                <div class="form-check">
-                                <input v-bind:value="checkStatus1" v-model="checkSt" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-                                <label class="form-check-label" for="flexRadioDefault1">
-                                    전체&nbsp;&nbsp;&nbsp;
-                                </label>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <div class="form-check">
-                                <input v-bind:value="checkStatus2" v-model="checkSt" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                                <label class="form-check-label" for="flexRadioDefault2">
-                                    결제완료&nbsp;&nbsp;&nbsp;
-                                </label>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <div class="form-check">
-                                <input v-bind:value="checkStatus3" v-model="checkSt" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
-                                <label class="form-check-label" for="flexRadioDefault3">
-                                    배송완료&nbsp;&nbsp;&nbsp;
-                                </label>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <div class="form-check">
-                                <input v-bind:value="checkStatus4" v-model="checkSt" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4">
-                                <label class="form-check-label" for="flexRadioDefault4">
-                                    취소&nbsp;&nbsp;&nbsp;
-                                </label>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <div class="form-check">
-                                <input v-bind:value="checkStatus5" v-model="checkSt" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault5">
-                                <label class="form-check-label" for="flexRadioDefault5">
-                                    반품
-                                </label>
-                                </div>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
             </table>
         </div>
         <div style="text-align: center; margin-bottom: 60px;">
@@ -91,21 +45,16 @@
             <button class="btn btn-secondary" @click="this.dataReset()">초기화</button>
         </div>
         <div>
-        <p>검색된 주문 수 : {{ this.allSize }} 건 | 총 주문 금액: {{ this.totalPayment }} 원</p>
+        <p>검색된 취소 수 : {{ this.allSize }} 건 | 총 취소 금액: {{ this.totalPayment }} 원</p>
         <table class="table table-hover" style="font-size: 15px;">
             <thead>
             <tr class="table-primary">
                 <th>번호</th>
                 <th>주문일</th>
+                <th>취소일</th>
                 <th>주문번호</th>
                 <th>주문자</th>
-                <th>수령자</th>
-                <th>주문금액</th>
-                <th>사용포인트</th>
-                <th>할인금액</th>
-                <th>배송비</th>
                 <th>결제금액</th>
-                <th>주문상태</th>
             </tr>
             </thead>
             <tbody>
@@ -116,12 +65,7 @@
                 <td>{{ table.ord_no }}</td>
                 <td>{{ table.name }}</td>
                 <td>{{ table.rcv_name }}</td>
-                <td>{{ table.total_price }}</td>
-                <td>{{ table.used_point }}</td>
-                <td>{{ table.cpn_disc }}</td>
-                <td>{{ table.deli_cost }}</td>
-                <td>{{ table.total_payment }}</td>
-                <td>{{ this.checkStatus(table.status) }}</td>
+                <td>{{ table.rcv_name }}</td>
             </tr>
             </tbody>
         </table>
@@ -151,12 +95,6 @@
                 checkDate : "1",
                 getDate1 : null,
                 getDate2 : null,
-                checkStatus1 : null,
-                checkStatus2 : "1",
-                checkStatus3 : "2",
-                checkStatus4 : "3",
-                checkStatus5 : "4",
-                checkSt : null,
                 totalPayment : 0,
 
                 // 리스트
@@ -173,18 +111,6 @@
             }
         },
         methods : {
-            checkStatus(st) {
-                if (st == 1) {
-                    st = "결제 완료"
-                } else if (st == 2) {
-                    st = "BASIC"
-                } else if (st == 3) {
-                    st = "VIP"
-                } else if (st == 4) {
-                    st = "GOLD"
-                }
-                return st;
-            },
             getToday() {
                 let today = new Date();
                 this.getDate2 = this.changeDate(today);
@@ -249,7 +175,6 @@
                         getDate1 : this.getDate1,
                         checkDate : this.checkDate,
                         getDate2 : this.getDate2,
-                        checkSt : this.checkSt
                     }
                 }
                 let result = await axios.post("/api/order/adOrderList", data)
@@ -266,7 +191,6 @@
                         getDate1 : this.getDate1,
                         checkDate : this.checkDate,
                         getDate2 : this.getDate2,
-                        checkSt : this.checkSt
                     }
                 }
                 let result = await axios.post(`/api/order/adOrderCount`, data) 
@@ -289,7 +213,6 @@
                         getDate1 : this.getDate1,
                         checkDate : this.checkDate,
                         getDate2 : this.getDate2,
-                        checkSt : this.checkSt
                     }
                 }
                 let result = await axios.post(`/api/order/adOrderTotalPayment`, data) 

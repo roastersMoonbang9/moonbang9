@@ -6,7 +6,7 @@ import userStore from '@/store/modules/userStore.js'
 
 const store = createStore({
 
-  plugin: [
+  plugins: [
     persistedstate({
       paths: ['userStore']
     })

@@ -5,7 +5,7 @@ const userRouter = express.Router();
 const db = require("../../db.js");
 
 
-//회원 전체 조회
+//회원 전체 조회(관리자)
 userRouter.post("/userList", async (request, response) => {
   let limit = parseInt(request.body.param.limit);
   let offset = parseInt(request.body.param.offset);
@@ -18,8 +18,6 @@ userRouter.post("/userList", async (request, response) => {
 
   let data = [];
   let where = " WHERE 1=1";
-  // var queryData = url.parse(request.url, true).query;
-  // let large_code = queryData.large_code;
 
     // 키워드(검색어) 있는 경우
     if(searched){
@@ -40,7 +38,7 @@ userRouter.post("/userList", async (request, response) => {
   
     // 소분류(카테고리) 있는 경우
     if(checkLv){
-      where += " AND grade_no = ? "
+      where += " AND grd_no = ? "
       data.push(checkLv);
     }
   
@@ -91,7 +89,7 @@ userRouter.put("/userUpdate/:mem_no", async (request, response) => {
   response.send(result);
 });
 
-// 회원 수 조회
+// 회원 수 조회(관리자)
 userRouter.post("/userCount", async (request,response)=>{
   let checkSearch = request.body.param.checkSearch;
   let searched = request.body.param.searched;
@@ -102,8 +100,6 @@ userRouter.post("/userCount", async (request,response)=>{
 
   let data = [];
   let where = " WHERE 1=1";
-  // var queryData = url.parse(request.url, true).query;
-  // let large_code = queryData.large_code;
 
     // 키워드(검색어) 있는 경우
     if(searched){
@@ -124,7 +120,7 @@ userRouter.post("/userCount", async (request,response)=>{
   
     // 회원등급 조건 존재할 경우
     if(checkLv){
-      where += " AND grade_no = ? "
+      where += " AND grd_no = ? "
       data.push(checkLv);
     }
 
