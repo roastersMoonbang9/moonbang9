@@ -222,8 +222,8 @@
                 this.curPage = curPage;
                 let data = {
                     param : {
-                        limit : (curPage - 1) * this.pageSize,
-                        offset : this.pageSize,
+                        limit : this.pageSize,
+                        offset : (curPage - 1) * this.pageSize,
                         checkSearch : this.checkSearch,
                         searched : this.searched,
                         getDate1 : this.getDate1,
@@ -234,11 +234,22 @@
                 }
                 let result = await axios.post("/api/user/userList", data)
                                         .catch(err => console.log(err));
+                console.log(result);
                 this.tableList = result.data;
             },
             // 테이블 행 총 갯수 가져오기  /api/~~ 만 수정해서 사용.
             async getTableCount() {
-                let result = await axios.get(`/api/user/userCount`) 
+                let data = {
+                    param : {
+                        checkSearch : this.checkSearch,
+                        searched : this.searched,
+                        getDate1 : this.getDate1,
+                        checkDate : this.checkDate,
+                        getDate2 : this.getDate2,
+                        checkLv : this.checkLv
+                    }
+                }
+                let result = await axios.post(`/api/user/userCount`, data) 
                                         .catch(err => console.log(err));
                 this.allSize = result.data[0].count;
                 this.lastPage = Math.ceil(this.allSize / this.pageSize);
