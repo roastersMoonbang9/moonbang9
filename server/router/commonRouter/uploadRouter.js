@@ -33,7 +33,7 @@ const multer = require('multer');
 fileUploadRouter.post("/", upload.array('photos',4), async (req,res)=>{
     let imgUrlList = [];
     for(let file of req.files){
-  
+
       let imgUrl = `files${staticUrl}/${file.filename}`;
   
       // 문자열 잘라서 파일명만 담기
