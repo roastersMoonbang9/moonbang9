@@ -3,6 +3,7 @@ import ProductList from '../views/user/product/ProductListView.vue';
 import ProductInfo from '../views/user/product/ProductInfoView.vue';
 import CartView from '../views/user/product/CartView.vue'
 import PaymentView from '../views/user/product/PaymentView.vue'
+import CompletePaymentView from '../views/user/product/CompletePaymentView.vue'
 import loginView from '../views/user/login/loginView.vue'
 import kakaoLoginView from '../views/user/login/kakaoLoginView.vue'
 import userJoinView from '../views/user/login/userJoinView.vue'
@@ -22,6 +23,11 @@ export default {
                 path: 'payment',
                 name: 'payment',
                 component: PaymentView
+            },
+            {
+                path: 'completePayment',
+                name: 'completePayment',
+                component: CompletePaymentView
             },
             {
                 path: 'login',

@@ -14,8 +14,7 @@
                 </colgroup>
                 <tbody>
                     <tr>
-                        <th width="95px" class="nowrap"><input name="itemcouponOrsailcoupon" value="S" type="radio"
-                                class="radio" id="bonusCp" checked=""> 
+                        <th width="95px" class="nowrap">
                                 <label for="bonusCp">상품쿠폰</label></th>
                         <td width="315px">
                             <select name="sailcoupon" class="select offInput" title="보너스 쿠폰 선택하세요" style="width:310px;" v-model="selected">

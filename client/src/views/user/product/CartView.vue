@@ -51,7 +51,7 @@
                       <td class="p-3 align-middle border-light"></td>
                       <td class="p-3 align-middle border-light">
                         <div class="d-flex flex-column d-grid gap-4 align-items-center">
-                          <input type="button" value="바로주문">
+                          <input type="button" value="바로주문" @click="goToPayment([list])">
                           <input type="button" value="삭제" @click="delCartInfo(list,idx)">
                         </div>
                       </td>
@@ -75,7 +75,7 @@
 
         <div class="overHidden tPad20 bPad20">
           <div class="ftRt">
-          <button type="button" class="btn btn-secondary btn btnB1 btnWhite2 btnW185">계속 쇼핑하기</button>
+          <button type="button" class="btn btn-secondary btn btnB1 btnWhite2 btnW185" @click="goToback()">계속 쇼핑하기</button>
           <button type="button" class="btn btn-secondary btn btnB1 btnWhite2 btnW185 lMar10" @click="goToPayment(selected)">선택상품 주문하기</button>
           <button type="button" class="btn btn-danger btn btnB1 btnRed btnW185 lMar10" @click="goToPayment(cartList)">전체상품 주문하기</button>
           </div>
@@ -125,7 +125,7 @@
     methods: {
         //장바구니 목록
         async getCartList() {
-            let result = await axios.get('/apiproduct/cart/1')
+            let result = await axios.get(`/apiproduct/cart/${this.$store.state.userStore.mem_no}`)
                 .catch(err => console.log(err));
             console.log(result);
             let list = result.data;
@@ -208,7 +208,11 @@
         //결제페이지 이동
         goToPayment(payList) {
           sessionStorage.setItem("payList", JSON.stringify(payList ))
-            this.$router.push({ name: 'payment'});
+          this.$router.push({ name: 'payment'});
+        },
+        //뒤로가기
+        goToback() {
+            this.$router.go(-1);
         }
     },
     components: { TotalOrderPrice }

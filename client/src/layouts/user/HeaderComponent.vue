@@ -52,8 +52,9 @@
                 </li>
               </ul>
               <ul class="navbar-nav ms-auto">               
+                <li v-if="isLogin" class="nav-item"><p class="nav-link" >{{ this.$store.state.userStore.name }}님</p></li>
+                <li v-else class="nav-item"><p class="nav-link"></p></li>
                 <li class="nav-item"><a class="nav-link"  @click="goToCart"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small class="text-gray fw-normal">(2)</small></a></li>
-                <li class="nav-item"><a class="nav-link" href="#!"> <i class="far fa-heart me-1"></i><small class="text-gray fw-normal"> (0)</small></a></li>
                 <li v-if="isLogin" class="nav-item"><a class="nav-link" href="/"> <i class="fas fa-user me-1 text-gray fw-normal"></i>마이페이지</a></li>
                 <li v-else class="nav-item"><a class="nav-link" href="/userJoin"> <i class="fas fa-user me-1 text-gray fw-normal"></i>회원가입</a></li>
                 <li v-if="isLogin" class="nav-item"><a class="nav-link" href="/"><i class="fas fa-user me-1 text-gray fw-normal"></i>로그아웃</a></li>
