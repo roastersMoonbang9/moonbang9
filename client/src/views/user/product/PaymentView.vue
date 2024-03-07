@@ -1,53 +1,29 @@
 <template>
-    <div>
-        <h1>주문결제</h1>
+    <div class="overHidden tMar80">
+      <h3>주문결제</h3>
     </div>
-    <section class="py-5">
-          <h2 class="h5 text-uppercase mb-4"><span class="bg-light" style="float: left;padding: 0 10px;">주문리스트 확인</span></h2>
-          <div class="row" style="display: block;">
-            <div class="mb-4 mb-lg-0" style="margin: 0 auto;">
-              <!-- CART TABLE-->
-              <div class="table-responsive mb-4">
-                <table class="table text-nowrap">
-                  <thead class="bg-light">
-                    <tr>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">상품코드</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">상품정보</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">판매가격</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">수량</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">주문금액</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th>
-                    </tr>
-                  </thead>
-                  <tbody class="border-0">
-                    <tr v-for="(list, idx) in paymentList" v-bind:key="idx">
-                      <th class="border-0 p-3" scope="col"><strong class="text-sm text-uppercase">{{list.prdt_cd}}</strong></th>
-                      <th class="ps-0 py-3 border-light" scope="row">
-                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="../../../assets/product-detail-3.jpg" alt="..." width="70"/></a>
-                          <div class="ms-3"><p class="mb-0 small">{{list.prdt_name}}</p><p class="mb-0 small" v-if="list.opt_name != null">옵션 : {{list.opt_name}}</p></div>
-                        </div>
-                      </th>
-                      <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">{{list.sale_price}}</p>
-                      </td>
-                      <td class="p-3 align-middle border-light">
-                            {{ list.cart_qty }}
-                      </td>
-                      <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">{{list.total_price}}</p>
-                      </td>
-                      <td class="p-3 align-middle border-light"><a class="reset-anchor" href="#!"><i class="fas fa-trash-alt small text-muted"></i></a></td>
-                      <td class="p-3 align-middle border-light"></td>
-                      <td class="p-3 align-middle border-light"></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
+    <table class="baseTable tMar10 orderForm">
+      <caption>주문리스트</caption><colgroup><col width="120px"><col width="55px"><col width=""><col width="110px"><col width="80px"><col width="95px"></colgroup>
+      <thead>
+        <tr>
+          <th>상품코드</th>
+          <th colspan="2">상품정보</th>
+          <th>판매가격</th>
+          <th>수량</th>
+          <th>주문금액</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(list, idx) in paymentList" v-bind:key="idx">
+          <td>{{list.prdt_cd}}</td>
+          <td><img src="http://webimage.10x10.co.kr/image/small/606/S006060421.jpg" width="50px" height="50px" alt="01-Custard [커스터드]"></td>
+          <td class="lt"><p class="tPad05">{{list.prdt_name}}</p><p class="tPad02" v-if="list.opt_name != null">옵션 : {{list.opt_name}}</p></td>
+          <td> {{list.sale_price}}원 </td>
+          <td> {{ list.cart_qty }}개 </td>
+          <td>{{list.total_price}}원 </td>
+        </tr>
+      </tbody>
+    </table>
         <!--주문금액 컴포넌트-->
         <TotalOrderPrice v-bind:list="paymentList"/>
         <!--주문고객 정보-->
@@ -190,7 +166,6 @@ export default {
   created() {
     //받아온 수량으로 설정
     this.paymentList = JSON.parse(sessionStorage.getItem("payList"));
-    // console.log(this.$store.state.mem_no)
     this.getUserInfo();
     if (this.paymentList == []) {
       this.$router.go(-1);
@@ -217,9 +192,9 @@ export default {
           let result = await axios.get(`/apiuser/userInfo/${this.$store.state.userStore.mem_no}`)
           .catch(err => console.log(err));
           console.log(result);
-            let list = result.data;
-            this.userInfo = list;
-            this.deliInfo = { ...this.userInfo }
+          let list = result.data;
+          this.userInfo = list;
+          this.deliInfo = { ...this.userInfo }
       },
       //배송지 업데이트
       updateUser(value){
@@ -292,7 +267,7 @@ export default {
 
           //통신
           axios({
-            url: '/order/orderList',
+            url: '/apiorder/orderList',
             method: "post",
             headers: { "Content-Type": "application/json" },
             data:  vue.payData(rsp)
@@ -301,12 +276,12 @@ export default {
             // 서버 결제 API 성공시 로직
             console.log(data);
             console.log("결제 성공");
-            this.$router.push({path:'/paymentComplete'});
+            this.$router.push({path:'/completePayment'});
           })
           
         } else {
           console.log("결제 실패");
-          this.$router.go(-1);
+          this.$router.push({path:'/'});
         }
       });
     },
@@ -329,33 +304,32 @@ export default {
           ord_no : rsp.merchant_uid,
           // payment_no : 'asd2213sa21',
           // ord_no : 'as21asadasdsd51',
-          accu_pnt : this.accountPoint,
+          accu_pnt : this.roundNum(this.accountPoint),
           cpn_disc : this.couponPrice,
           mem_no : this.$store.state.userStore.mem_no
       },
       "paymentList" : {
         paymentLists : this.paymentList,
-        // ord_no : 'as21asadasdsd51'
         ord_no : rsp.merchant_uid
       },
       "cartList" : {
         cart_cds : this.paymentList
       },
       "userPoint" : {
-          point : this.userInfo.point + this.accountPoint - this.point,
+          point : this.roundNum(this.userInfo.point + this.accountPoint - this.point),
           mem_no : this.$store.state.userStore.mem_no
       },
       //userInfo에 사용금액 비교 필요(등급 변경 적용기준)
       "usergrade" : {
-          grade : this.userInfo.grd_no,
-          mem_no : this.$store.state.userStore.mem_no
+        used_payment : this.userInfo.used_payment + this.finalPrice,
+        mem_no : this.$store.state.userStore.mem_no
       },
       "usercoupon" : {
           poss_no : this.couponSelected.poss_no,
           end_dt : this.getDate(),
           status : 1,
           cpnused_dt : this.getDate()
-      },
+      }
       }
       return orderData
     },
@@ -374,6 +348,10 @@ export default {
     //뒤로가기 버튼
     backBtn(){
       this.$router.go(-1);
+    },
+    // 소수점 자르기
+    roundNum(num){
+      return Math.round(num);
     }
 
     // async test(){
@@ -479,8 +457,8 @@ em {
 }
 .btnRed {
     color: #fff;
-    background: #d50c0c;
-    border: 1px solid #d50c0c;
+    background-color: #000;
+    border-color: #000;
 }
 
 .tMar80 {
@@ -573,4 +551,10 @@ caption {
     font-size:12px; 
     font-weight:normal;
 }
+.cartBox h3 {
+    float: left;
+    font-size: 15px;
+    color: #000;
+}
+
 </style>

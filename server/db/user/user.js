@@ -39,7 +39,8 @@ const userInfo =
         token,
         mem_status,
         grd_no,
-        (select rwd_pct from grade where grd_no = member.grd_no) as rwd_pct
+        (select rwd_pct from grade where grd_no = member.grd_no) as rwd_pct,
+        used_payment
 FROM    member
 WHERE mem_no = ?`;
 
@@ -82,6 +83,18 @@ const userUpdate =
 `SELECT count(mem_no) as count
 FROM member`;
 
+//회원 등급수정
+const userGradeUpdate = 
+`UPDATE member 
+SET grd_no = (select grd_no from grade where grd_level <= ? order by grd_no desc limit 1)
+WHERE mem_no = ?`;
+
+// 회원 토탈사용금액 갱신
+const usedPaymentUpdate = 
+`UPDATE member 
+SET used_payment = used_payment + ?
+WHERE mem_no = ?`;
+
  module.exports = {
     userList,
     userInfo,
@@ -89,5 +102,7 @@ FROM member`;
     userUpdate,
     userLogin,
     userPoint,
-    userCount
+    userCount,
+    userGradeUpdate,
+    usedPaymentUpdate
 }
