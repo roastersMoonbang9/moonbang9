@@ -90,7 +90,7 @@
       async getProductOptions(cd){
         console.log(cd);
         let result = await axios.get('/api/product/productOptions/' + cd);
-        this.productInfo = result.data;
+        // this.productInfo = result.data;
         console.log(result);
       }
     }
