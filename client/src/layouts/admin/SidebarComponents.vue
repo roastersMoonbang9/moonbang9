@@ -22,7 +22,8 @@
             </li>
             <li>
                 <a href="#">
-                <i class="bi bi-circle"></i><span>레벨 관리</span>
+                <i class="bi bi-circle"></i>
+                <router-link to="/admin/grade"><span>레벨 관리</span></router-link>
                 </a>
             </li>
             <li>
@@ -89,7 +90,7 @@
         <li class="nav-item">
             <a class="nav-link collapsed" href="#">
             <i class="bi bi-person"></i>
-            <router-link to="/admin/delivery"><span style="color: #00009cda;">배송 관리</span></router-link>
+            <router-link to="/admin/delivery"><span style="color: #00009cda;">배송 조회</span></router-link>
             </a>
         </li>
 

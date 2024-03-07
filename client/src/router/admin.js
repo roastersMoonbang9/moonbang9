@@ -4,6 +4,7 @@ import EventView from '../views/admin/eventView.vue'
 import adminView from '../views/admin/AdminMainViews.vue'
 import orderListView from '../views/admin/OrderListView.vue'
 import memberlistView from '../views/admin/MemberListView.vue'
+import GradeView from '../views/admin/GradeList.vue'
 import cancleOrderListView from '../views/admin/CancleOrderListView.vue'
 import store from '../store/index.js'
 
@@ -53,6 +54,13 @@ export default {
             path: 'event',
             name: 'event',
             component: EventView
+
+        },
+        {
+            path: 'grade',
+            name: 'grade',
+            component: GradeView
+
         },
         {
             path: 'cancleOrderList',
