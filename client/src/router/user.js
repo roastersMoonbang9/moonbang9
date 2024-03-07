@@ -1,4 +1,5 @@
 import HomeView from '../views/user/HomeView.vue'
+import MainView from '../views/user/MainView.vue'
 import ProductList from '../views/user/product/ProductListView.vue';
 import ProductInfo from '../views/user/product/ProductInfoView.vue';
 import CartView from '../views/user/product/CartView.vue'
@@ -12,6 +13,11 @@ export default {
         name: 'home',
         component: HomeView,
         children: [
+            {
+                path: '',
+                name: 'main',
+                component: MainView
+            },
             {
                 path: 'cart',
                 name: 'cart',
