@@ -99,20 +99,28 @@
         <table class="table table-hover" style="font-size: 15px;">
             <thead>
             <tr class="table-primary">
-                <th>이름</th>
-                <th>폰번호</th>
-                <th>이메일</th>
+                <th>번호</th>
+                <th>회원명</th>
+                <th>아이디</th>
                 <th>레벨</th>
+                <th>핸드폰</th>
+                <th>이메일</th>
+                <th>포인트</th>
+                <th>누적주문금액</th>
                 <th>가입일자</th>
             </tr>
             </thead>
             <tbody>
             <!--for 과 if를 같이 사용은 불가능하다고 생각해라-->
             <tr v-for="(table, idx) in tableList" :key="idx">
+                <td>{{ idx + 1 }}</td>
                 <td>{{ table.name }}</td>
+                <td>{{ table.id }}</td>
+                <td>{{ this.changeLv(parseInt(table.grd_no)) }}</td>
                 <td>{{ table.phone }}</td>
                 <td>{{ table.email }}</td>
-                <td>{{ table.grade_no }}</td>
+                <td>{{ table.point }}</td>
+                <td>{{ table.used_payment }}</td>
                 <td>{{ table.post_cd }}</td>
             </tr>
             </tbody>
@@ -164,6 +172,18 @@
             }
         },
         methods : {
+            changeLv(lv) {
+                if (lv == 1) {
+                    lv = "WHITE"
+                } else if (lv == 2) {
+                    lv = "BASIC"
+                } else if (lv == 3) {
+                    lv = "VIP"
+                } else if (lv == 4) {
+                    lv = "GOLD"
+                }
+                return lv;
+            },
             getToday() {
                 let today = new Date();
                 this.getDate2 = this.changeDate(today);
