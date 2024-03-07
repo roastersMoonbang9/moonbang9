@@ -26,14 +26,14 @@ eventRouter.put("/event/:eno", async (request, response) => {
 eventRouter.post("/event",async (req, res) => {
     let eventData = req.body; //배너 정보 
     let fileData = req.body.file; // 이미지파일 정보 
-    eventData.event_name = file.event_name; 
-    eventData.type_cd = file.type_cd; 
-    eventData.file_path = file.path; // Set based on your file upload logic
-    eventData.status = file.status; // .앞의 이미지명
-    eventData.table_cd = file.table_cd; // .뒤의 확장자
+    // eventData.event_name = file.event_name; 
+    // eventData.type_cd = file.type_cd; 
+    // eventData.file_path = file.path; // Set based on your file upload logic
+    // eventData.status = file.status; // .앞의 이미지명
+    // eventData.table_cd = file.table_cd; // .뒤의 확장자
     console.log('Received Event Data:', eventData);
     console.log('Received File Data:', fileData);
-    let eventResult = await db.connection('event', 'insertEvent', [eventData]); //배너 정보 넣어주고 
+    let eventResult = await db.connection('event', 'insertEvent', [eventData]).catch(err=>{console.log(err)}); //배너 정보 넣어주고 
 
     let newfileName = file.filename.split('.');
    

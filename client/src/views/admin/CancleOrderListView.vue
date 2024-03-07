@@ -62,10 +62,10 @@
             <tr v-for="(table, idx) in tableList" :key="idx">
                 <td>{{ idx + 1 }}</td>
                 <td>{{ table.ord_dt }}</td>
+                <td>{{ table.ord_dt }}</td>
                 <td>{{ table.ord_no }}</td>
                 <td>{{ table.name }}</td>
-                <td>{{ table.rcv_name }}</td>
-                <td>{{ table.rcv_name }}</td>
+                <td>{{ table.total_payment }}</td>
             </tr>
             </tbody>
         </table>
@@ -152,8 +152,7 @@
                 this.searched = null,
                 this.getDate1 = null,
                 this.checkDate = "1",
-                this.getDate2 = null,
-                this.checkSt = null
+                this.getDate2 = null
             },
 
             async getTableList(curPage) {
@@ -177,7 +176,7 @@
                         getDate2 : this.getDate2,
                     }
                 }
-                let result = await axios.post("/api/order/adOrderList", data)
+                let result = await axios.post("/api/order/adCancleOrderList", data)
                                         .catch(err => console.log(err));
                 console.log(result);
                 this.tableList = result.data;
@@ -193,7 +192,7 @@
                         getDate2 : this.getDate2,
                     }
                 }
-                let result = await axios.post(`/api/order/adOrderCount`, data) 
+                let result = await axios.post(`/api/order/adCancleOrderCount`, data) 
                                         .catch(err => console.log(err));
                 this.allSize = result.data[0].count;
                 this.lastPage = Math.ceil(this.allSize / this.pageSize);
@@ -215,7 +214,7 @@
                         getDate2 : this.getDate2,
                     }
                 }
-                let result = await axios.post(`/api/order/adOrderTotalPayment`, data) 
+                let result = await axios.post(`/api/order/adCancleOrderTotalPayment`, data) 
                                         .catch(err => console.log(err));
                 this.totalPayment = result.data[0].SUM;
             },

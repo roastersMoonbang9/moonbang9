@@ -50,7 +50,8 @@ const userLogin =
 `SELECT 
         COUNT(*) AS loginCheck ,
         mem_no,
-        name
+        name,
+        mem_status
 FROM    member 
 WHERE   id = ? 
 AND     pwd = ?`;

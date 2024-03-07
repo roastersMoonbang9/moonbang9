@@ -31,6 +31,15 @@ const multer = require('multer');
     const staticUrl = '/event';
 
 fileUploadRouter.post("/", upload.array('photos',4), async (req,res)=>{
+  let eventData = {
+    event_name : req.body.event_name,
+    path : req.body.path,
+    status : parseInt(req.body.status)
+  }
+   //배너 정보 
+  let fileData = req.body.file; // 이미지파일 정보 
+  console.log('Received Event Data:', eventData);
+  console.log('Received File Data:', fileData);
     let imgUrlList = [];
     for(let file of req.files){
 
@@ -48,16 +57,11 @@ fileUploadRouter.post("/", upload.array('photos',4), async (req,res)=>{
           file_extn: newfileName[1], // 확장자명
           ranks: 1, // 배치순서 -> 배열로 바꿔야함    
       }
+      let eventResult = await db.connection('event','InsertBanner',eventData).catch(err => console.log(err));;
+      console.log(eventResult);
       // DB insert 첨부파일 정보를 DB에 저장
-      await db.connection('file','fileInsert',data)
-      .then((result) => {
-        if(result.affectedRows > 0) {
-          res.send(result);
-        }
-      }).catch ((err) => {
-        console.log(err);
-        res.send('err');
-      })
+      let result = await db.connection('file','fileInsert',data).catch(err => console.log(err));;
+      console.log(result);
   
       imgUrlList.push(imgUrl);
       console.log(imgUrlList);

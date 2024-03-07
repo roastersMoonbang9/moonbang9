@@ -161,6 +161,7 @@ export default {
               mem_no: result.data[0].mem_no,
               name: result.data[0].name,
               isLogin: true,
+              mem_status: result.data[0].mem_status
             });
             this.$router.push("/");
             alert(this.$store.state.userStore.name + "님 로그인 되었습니다.");
@@ -168,6 +169,7 @@ export default {
             console.log(this.$store.state.userStore.id);
             console.log(this.$store.state.userStore.mem_no);
             console.log(this.$store.state.userStore.name);
+            console.log(this.$store.state.userStore.mem_status);
           } else {
             alert("아이디/비밀번호를 확인해주세요.");
             this.$router.go(0);

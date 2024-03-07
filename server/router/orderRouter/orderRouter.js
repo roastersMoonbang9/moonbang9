@@ -210,7 +210,7 @@ orderRouter.post("/adOrderTotalPayment", async (request,response)=>{
 })
 
 // 주문 취소목록 출력(관리자)
-orderRouter.post("/adOrderList", async (request, response) => {
+orderRouter.post("/adCancleOrderList", async (request, response) => {
   let limit = parseInt(request.body.param.limit);
   let offset = parseInt(request.body.param.offset);
   let checkSearch = request.body.param.checkSearch;
@@ -218,10 +218,9 @@ orderRouter.post("/adOrderList", async (request, response) => {
   let getDate1 = request.body.param.getDate1;
   let getDate2 = request.body.param.getDate2;
   let checkDate = request.body.param.checkDate;
-  let checkSt = parseInt(request.body.param.checkSt);
 
   let data = [];
-  let where = " WHERE 1=1";
+  let where = " WHERE status = 5";
 
     // 키워드(검색어) 있는 경우
     if(searched){
@@ -239,17 +238,12 @@ orderRouter.post("/adOrderList", async (request, response) => {
       if(checkDate == "1"){
         where += " AND ord_dt BETWEEN ? AND ?"
         data.push(getDate1, getDate2);
+      } else if(checkDate == "2"){
+        where += " AND ord_dt BETWEEN ? AND ?"
+        data.push(getDate1, getDate2);
       }
     }
   
-    // 소분류(카테고리) 있는 경우
-    if(checkSt){
-      where += " AND status = ? "
-      data.push(checkSt);
-    }
-  
-
-
     // ORDER BY 절 추가
     where += " order by ord_no desc"
   
@@ -265,16 +259,15 @@ orderRouter.post("/adOrderList", async (request, response) => {
 })
 
 // 주문 수 조회(관리자)
-orderRouter.post("/adOrderCount", async (request,response)=>{
+orderRouter.post("/adCancleOrderCount", async (request,response)=>{
   let checkSearch = request.body.param.checkSearch;
   let searched = request.body.param.searched;
   let getDate1 = request.body.param.getDate1;
   let getDate2 = request.body.param.getDate2;
   let checkDate = request.body.param.checkDate;
-  let checkSt = parseInt(request.body.param.checkSt);
 
   let data = [];
-  let where = " WHERE 1=1";
+  let where = " WHERE status = 5";
 
     // 키워드(검색어) 있는 경우
     if(searched){
@@ -293,12 +286,6 @@ orderRouter.post("/adOrderCount", async (request,response)=>{
         where += " AND ord_dt BETWEEN ? AND ?"
         data.push(getDate1, getDate2);
       }
-    }
-  
-    // 소분류(카테고리) 있는 경우
-    if(checkSt){
-      where += " AND status = ? "
-      data.push(checkSt);
     }
 
     let result = await db.connection('order','adOrderCount', data, where);
@@ -307,16 +294,15 @@ orderRouter.post("/adOrderCount", async (request,response)=>{
 })
 
 // 총 주문 금액 조회(관리자)
-orderRouter.post("/adOrderTotalPayment", async (request,response)=>{
+orderRouter.post("/adCancleOrderTotalPayment", async (request,response)=>{
   let checkSearch = request.body.param.checkSearch;
   let searched = request.body.param.searched;
   let getDate1 = request.body.param.getDate1;
   let getDate2 = request.body.param.getDate2;
   let checkDate = request.body.param.checkDate;
-  let checkSt = parseInt(request.body.param.checkSt);
 
   let data = [];
-  let where = " WHERE 1=1";
+  let where = " WHERE status = 5";
 
     // 키워드(검색어) 있는 경우
     if(searched){
@@ -336,16 +322,9 @@ orderRouter.post("/adOrderTotalPayment", async (request,response)=>{
         data.push(getDate1, getDate2);
       }
     }
-  
-    // 소분류(카테고리) 있는 경우
-    if(checkSt){
-      where += " AND status = ? "
-      data.push(checkSt);
-    }
 
     let result = await db.connection('order','adOrderTotalPayment', data, where);
     response.send(result);
-    
 })
 
 //주문 상세목록 칼럼명 변경
