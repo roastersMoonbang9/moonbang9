@@ -9,7 +9,18 @@
     <nav class="header-nav ms-auto">
         <a class="nav-item pe-3" href="#" style="font-size: 17px;"><router-link to="/admin">관리자홈 </router-link></a>
         <a class="nav-item pe-3" href="#" style="font-size: 17px;"><router-link to="/"> 쇼핑몰 </router-link></a>
-        <a class="nav-item pe-3" href="#" style="font-size: 17px;"> 로그아웃</a>
+        <a class="nav-item pe-3" href="#" style="font-size: 17px;" @click="handleLogout()"> 로그아웃</a>
     </nav>
   </header>
 </template>
+<script>
+  export default {
+    methods : {
+      handleLogout() {
+        this.$store.commit('userStore/logout'); 
+        alert("로그아웃 되었습니다.");
+        this.$router.push('/login');
+      }
+    }
+  }
+</script>

@@ -13,10 +13,6 @@ export default {
     name: 'admin',
     component: adminView,
     // beforeEnter: (to, from, next) => {
-    //     // let member_type = store.state.memberStore.memberInfo.member_type;
-    //     // let loginStatus =  store.state.memberStore.loginStatus;
-    //     // console.log(member_type, ', ', loginStatus);
-
     //     let mem_status = store.state.userStore.mem_status;
     //     let isLogin =  store.state.userStore.isLogin;
 

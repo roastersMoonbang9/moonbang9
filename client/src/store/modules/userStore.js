@@ -7,6 +7,7 @@ const userStore = {
         token: '',
         isLogin: false,
         kakaoInfo: {},
+        mem_status: ''
     },
 
     mutations: {
@@ -16,6 +17,7 @@ const userStore = {
             state.mem_no = payload.mem_no;
             state.name = payload.name;
             state.token = payload.token;
+            state.mem_status = payload.mem_status;
         },
         logout(state) {
             state.id = '';
@@ -23,6 +25,7 @@ const userStore = {
             state.name = '';
             state.token = '';
             state.isLogin = false;
+            state.mem_status = '';
         }
     },
     actions: {
