@@ -1,5 +1,5 @@
 import DeliveryView from '../views/admin/DeliveryView.vue'
-import testView from '../views/admin/testjeonView.vue'
+import noticeView from '../views/admin/noticeView.vue'
 import EventView from '../views/admin/eventView.vue'
 import adminView from '../views/admin/AdminMainViews.vue'
 import orderListView from '../views/admin/OrderListView.vue'
@@ -33,7 +33,7 @@ export default {
         {
             path: 'notice',
             name: 'notice',
-            component: testView
+            component: noticeView
         },
         {
 

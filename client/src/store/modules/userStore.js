@@ -1,3 +1,5 @@
+// userStore.js
+
 const userStore = {
     namespaced: true,
     state: {
@@ -6,7 +8,6 @@ const userStore = {
         name: '',
         token: '',
         isLogin: false,
-        kakaoInfo: {},
         mem_status: ''
     },
 
