@@ -5,11 +5,13 @@ const reviewList =
 r.rv_no
 ,r.content
 ,r.rating
-,r.prdt_cd
+,o.prdt_cd
+,o.opt_cd
 ,m.id
 ,r.rv_dt
 ,r.ord_no
-FROM review r JOIN member m ON r.mem_no = m.mem_no`;
+FROM review r join order_detail o on r.ord_no = o.ord_no JOIN member m ON  m.mem_no = r.mem_no 
+WHERE o.prdt_cd =?`;
 
 const reviewInfo = 
 `SELECT * FROM review 

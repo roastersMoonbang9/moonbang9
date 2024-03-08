@@ -166,16 +166,7 @@
 
                 <ProductList />
 
-                <!-- PAGINATION-->
-                <nav aria-label="Page navigation example">
-                  <ul class="pagination justify-content-center justify-content-lg-end">
-                    <li class="page-item mx-1"><a class="page-link" href="#!" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-                    <li class="page-item mx-1 active"><a class="page-link" href="#!">1</a></li>
-                    <li class="page-item mx-1"><a class="page-link" href="#!">2</a></li>
-                    <li class="page-item mx-1"><a class="page-link" href="#!">3</a></li>
-                    <li class="page-item ms-1"><a class="page-link" href="#!" aria-label="Next"><span aria-hidden="true">»</span></a></li>
-                  </ul>
-                </nav>
+               
               </div>
             </div>
           </div>

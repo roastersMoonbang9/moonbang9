@@ -30,15 +30,26 @@ const multer = require('multer');
     const upload = multer({storage : storage});
     const staticUrl = '/event';
 
+ 
+
 fileUploadRouter.post("/", upload.array('photos',4), async (req,res)=>{
-  let eventData = {
-    event_name : req.body.event_name,
-    path : req.body.path,
-    status : parseInt(req.body.status)
+  let table_cd = req.body.table_cd;
+  let table_name = '';
+  let tableData = {};
+  if(table_cd == "4"){
+    table_name = "notice"
+    tableData = {
+      title : req.body.title,
+      content : req.body.content,
+      impor : parseInt(req.body.impor)
+    }
+    console.log('Received Table Data:', tableData);
+  } else if(table_cd == "3"){
+    
   }
+
    //배너 정보 
   let fileData = req.body.file; // 이미지파일 정보 
-  console.log('Received Event Data:', eventData);
   console.log('Received File Data:', fileData);
     let imgUrlList = [];
     for(let file of req.files){
@@ -50,21 +61,24 @@ fileUploadRouter.post("/", upload.array('photos',4), async (req,res)=>{
       //console.log('파일명과 확장자 분리하기', newfileName[0], newfileName[1]);
   
       let data = {
-          table_cd: "3", //0 = 상품 1= 리뷰 2= 1: 1 문의 3= 이벤트 4= 반품
-          type_cd: 1, // 구분번호 <-- 이거 1로 고정시키면 안됨
+          table_cd: req.body.table_cd, //0 = 상품 1= 리뷰 2= 1: 1 문의 3= 이벤트 4= 반품
+          type_cd: req.body.type_cd, // 구분번호 <-- 이거 1로 고정시키면 안됨
           file_path: file.path, // 파일경로 ..\client\src\assets\user\img\1709702569457_1.png 저장됨
           file_name: newfileName[0], // 파일 이름
           file_extn: newfileName[1], // 확장자명
           ranks: 1, // 배치순서 -> 배열로 바꿔야함    
       }
-      let eventResult = await db.connection('event','InsertBanner',eventData).catch(err => console.log(err));;
+      let eventResult = await db.connection(table_name, table_name +'Insert',tableData).catch(err => console.log(err));;
       console.log(eventResult);
+
       // DB insert 첨부파일 정보를 DB에 저장
       let result = await db.connection('file','fileInsert',data).catch(err => console.log(err));;
       console.log(result);
-  
+      
       imgUrlList.push(imgUrl);
       console.log(imgUrlList);
+
+      res.send(result);
     }
   });
 

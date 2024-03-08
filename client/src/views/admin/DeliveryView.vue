@@ -78,6 +78,7 @@
         <thead>
           <tr class="table-primary">
             <th><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></th>
+            <th>번호</th>
             <th>주문번호</th>
             <th>주문일자</th>
             <th>배송정보</th>
@@ -89,6 +90,7 @@
         <tbody>
           <tr v-for="(delivery, idx) in deliveryList" :key="idx">
             <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+            <td>{{ idx + 1 }}</td>
             <td>{{ delivery.deli_no }}</td>
             <td>{{ delivery.ord_dt }}</td>
             <td>{{ delivery.fulladdr }}</td>
@@ -100,6 +102,7 @@
         </tbody>
       </table>
       <button type="button" class="btn btn-outline-secondary m-2" style="float: left;">주문서 출력</button>
+      <!-- 1) 페이징 테그 복붙 -->
       <Paging 
       :pagination="pagination"
       v-on:prevPage="prevPage"
@@ -107,13 +110,12 @@
       v-on:firstPage="firstPage"
       v-on:lastPaging="lastPaging"
       v-on:changeNowPage="changeNowPage"/>
-      </div>
-     
+      </div> 
   </div>
 </template>
-
 <script>
 import axios from 'axios'
+// 2) 임포트 해주기 
 import Paging from '@/components/PagingComponent.vue';  
 
   export default {
@@ -122,7 +124,7 @@ import Paging from '@/components/PagingComponent.vue';
       },
       data () {
           return {
-            deliveryList : [],
+            
               searched : null,
               getDate1 : null,
               getDate2 : null,
@@ -130,11 +132,12 @@ import Paging from '@/components/PagingComponent.vue';
               checkStatus2 : "1",
               checkStatus3 : "2",
               checkStatus4 : "3",
-              checkStatus5 : "4",
               checkSt : null,
 
               // 리스트
+              deliveryList:[],
               tableList : [],
+              //3) 페이징 [] 가져오기
               paging : [],
               pagination : {},
               allSize : 0,  // 모든 데이터 수
@@ -146,52 +149,57 @@ import Paging from '@/components/PagingComponent.vue';
               endPage : 1,  // 페이지네이션 끝번호
           }
       },
-    created() {
-      this.getDeliveryList(); // 비동기작업
-    },
       methods : 
       {
-        async getDeliveryList() { // 동기작업
-        let result = await axios.get('/api/order/delivery')
-                                .catch(err => console.log(err));
-        this.deliveryList = result.data;
-      },
-          getToday() {
-              let today = new Date();
-              this.getDate2 = this.changeDate(today);
-              this.getDate1 = this.changeDate(today);
-          },
-          getYesterday() {
-              let yesterday = new Date();
-              this.getDate2 = this.changeDate(yesterday);
-              yesterday.setDate(yesterday.getDate()-1);
-              this.getDate1 = this.changeDate(yesterday);
-          },
-          getWeekAgo(){
-              let weekAgo = new Date();
-              this.getDate2 = this.changeDate(weekAgo);
-              weekAgo.setDate(weekAgo.getDate()-7);
-              this.getDate1 = this.changeDate(weekAgo);
-          },
-          getOneMonthAgo() {
-              let oneMonthAgo = new Date();
-              this.getDate2 = this.changeDate(oneMonthAgo);
-              oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-              this.getDate1 = this.changeDate(oneMonthAgo);
-          },
-          getThreeMonthAgo() {
-              let threeMonthAgo = new Date();
-              this.getDate2 = this.changeDate(threeMonthAgo);
-              threeMonthAgo.setMonth(threeMonthAgo.getMonth() - 3);
-              this.getDate1 = this.changeDate(threeMonthAgo);
-          },
-          changeDate(value) {
-          let year = value.getFullYear();
-          let month = ('0'+(value.getMonth()+1)).slice(-2);
-          let day = ('0'+ value.getDate()).slice(-2);
-          
-          return `${year}-${month}-${day}`;
-          },
+        // changeLv(lv) {
+        //         if (lv == 1) {
+        //             lv = "WHITE"
+        //         } else if (lv == 2) {
+        //             lv = "BASIC"
+        //         } else if (lv == 3) {
+        //             lv = "VIP"
+        //         } else if (lv == 4) {
+        //             lv = "GOLD"
+        //         }
+        //         return lv;
+        //     },
+        getToday() {
+                let today = new Date();
+                this.getDate2 = this.changeDate(today);
+                this.getDate1 = this.changeDate(today);
+            },
+            getYesterday() {
+                let yesterday = new Date();
+                this.getDate2 = this.changeDate(yesterday);
+                yesterday.setDate(yesterday.getDate()-1);
+                this.getDate1 = this.changeDate(yesterday);
+            },
+            getWeekAgo(){
+                let weekAgo = new Date();
+                this.getDate2 = this.changeDate(weekAgo);
+                weekAgo.setDate(weekAgo.getDate()-7);
+                this.getDate1 = this.changeDate(weekAgo);
+            },
+            getOneMonthAgo() {
+                let oneMonthAgo = new Date();
+                this.getDate2 = this.changeDate(oneMonthAgo);
+                oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+                this.getDate1 = this.changeDate(oneMonthAgo);
+            },
+            getThreeMonthAgo() {
+                let threeMonthAgo = new Date();
+                this.getDate2 = this.changeDate(threeMonthAgo);
+                threeMonthAgo.setMonth(threeMonthAgo.getMonth() - 3);
+                this.getDate1 = this.changeDate(threeMonthAgo);
+            },
+            changeDate(value) {
+            let year = value.getFullYear();
+            let month = ('0'+(value.getMonth()+1)).slice(-2);
+            let day = ('0'+ value.getDate()).slice(-2);
+            
+            return `${year}-${month}-${day}`;
+            },
+
 
           dataReset(){
               this.checkSearch = "1",
@@ -201,35 +209,47 @@ import Paging from '@/components/PagingComponent.vue';
               this.getDate2 = null,
               this.checkSt = null
           },
-
+          //4) 전체를 가져와서 
           async getTableList(curPage) {
-              curPage = this.judgePage(curPage);
-              if (!curPage || curPage <= 0) 
-              curPage = this.startPage;
-              let gap = curPage%this.navSize === 0 ?  this.navSize - 1 : curPage%this.navSize - 1;
-              this.startPage = this.judgePage(curPage - gap);
-              this.endPage = this.startPage + this.navSize - 1;
-              await this.getTableCount(curPage);
+                curPage = this.judgePage(curPage);
+                if (!curPage || curPage <= 0) 
+                curPage = this.startPage;
+                let gap = curPage%this.navSize === 0 ?  this.navSize - 1 : curPage%this.navSize - 1;
+                this.startPage = this.judgePage(curPage - gap);
+                this.endPage = this.startPage + this.navSize - 1;
+                await this.getTableCount(curPage);
 
               this.curPage = curPage;
-              let data = {
-                  param : {
-                      limit : (curPage - 1) * this.pageSize,
-                      offset : this.pageSize,
-                      checkSearch : this.checkSearch,
-                      searched : this.searched,
-                      getDate1 : this.getDate1,
-                      checkDate : this.checkDate,
-                      getDate2 : this.getDate2,
-                      checkLv : this.checkLv
-                  }
-              }
-        let result = await axios.get('/api/order/delivery')
+                let data = {
+                    param : {
+                        limit : this.pageSize,
+                        offset : (curPage - 1) * this.pageSize,
+                        checkSearch : this.checkSearch,
+                        searched : this.searched,
+                        getDate1 : this.getDate1,
+                        checkDate : this.checkDate,
+                        getDate2 : this.getDate2,
+                        //checkLv : this.checkLv
+                    }
+                }
+        let result = await axios.post('/api/order/deliveryList',data)
                                 .catch(err => console.log(err));
+                                console.log(result);
         this.deliveryList = result.data;
       },
+      //5) AXIOS.GET ()수정할 주소를 가져와서 수정
           async getTableCount() {
-              let result = await axios.get(`/api/order/deliveryCount`) 
+            let data = {
+                    param : {
+                        checkSearch : this.checkSearch,
+                        searched : this.searched,
+                        getDate1 : this.getDate1,
+                        checkDate : this.checkDate,
+                        getDate2 : this.getDate2,
+                        //checkLv : this.checkLv
+                    }
+                }
+              let result = await axios.post(`/api/order/deliveryCount`,data) //쿼리문에 count문이 있어야함
                                       .catch(err => console.log(err));
               this.allSize = result.data[0].count;
               this.lastPage = Math.ceil(this.allSize / this.pageSize);

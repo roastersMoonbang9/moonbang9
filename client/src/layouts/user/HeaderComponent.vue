@@ -12,7 +12,7 @@
               
               <router-link to="/" class="nav-link active"><a class="navbar-brand" href="#">
 
-              <span class="fw-bold text-uppercase text-dark">MOONBANG9</span></a></router-link>
+              <span class="fw-bold text-uppercase text-dark">MOONBANGKU</span></a></router-link>
 
               <ul class="navbar-nav me-auto">
                 <li class="nav-item">
@@ -65,7 +65,7 @@
                 <li v-else class="nav-item"><p class="nav-link"></p></li>
                 <li class="nav-item"><router-link to="/admin"><p class="nav-link" >관리자홈</p></router-link></li>
                 <li class="nav-item"><a class="nav-link"  @click="goToCart"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small class="text-gray fw-normal">(2)</small></a></li>
-                <li v-if="isLogin" class="nav-item"><a class="nav-link" href="/"> <i class="fas fa-user me-1 text-gray fw-normal"></i>마이페이지</a></li>
+                <li v-if="isLogin" class="nav-item"><a class="nav-link" href="/myPage"> <i class="fas fa-user me-1 text-gray fw-normal"></i>마이페이지</a></li>
                 <li v-else class="nav-item"><a class="nav-link" href="/userJoin"> <i class="fas fa-user me-1 text-gray fw-normal"></i>회원가입</a></li>
                 <li v-if="isLogin" class="nav-item"><a class="nav-link" @click="handleLogout"> <i class="fas fa-user me-1 text-gray fw-normal"></i>로그아웃</a></li>
                 <li v-else class="nav-item"><a class="nav-link" href="/login"> <i class="fas fa-user me-1 text-gray fw-normal"></i>로그인</a></li>              

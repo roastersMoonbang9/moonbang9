@@ -10,6 +10,7 @@ import userJoinView from '../views/user/login/userJoinView.vue'
 import ProductReview from '../views/user/product/productReview.vue'
 import Mypage from '../views/user/mypage/mypageMainView.vue'
 import myOrders from '../views/user/mypage/myOrdersView.vue'
+import myPageView from '../views/user/login/myPageView.vue'
 
 export default {
         path: '/',
@@ -45,6 +46,11 @@ export default {
                 path: 'userJoin',
                 name: 'userJoin',
                 component: userJoinView
+            },
+            {
+                path: 'myPage',
+                name: 'myPage',
+                component: myPageView
             },
             {
                 path: 'product',

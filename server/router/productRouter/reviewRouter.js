@@ -4,11 +4,12 @@ const db = require("../../db.js");
 
 //예시
 //쿼리형태로 받음
-reviewRouter.get("/review", async (request,response)=>{ ///:pno
-  //let data = request.query.pno
-    let result = await db.connection('review','reviewList') //,data
-    .then(result => {response.send(result)})
-                   .catch(err=>{console.log(err)});
+reviewRouter.get("/review/:cd", async (request,response)=>{ ///:pno
+  let data = request.params.cd;
+  //console.log('data는'+data);
+    let result = await db.connection('review','reviewList', data) //,data
+    response.send(result);
+    console.log('넘어오는 :'+result)
   });
 
 //리뷰 단건조회
