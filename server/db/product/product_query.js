@@ -1,9 +1,30 @@
 //product-query.js
 // 예시
-const boardList = 
-`select * from customers`;
+const queryList = 
+`select * from product_question
+where prdt_cd = ?`;
+
+const queryInfo = 
+`SELECT * FROM product_question  
+WHERE qst_no = ?`;
+
+const queryUpdate = 
+`UPDATE product_question
+SET ?`;
+const queryInsert =
+`INSERT INTO product_question
+SET ?`;
+const queryDel = 
+`DELETE FROM product_question
+WHERE qst_no= ?`; 
 
 
 module.exports = {
-    boardList
+    queryList,
+    queryInfo,
+    queryUpdate,
+    queryInsert,
+    queryDel
+
+
 }

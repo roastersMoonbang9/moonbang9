@@ -115,7 +115,7 @@ productRouter.get("/productInfo/:prdt_cd", async (request,response)=>{
   let data = request.params.prdt_cd;
   let result = await db.connection('product','productInfo', data);
   response.send(result[0]);
-  console.log('결과는 ' + result);
+  //console.log('결과는 ' + result);
 });
 
 // 상품상세 페이지 - 상품의 옵션들 목록

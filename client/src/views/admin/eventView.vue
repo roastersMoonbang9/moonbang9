@@ -144,7 +144,8 @@
             let result = await axios.post("/api/upload", formData ,axiosConfig)
                                .catch(err => console.log(err));
                                console.log(' Result출력:', result.data);
-                  // this.$router.go(1); //해당 페이지 재호출
+                               Swal.fire('생성되었습니다');
+                   this.$router.go(1); //해당 페이지 재호출
         },
       async getTableList(curPage) {
         curPage = this.judgePage(curPage);
