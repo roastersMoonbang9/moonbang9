@@ -3,7 +3,7 @@ const couponRouter = express.Router();
 const db = require("../../db.js");
 
 //예시
-//쿼리형태로 받음
+//회원의 쿠폰리스트 가져오기
 couponRouter.get("/coupon/:mem_no/:state", async (request,response)=>{
     let no = [request.params.mem_no, request.params.state];
     // let couponState = request.params.state;

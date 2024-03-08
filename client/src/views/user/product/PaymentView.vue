@@ -272,13 +272,24 @@ export default {
             }).then((data) => {
               // 서버 결제 API 성공시 로직
               console.log(data);
-              console.log("결제 성공");
-              this.$router.push({path:'/completePayment'});
+              if(data.data[1].affectedRows > 0 && data.data[5].affectedRows > 0){
+                console.log("결제 성공");
+                this.$router.push({path:'/completePayment', query : {"no" : data.data[0].ord_no}});
+              }else{
+                console.log("결제 실패");
+                Swal.fire({
+                  icon: "error",
+                  title: "결제 실패",
+                  text: "결제 확인후 다시 시도해주세요.",
+                  footer: '<a href="#">관리자에게 문의해주세요</a>'
+                });
+                this.$router.go(-1);
+              }
             })
-
           } else {
-            console.log("결제 실패");
-            this.$router.push({path:'/'});
+            console.log("결제 취소");
+            this.$router.go(-1);
+            // this.$router.push({path:'/'});
           }
         });
     },
@@ -301,7 +312,9 @@ export default {
           ord_no : rsp.merchant_uid,
           accu_pnt : this.roundNum(this.accountPoint),
           cpn_disc : this.couponPrice,
-          mem_no : this.$store.state.userStore.mem_no
+          mem_no : this.$store.state.userStore.mem_no,
+          cpn_no : this.couponSelected.cpn_no,
+          rcv_postcode : this.deliInfo.post_cd
         },
         "paymentList" : {
           paymentLists : this.paymentList,
@@ -326,6 +339,7 @@ export default {
             cpnused_dt : this.getDate()
         }
       } 
+      console.log(JSON.stringify(orderData))
       return orderData
     },
     //오늘 날짜 계산
@@ -335,8 +349,11 @@ export default {
       let y = date.getFullYear();
       let m = ("0" + (date.getMonth() + 1)).slice(-2);
       let d = ("0" + date.getDate()).slice(-2);
+      let h = ("0" + date.getHours()).slice(-2);
+      let mi = ("0" + date.getMinutes()).slice(-2);
+      let s = ("0" + date.getSeconds()).slice(-2);
 
-      res = `${y}-${m}-${d}`;
+      res = `${y}-${m}-${d} ${h}:${mi}:${s}`;
       
       return res;
     },

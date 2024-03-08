@@ -8,6 +8,8 @@ import CompletePaymentView from '../views/user/product/CompletePaymentView.vue'
 import loginView from '../views/user/login/loginView.vue'
 import userJoinView from '../views/user/login/userJoinView.vue'
 import ProductReview from '../views/user/product/productReview.vue'
+import Mypage from '../views/user/mypage/mypageMainView.vue'
+import myOrders from '../views/user/mypage/myOrdersView.vue'
 
 export default {
         path: '/',
@@ -58,6 +60,18 @@ export default {
                 path: 'productReview',
                 name: 'productReview',
                 component: ProductReview
+            },
+            {
+                path: 'mypage/',
+                name: 'mypage',
+                component: Mypage,
+                children: [
+                    {
+                        path: 'myOrders',
+                        name: 'myOrders',
+                        component: myOrders
+                    }
+                ]
             }
         ]
 }
