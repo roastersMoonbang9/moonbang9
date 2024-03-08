@@ -10,10 +10,23 @@
                     <li>
                         <span class="ftLt">배송비</span><strong class="ftRt">{{fee}}원</strong>
                     </li>
+                    <li v-if="usedPoint != null">
+                        <span class="ftLt">포인트 사용금액</span><strong class="ftRt">-{{usePoint}}원</strong>
+                    </li>
+                    <li v-if="usedCoupon != null">
+                        <span class="ftLt">쿠폰 할인금액</span><strong class="ftRt">-{{useCoupon}}원</strong>
+                    </li>
                 </ul>
             </dd>
         </dl>
-        <p class="rt tPad15 bPad05" id="lyrTotalOrder">
+        <p class="rt tPad15 bPad05" id="lyrTotalOrder" v-if="payTotal != null">
+            <strong class="lPad10">
+
+                결제 금액 <span class="crRed lPad10"><em class="fs20">
+                    {{payTotals}}</em>원</span>
+            </strong>
+        </p>
+        <p class="rt tPad15 bPad05" id="lyrTotalOrder" v-else>
             <strong class="lPad10">
 
                 결제 예정 금액 <span class="crRed lPad10"><em class="fs20">
@@ -24,7 +37,7 @@
 </template>
 <script>
 export default {
-    props: ['list'],
+    props: ['list','usedPoint','usedCoupon','payTotal'],
     data() {
         return {
             totalPrice:0
@@ -43,6 +56,15 @@ export default {
         },
         totalSum(){
             return this.totalPrices + this.fee;
+        },
+        usePoint(){
+            return this.usedPoint != null ? this.usedPoint : 0;
+        },
+        useCoupon(){
+            return this.usedCoupon != null ? this.usedCoupon : 0;
+        },
+        payTotals(){
+            return this.payTotal != null ? this.payTotal : 0;
         }
     },
     created() { },

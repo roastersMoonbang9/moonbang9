@@ -154,7 +154,7 @@ export default {
     },
     methods: {
         async getCouponList(){
-          let result = await axios.get('/apiuser/coupon/1/0')
+          let result = await axios.get(`/apiuser/coupon/${this.$store.state.userStore.mem_no}/0`)
               .catch(err => console.log(err));
           let list = result.data;
           this.couponList = list;

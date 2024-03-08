@@ -16,7 +16,7 @@ const possCouponList =
         c.cpn_dt
 FROM poss_coupon p 
 JOIN coupon c ON p.cpn_no = c.cpn_no 
-WHERE p.mem_no=? and p.status=?`;
+WHERE p.mem_no=? and p.status=? and p.end_dt >= now()`;
 
 const couponList = 
 ``
@@ -25,7 +25,7 @@ const couponList =
 const couponMod = 
 `UPDATE poss_coupon
 SET ?
-WHERE pass_no=?`
+WHERE poss_no=?`
 
 
 module.exports = {

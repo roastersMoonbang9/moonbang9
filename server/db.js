@@ -39,8 +39,33 @@ module.exports = {
     }
     }));
   },
-  excuteConnection(cmd){
-    return new Promise((resolve, reject) => dbPool.query(cmd, (error, results) => {
+  getConnecttion(){
+    return new Promise((resolve, reject) => dbPool.getConnection( (error, conn) => {
+      if (error) { 
+        reject({
+          error
+        });
+      } else { 
+      resolve(conn);
+    }
+    })); 
+  },
+
+  trConnection(conn, table, alias, param = [], where="") {
+    return new Promise((resolve, reject) => conn.query(sql[table][alias] + where, param, (error, results) => {
+      if (error) {         
+        reject({
+          error
+        });
+      } else { 
+      resolve(results);
+     console.log(results)
+    }
+    }));
+  },
+
+  excuteConnection(conn,cmd){
+    return new Promise((resolve, reject) => conn.query(cmd, (error, results) => {
       if (error) {         
         reject({
           error

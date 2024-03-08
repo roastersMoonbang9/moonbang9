@@ -4,10 +4,29 @@ const orderAdd =
 `INSERT INTO orders
 SET ?`;
 
-//주문 결제 조회
+//회원주문 내역 조회
 const orderList = 
-`
-`;
+`SELECT 
+    ord_no,
+    deli_addr,
+    deli_addrdt,
+    deli_cost,
+    ord_dt,
+    rcv_name,
+    rcv_phone,
+    rcv_email,
+    status,
+    total_price,
+    used_point,
+    total_payment,
+    mem_no,
+    payment_no,
+    accu_pnt,
+    cpn_no,
+    cpn_disc,
+    rcv_postcode
+FROM orders
+WHERE ord_no=?`;
 
 
 //예시
