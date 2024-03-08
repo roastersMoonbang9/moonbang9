@@ -1,5 +1,5 @@
 <!-- userJoinView.vue -->
-<template>
+<template> 
   <div class="userJoin">
     <head>
       <meta charset="UTF-8" />
@@ -409,4 +409,5 @@ input:read-only {
   content: var(--bs-breadcrumb-divider, "/");
   /* rtl: var(--bs-breadcrumb-divider, "/") */
 }
+/* 브런치 수정 테스트 */
 </style>
