@@ -20,6 +20,15 @@ FROM  product p LEFT OUTER JOIN (SELECT COUNT(*) as sell,
                                  GROUP BY prdt_cd) d
                 ON p.prdt_cd = d.prdt_cd`;
 
+// 회원수 확인(관리자)
+const productCount = 
+`SELECT count(p.prdt_cd) as count
+FROM product p LEFT OUTER JOIN (SELECT COUNT(*) as sell, 
+prdt_cd
+FROM order_detail
+GROUP BY prdt_cd) d
+ON p.prdt_cd = d.prdt_cd`;
+
 // 상품상세 페이지 내부 : 상품상세 컴포넌트 => (이미지 제외) 상품정보
 const productInfo = 
 `SELECT prdt_cd,
@@ -73,6 +82,7 @@ SET ?`;
 
 module.exports = {    
     productList,
+    productCount,
     productInfo,
     productOptions,
     productImages,

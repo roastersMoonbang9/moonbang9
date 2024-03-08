@@ -37,6 +37,9 @@ export default {
 </script>
 <style>
 @import '../../assets/user/style.default.css';
+@import '../../assets/user/swiper-bundle.css';
+@import '../../assets/user/swiper-bundle.min.css';
+@import '../../assets/user/swiper.min.css';
 
   #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
