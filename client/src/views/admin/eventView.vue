@@ -64,8 +64,8 @@
         </fieldset>
         <div class="mb-3">
     <input @change="fileSelect()" for="photosUpl" class="form-control" type="file" name="photos"  multiple ref="images" />
-    <input for="tablecd" type="hidden" name="table_cd" value="3">
-    <input for="type_cd" type="hidden" name= "type_cd" value="eventList.event_cd">  
+          <input for="tablecd" type="hidden" name="table_cd" :value="4">
+          <input for="type_cd" type="hidden" name= "type_cd" :value="2">  
 
         </div>
         <button type="reset" class="btn btn-primary">취소하기</button>
@@ -85,14 +85,11 @@
         eventList : [],
         modalOpen: false,
         bannerInfo: {
-          no: '',
-          name: '',
+          event_name: '',
           path: '',
           status: 0, 
           table_cd: '',
-          type_cd: '',
-          img: '',
-          created_date: '',
+          type_cd: ''
         },
         bannerImage: '',
         // fileList:[{
@@ -125,13 +122,15 @@
         this.bannerImage = this.$refs.images.files[0];
       },
       async bannerInsert(){
+        this.bannerInfo.type_cd = this.eventList[0].event_cd + 1;
+        this.bannerInfo.table_cd = 3;
         let formData = new FormData(window.Document.bannerForm); //form 안의 값을 다 넣어줌
         formData.append('event_name',this.bannerInfo.name);
         formData.append('path',this.bannerInfo.path);
         formData.append('status',this.bannerInfo.status);
         formData.append('photos',this.bannerImage);
-        // formData.append('table_cd',this.bannerInfo.table_cd);
-        // formData.append('type_cd',this.bannerInfo.type_cd);
+        formData.append('table_cd',this.bannerInfo.table_cd);
+        formData.append('type_cd',this.bannerInfo.type_cd);
 
         console.log(formData);
 
@@ -144,7 +143,7 @@
             let result = await axios.post("/api/upload", formData ,axiosConfig)
                                .catch(err => console.log(err));
                                console.log(' Result출력:', result.data);
-                  // this.$router.go(1); //해당 페이지 재호출
+                               this.$router.go(this.$router.currentRoute);
         },
       async getTableList(curPage) {
         curPage = this.judgePage(curPage);
