@@ -47,7 +47,7 @@
       </option>
     </select>
 
-    <div id="lySpBag" style="display: block">
+    <div id="lySpBag" style="display: block" v-show="showSelectedOpt">
       <div class="easeCartV15">
         <div class="easeTxtV15">
           <p>다른옵션도 구매하시려면 옵션을 반복하여 선택해 주세요.</p>
@@ -101,10 +101,10 @@
                     <span class="lPad05">개</span>
                   </div>
                 </td>
-                <td class="rt rPad05">{{ productInfo.sale_price }}</td>
+                <!-- <td class="rt rPad05">{{productInfo.sale_price}}</td> 부분합계인데 일단 보류--> 
                 <td>
-                  <a href="" class="del" style="cursor: pointer">
-                    <span class="btnListDel">삭제</span>
+                  <a href="#" class="del" style="cursor: pointer">
+                    <span class="btnListDel" @click.stop="deleteOption(idx)">삭제</span>
                   </a>
                 </td>
               </tr>
@@ -114,7 +114,7 @@
         </div>
         <div class="totalPrice">
           <span>상품 금액 합계</span>
-          <strong><span id="spTotalPrc">136,620원</span></strong>
+          <strong><span id="spTotalPrc">{{total}}</span></strong>
         </div>
       </div>
       <p class="rt tPad10 cGy1V15 optionP">
@@ -176,8 +176,10 @@ export default {
         prdt_detail: "",
       },
       productOptions: [], //opt_cd, opt_number, opt_name
+      showSelectedOpt : false,
       selectedOptions: [],
       selectedOption: null, // ocd, onumber, oname, oqty
+      total : 0,
       cartProducts : [] //`cart_qty`, `mem_no`, `opt_cd`, `prdt_cd`
     };
   },
@@ -186,6 +188,9 @@ export default {
     this.getProductInfo(cd);
     this.getProductOptions(cd);
   },
+  mounted() {
+    // this.$emit('send-image', this.productInfo.image);
+  },  
   methods: {
     // 상품 정보
     async getProductInfo(cd) {
@@ -193,6 +198,8 @@ export default {
       let result = await axios.get("/api/product/productInfo/" + cd);
       this.productInfo = result.data;
       console.log(result);
+      // 상품 대표 이미지 ProductInfoView에게 전달
+      this.$emit('send-image', this.productInfo.image);
     },
     // 상품 옵션 목록
     async getProductOptions(cd) {
@@ -213,6 +220,8 @@ export default {
       // this.selectedOptions.push(selectedO);
       this.selectedOptions.splice(this.selectedOptions.length, 0, selectedO);
       console.log(this.selectedOptions);
+      this.makeTotal();
+      this.showSelectedOpt = true;
     },
     // 사용자가 선택한 옵션의 수량 변경하고 selectedOptions에 넣기
     changeCnt(i, cnt){
@@ -221,10 +230,15 @@ export default {
       console.log(qty, cnt);
       if(qty + cnt >= 1){
         qty += cnt;
-        console.log( qty);
       }
       console.log(qty);
       this.selectedOptions[i].oqty = qty;
+      console.log(this.selectedOptions);
+      this.makeTotal();      
+    },
+    // 사용자가 선택한 옵션을 삭제
+    deleteOption(i){
+      this.selectedOptions.splice(i, 1);
       console.log(this.selectedOptions);
     },
     // 사용자가 선택한 옵션들을 장바구니 db에 담기
@@ -249,6 +263,26 @@ export default {
 
         // this.cartProducts = null;
         // console.log(this.cartProducts);
+
+        let info = result.data.insertId;
+          if(info > 0){
+              alert('등록되었습니다.');
+          }else{
+            alert('장바구니 등록 실패');
+          }
+    },
+    // // 옵션별 합산금액 보류
+    // makeOptTotal(){
+
+    // },
+    // 구매할 상품 전체금액
+    makeTotal(){      
+      let price = this.productInfo.sale_price;
+      let total = 0;
+      this.selectedOptions.forEach((ele)=>{
+        total += price * ele.oqty;
+      })
+      this.total = total;
     }
   },
 };
@@ -432,5 +466,17 @@ a {
     margin-inline-start: 0px;
     margin-inline-end: 0px;
     font-size: 12px;
+}
+.swiper-pointer-events {
+    touch-action: pan-y;
+}
+.swiper {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    z-index: 1;
 }
 </style>

@@ -16,22 +16,43 @@
           </div>
         </div>
         <h6><a class="reset-anchor" href="#" @click="goToProductInfo(product.prdt_cd)">{{ product.prdt_name }}</a></h6>
-        <p class="small text-muted">{{ product.price }}</p>
+        <p class="small text-muted">{{ product.price }} 원</p>
         <p class="small text-muted">{{ product.sale_price }}</p>
       </div>
     </div>
+    <Paging 
+        :pagination="pagination"
+        v-on:prevPage="prevPage"
+        v-on:nextPage="nextPage"
+        v-on:firstPage="firstPage"
+        v-on:lastPaging="lastPaging"
+        v-on:changeNowPage="changeNowPage"/>
+    
     <!-- PRODUCT-->
 
   </div>
 </template>
 <script>
 import axios from 'axios';
+import Paging from '@/components/PagingComponent.vue';
 //./../assets/user/img/{{ product.image }}
   export default {
-
+    components : {
+      Paging
+    },
     data() {
       return {
-        productList : []
+        productList : [],
+
+        paging : [],
+        pagination : {},
+        allSize : 0,  // 모든 데이터 수
+        pageSize : 12, // 한 페이지에서 보여줄 데이터 수
+        navSize : 5,  // 페이지네이션이 보여줄 최대 페이지 수
+        lastPage : 1,  // Math.ceil(allSize / pageSize) 마지막 페이지
+        curPage : 1,  // 현재 페이지
+        startPage : 1,  // 페이지네이션 시작번호
+        endPage : 1,  // 페이지네이션 끝번호
       }
     },
     created() {
@@ -39,7 +60,8 @@ import axios from 'axios';
       let small_code = this.$route.query.small_code;
       console.log('created: ' + large_code);
       console.log('created: ' + small_code);
-      this.getProductList(large_code, small_code);
+      this.getTableList(this.curPage, large_code, small_code);
+      
     },
     mounted() {
 
@@ -56,7 +78,83 @@ import axios from 'axios';
       // 개별 상품 정보 페이지로 이동
       goToProductInfo(prdt_cd){
         this.$router.push({ path : 'productInfo', query : { 'prdt_cd' : prdt_cd }})
-      }
+      },
+      async getTableList(curPage, large, small) {
+                curPage = this.judgePage(curPage);
+                if (!curPage || curPage <= 0) 
+                curPage = this.startPage;
+                let gap = curPage%this.navSize === 0 ?  this.navSize - 1 : curPage%this.navSize - 1;
+                this.startPage = this.judgePage(curPage - gap);
+                this.endPage = this.startPage + this.navSize - 1;
+                await this.getTableCount(large, small);
+
+                this.curPage = curPage;
+                let data = {
+                    param : {
+                        limit : this.pageSize,
+                        offset : (curPage - 1) * this.pageSize,
+                        
+                       
+   
+                        large_code : large,
+                        small_code : small
+                    }
+                }
+                let result = await axios.post("/api/product", data)
+                                        .catch(err => console.log(err));
+                console.log(result);
+                this.productList = result.data;
+            },
+            async getTableCount(large, small) {
+                let data = {
+                    param : {
+                      large_code : large,
+                        small_code : small
+                    }
+                }
+                let result = await axios.post(`/api/product/productCount`, data) 
+                                        .catch(err => console.log(err));
+                this.allSize = result.data[0].count;
+                this.lastPage = Math.ceil(this.allSize / this.pageSize);
+                this.pagination = {
+                                lastPage : this.lastPage, 
+                                startPage : this.startPage, 
+                                endPage : this.endPage, 
+                                curPage : this.curPage
+                                }
+            },
+            judgePage(page) {
+                if (!page || page <= 0) 
+                page = 1
+                else if (page > this.lastPage) 
+                page = this.lastPage
+                return page
+            },
+
+            // 페이징
+            prevPage(){
+                this.getTableList(--this.curPage);
+            },
+
+            nextPage(){
+                this.getTableList(++this.curPage);
+            },
+
+            firstPage(){
+                this.curPage = 1;
+                this.getTableList(this.curPage);
+            },
+
+            lastPaging(){
+                this.curPage = this.lastPage;
+                this.getTableList(this.curPage);
+                
+            },
+            
+            changeNowPage(page){
+                this.curPage = page
+                this.getTableList(this.curPage);
+            }
     }    
   }
 </script>
