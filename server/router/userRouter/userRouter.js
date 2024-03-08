@@ -82,6 +82,59 @@ userRouter.post("/userJoin", async (request, response) => {
   response.send(result);
 });
 
+
+
+
+
+// 카카오 아이디 체크 및 회원 가입
+userRouter.post("/checkKakao", async (request, response) => {
+  console.log(request.body,'=====================================')
+  let kakao_id = request.body.id;
+  console.log(kakao_id)
+  // 데이터베이스에서 카카오 아이디 확인
+  const userExists = await db.connection('user', 'checkKakaoId', [kakao_id]);
+  
+  if (userExists.length > 0) {
+    // 이미 등록된 카카오 아이디인 경우
+    const result = await db.connection('user', 'checkKakaoId', [kakao_id]);
+
+    response.send(result);
+  } else {
+    // 회원가입이 되지 않았을 경우
+    // 회원가입 처리
+    const result2 = await db.connection('user', 'userJoin', [request.body]);
+    console.log(result2)
+    //가입한 카카오톡 회원조회
+    const result3 = await db.connection('user', 'checkKakaoId', [kakao_id]);
+    response.send(result3);
+  }
+});
+
+/*
+// 카카오 아이디로 회원 가입
+userRouter.post("/registerWithKakaoAccount", async (request, response) => {
+  let userData = request.body.param;
+
+  // 데이터베이스에 회원 정보 추가
+  const result = await db.connection('user', 'userJoin', userData);
+
+  // 회원 가입 결과 전송
+  response.send(result);
+});
+
+// 카카오 아이디로 로그인
+userRouter.post("/loginWithKakaoId", async (request, response) => {
+  let kakao_id = request.body.id;
+
+  // 카카오 아이디로 로그인 처리
+  const result = await db.connection('user', 'loginWithKakaoId', [kakao_id]);
+
+  // 로그인 결과 전송
+  response.send(result);
+});
+*/
+
+
 //회원 정보 수정 : put => body를 요구
 userRouter.put("/userUpdate/:mem_no", async (request, response) => {
   let data = [request.body.param, request.params.mem_no]; // [객체, 단일값]

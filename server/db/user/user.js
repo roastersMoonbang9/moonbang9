@@ -56,6 +56,39 @@ FROM    member
 WHERE   id = ? 
 AND     pwd = ?`;
 
+//카카오 아이디 확인
+const checkKakaoId = 
+`SELECT mem_no,
+        id,
+        name,
+        pwd,
+        phone,
+        birth_dt,
+        gen,
+        email,
+        post_cd,
+        addr,
+        addrdt,
+        point,
+        token,
+        mem_status,
+        grd_no,
+        (select rwd_pct from grade where grd_no = member.grd_no) as rwd_pct,
+        used_payment 
+FROM member
+WHERE id=?`;
+
+// 카카오 아이디로 회원 가입
+const registerWithKakaoAccount = 
+`INSERT INTO member 
+ SET ?`;
+
+// 카카오 아이디로 로그인 조회
+const loginWithKakaoId = 
+`SELECT id        
+FROM    member 
+WHERE   id = ?`;
+
 // 회원 가입
 const userJoin = 
 `INSERT INTO member 
@@ -105,5 +138,8 @@ WHERE mem_no = ?`;
     userPoint,
     userCount,
     userGradeUpdate,
-    usedPaymentUpdate
+    usedPaymentUpdate,
+    registerWithKakaoAccount,
+    loginWithKakaoId,
+    checkKakaoId
 }

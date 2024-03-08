@@ -89,8 +89,11 @@
                 <div
                   class="d-flex align-items-center justify-content-between mb-4"
                 >
-                  <a href="">아이디/비밀번호 찾기</a>
+                  <a href="#" data-bs-toggle="modal" data-bs-target="#findModal"
+                    >아이디/비밀번호 찾기</a
+                  >
                 </div>
+
                 <button
                   type="submit"
                   class="btn btn-primary py-3 w-100 mb-4"
@@ -116,6 +119,79 @@
           </div>
         </div>
         <!-- Sign In End -->
+        
+        <!-- 모달 창 -->
+        <div
+          class="modal fade"
+          id="findModal"
+          tabindex="-1"
+          aria-labelledby="findModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="findModalLabel">
+                  아이디/비밀번호 찾기
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <!-- 아이디 찾기 폼 -->
+                <form id="findIdForm">
+                  <div class="mb-3">
+                    <label for="emailForId" class="form-label"
+                      >가입 시 등록한 이메일</label
+                    >
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="emailForId"
+                      required
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-primary">
+                    아이디 찾기
+                  </button>
+                </form>
+
+                <!-- 비밀번호 찾기 폼 -->
+                <form id="findPasswordForm">
+                  <div class="mb-3">
+                    <label for="usernameForPassword" class="form-label"
+                      >아이디</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="usernameForPassword"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="emailForPassword" class="form-label"
+                      >가입 시 등록한 이메일</label
+                    >
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="emailForPassword"
+                      required
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-primary">
+                    비밀번호 찾기
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </body>
   </div>
@@ -151,17 +227,17 @@ export default {
       };
     },
     async login() {
+      //자체 로그인 요청
       let data = this.loginData();
       let result = await axios(data)
         .then((result) => {
-          console.log("이건 뭐지", result);
           if (result.data[0].loginCheck > 0) {
             this.$store.commit("userStore/user", {
               id: this.id,
               mem_no: result.data[0].mem_no,
               name: result.data[0].name,
               isLogin: true,
-              mem_status: result.data[0].mem_status
+              mem_status: result.data[0].mem_status,
             });
             this.$router.push("/");
             alert(this.$store.state.userStore.name + "님 로그인 되었습니다.");
@@ -177,54 +253,118 @@ export default {
         })
         .catch((err) => console.log(err));
     },
-    kakaoLogin() {
+
+    //카카오 로그인 데이터 전송
+    async kakaoLogin() {
+      // 카카오 로그인 요청
       window.Kakao.Auth.login({
         scope:
           "account_email, name, gender, birthday, birthyear, phone_number, shipping_address",
-        success: this.getKakaoAccount,
+        success: this.getKakaoAccount, // 성공적으로 로그인되면 getKakaoAccount 메소드 호출
       });
     },
-    getKakaoAccount() {
+    //카카오에서 받은 회원 정보를 처리하는 메소드
+    async getKakaoAccount() {
+      // 카카오 API를 사용하여 회원 정보를 가져옴
       window.Kakao.API.request({
         url: "/v2/user/me",
-        success: (res) => {
+        success: async (res) => {
           const kakao_account = res.kakao_account;
           const email = kakao_account.email;
           const name = kakao_account.name;
-          const gender = kakao_account.gender;
-          const birthday = kakao_account.birthday;
-          const birthyear = kakao_account.birthyear;
-          const phone_number = kakao_account.phone_number;
-          const shipping_address = kakao_account.shipping_address;
-          this.$store.commit("userStore/user", { isLogin: true });
-          console.log(
-            res.id,
-            email,
-            name,
-            gender,
-            birthday,
-            birthyear,
-            phone_number,
-            shipping_address
-          );
+          const gen = kakao_account.gender;
+          const birth_dt = kakao_account.birthyear + kakao_account.birthday;
+          const phone = kakao_account.phone_number;
+          const addr = kakao_account.shipping_address;
+          const kakao_id = res.id; // 카카오에서 제공하는 고유 아이디
 
-          alert("로그인 성공");
-          this.$router.push("/");
+          // 카카오 아이디를 서버로 전송하여 디비와 비교
+          const data = {
+            id: kakao_id,
+            name: name,
+            phone: phone,
+            email: email,
+            addr: addr == undefined ? "" : addr,
+            addrdt: "",
+            mem_status: 3,
+            grd_no: 1,
+            gen: gen == undefined ? "" : gen,
+          };
+
+          console.log(data);
+          // 서버에 카카오 아이디 전송 후 처리
+          const result = await axios.post("/apiuser/checkKakao", data);
+          let datas = result.data;
+          console.log(datas);
+
+          // 로그인이 성공하면 상태를 업데이트하고 메인 페이지로 이동합니다.
+          if (datas.length == 1) {
+            //로그인 처리
+            this.$store.commit("userStore/user", {
+              id: datas[0].id,
+              name: datas[0].name,
+              isLogin: true,
+              mem_no: datas[0].mem_no,
+              mem_status: datas[0].mem_status,
+              token: datas[0].token,
+            });
+
+            alert(`${datas[0].name}님 로그인 되었습니다.`);
+            this.$router.push("/");
+          } else {
+            alert("로그인에 실패했습니다.");
+          }
         },
         fail: (error) => {
           console.log(error);
         },
       });
+    },
 
-      window.Kakao.API.request({
-        url: "/v1/user/unlink",
-        success: function (response) {
-          console.log(response);
-        },
-        fail: function (error) {
-          console.log(error);
-        },
-      });
+    // 카카오 아이디로 로그인하는 메소드
+    async loginWithKakaoId(kakao_id) {
+      // 서버에 카카오 아이디를 전송하여 로그인 처리합니다.
+      const data = {
+        id: kakao_id,
+      };
+
+      const result = await axios.post("/api/user/loginWithKakaoId", data);
+    },
+    // 카카오 회원 정보로 회원 가입하는 메소드
+    async registerWithKakaoAccount(
+      kakao_id,
+      email,
+      name,
+      gen,
+      birth_dt,
+      phone,
+      addr
+    ) {
+      // 서버에 카카오 회원 정보를 전송하여 회원 가입 처리합니다.
+      const data = {
+        mem_no: result.data[0].mem_no,
+        id: kakao_id,
+        email: email,
+        name: name,
+        gen: gen,
+        birth_dt: birth_dt,
+        phone: phone,
+        addr: addr,
+        mem_status: 2,
+        grade_no: 1,
+      };
+
+      const result = await axios.post(
+        "/api/user/registerWithKakaoAccount",
+        data
+      );
+
+      // 회원 가입이 성공하면 로그인 처리합니다.
+      if (result.data.success) {
+        this.loginWithKakaoId(kakao_id);
+      } else {
+        alert("로그인에 실패했습니다.");
+      }
     },
   },
 };
