@@ -1,110 +1,34 @@
 <template>
 <div class="myContent">
 		<div class="titleSection">
-			<h3>주문조회</h3>
+			<h3>주문상세조회</h3>
 		</div>
-        <div>
-            <table class="table table-bordered">
-                <tr style="border-top: none;">
-                    <th style="border-top: none; padding-bottom: 9px;">주문기간으로 검색</th>
-                </tr>
-                <tr style="border-top: none;">
-                    <td style="border-top: none;">
-                        <span style="border-top: none;"><input class="form-control" type="date" v-model="getDate1" aria-label="default input example"></span>
-                    </td>
-                    <td style="border-top: none;">
-                        <span style="border-top: none;"><input class="form-control" type="date" v-model="getDate2" aria-label="default input example"></span>
-                    </td>
-                    <td style="border-top: none;position: relative;left: 102px;">
-                        <button class="btn btn-outline-dark words" style="border-top: none;" @click="getToday()">오늘</button>
-                        <button class="btn btn-outline-dark words" style="border-top: none;" @click="getYesterday()">어제</button>
-                        <button class="btn btn-outline-dark words" style="border-top: none;" @click="getWeekAgo()">일주일</button>
-                        <button class="btn btn-outline-dark words" style="border-top: none;" @click="getOneMonthAgo()">1개월</button>
-                        <button class="btn btn-outline-dark words" style="border-top: none;" @click="getThreeMonthAgo()">3개월</button>
-                    </td>
-                </tr>
-                <tr>
-                    <th style="padding: 9px 0px;">상태검색</th>
-                </tr>
-                <tr style="border-top: none;">
-                    <td colspan="4" style="border-top: none;">
-                        <ul class="nav">
-                            <li class="nav-item">
-                                <div class="form-check">
-                                <input v-bind:value="checkStatus1" v-model="checkSt" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-                                <label class="form-check-label" for="flexRadioDefault1">
-                                    전체&nbsp;&nbsp;&nbsp;
-                                </label>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <div class="form-check">
-                                <input v-bind:value="checkStatus2" v-model="checkSt" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                                <label class="form-check-label" for="flexRadioDefault2">
-                                    결제완료&nbsp;&nbsp;&nbsp;
-                                </label>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <div class="form-check">
-                                <input v-bind:value="checkStatus3" v-model="checkSt" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
-                                <label class="form-check-label" for="flexRadioDefault3">
-                                    배송완료&nbsp;&nbsp;&nbsp;
-                                </label>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <div class="form-check">
-                                <input v-bind:value="checkStatus4" v-model="checkSt" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4">
-                                <label class="form-check-label" for="flexRadioDefault4">
-                                    취소&nbsp;&nbsp;&nbsp;
-                                </label>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <div class="form-check">
-                                <input v-bind:value="checkStatus5" v-model="checkSt" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault5">
-                                <label class="form-check-label" for="flexRadioDefault5">
-                                    반품
-                                </label>
-                                </div>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div style="text-align: center; margin-bottom: 60px;">
-            <button class="btn btn-dark chbtn" @click="this.getTableList()">검색</button>
-            <button class="btn btn-secondary chbtn" @click="this.dataReset()">초기화</button>
-        </div>
-        <div>
-        <p>검색된 주문 수 : {{ this.allSize }} 건 | 총 주문 금액: {{ this.totalPayment }} 원</p>
-        </div>
 			<div class="mySection">
 				<fieldset>
 					<table class="baseTable">
 						<caption>주문배송조회 목록</caption>
 							<colgroup>
-								 <col width="88"> <col width="88"><col width="50"> <col width="130"> <col width="81"> <col width="100">
+								 <col width="88"><col width="88"> <col width="88"><col width="50"> <col width="130"> <col width="81"> <col width="100">
 							</colgroup>
 						<thead>
 							<tr>
-                                <th scope="col">주문번호</th>
+                                <th scope="col">상품</th>
+								<th scope="col">상품옵션</th>
+								<th scope="col">수량</th>
+								<th scope="col">배송비</th>
+								<th scope="col">금액</th>
 								<th scope="col">주문일자</th>
-								<th scope="col">수령자</th>
-								<th scope="col">주문상품</th>
-								<th scope="col">총 구매금액</th>
 								<th scope="col">주문상태</th>
 							</tr>
 						</thead>
 						<tbody>
-	                        <tr v-for="(table, idx) in tableList" :key="idx" @click="goToOrderDetail(table.ord_no)">
-								<td>{{ table.ord_no }}</td>
-								<td>{{ getDate(table.ord_dt) }}</td>
-								<td>{{ table.rcv_name }}</td>
-								<td>{{ table.prod_name }} 외 {{table.prod_count}}개</td>
+	                        <tr v-for="(table, idx) in tableList" :key="idx">
+								<td>{{ table.prod_name }}</td>
+								<td>옵션</td>
+								<td>갯수</td>
+								<td>배송비</td>
 								<td>{{ table.total_payment }}원</td>
+								<td>{{ getDate(table.ord_dt) }}</td>
 								<td>{{ this.checkStatus(table.status) }}</td>
             				</tr>
 	                        <tr v-if="tableList.length == 0">
@@ -151,7 +75,7 @@ export default{
                 paging : [],
                 pagination : {},
                 allSize : 0,  // 모든 데이터 수
-                pageSize : 5, // 한 페이지에서 보여줄 데이터 수
+                pageSize : 10, // 한 페이지에서 보여줄 데이터 수
                 navSize : 5,  // 페이지네이션이 보여줄 최대 페이지 수
                 lastPage : 1,  // Math.ceil(allSize / pageSize) 마지막 페이지
                 curPage : 1,  // 현재 페이지
@@ -343,10 +267,6 @@ export default{
                 res = `${y}년${m}월${d}일`;
 
             return res;
-            },
-            // 주문상세페이지로 이동
-            goToOrderDetail(ord_no){
-                this.$router.push({path:'/mypage/myOrdersDetail', query : {"no" : ord_no}});
             }
     }
 }

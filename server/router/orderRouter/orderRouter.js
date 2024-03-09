@@ -96,7 +96,8 @@ orderRouter.post("/adOrderList", async (request, response) => {
   let getDate2 = request.body.param.getDate2;
   let checkDate = request.body.param.checkDate;
   let checkSt = parseInt(request.body.param.checkSt);
-
+  let mem_no = request.body.param.chMem;
+  console.log('limit :' + limit + ', offset : ' + offset + ', checkSearch :' + checkSearch + ', searched : ' + searched + ', getDate1 : ' + getDate1 + ', getDate2 : ' + getDate2 + ', checkDate : ' + checkDate + ', checkSt : ' + checkSt)
   let data = [];
   let where = " WHERE 1=1";
 
@@ -108,6 +109,9 @@ orderRouter.post("/adOrderList", async (request, response) => {
       } else if(checkSearch == "2"){
         where += " AND name LIKE ? "
         data.push("%" + searched + "%");
+      } else if(mem_no != null){
+        where += " AND mem_no = ? "
+        data.push(mem_no);
       }
     }
   
@@ -138,8 +142,23 @@ orderRouter.post("/adOrderList", async (request, response) => {
     data.push(offset);
     
     let result = await db.connection('order', 'adOrderList', data, where);
-    response.send(result);
+    let newResult = [];
+    console.log(result)
+    if(mem_no != null){
+      let result3 = [];
+      for(let i of result){
+        let result2 = await db.connection('order', 'usOrderCount', [i.ord_no, i.ord_no]);
+        result3.push(result2)
+      }
+      newResult.push(result)
+      newResult.push(result3)
+      console.log(newResult)
+    }else {
+      newResult = result;
+    }
+    response.send(newResult);
 })
+
 
 // 주문 수 조회(관리자)
 orderRouter.post("/adOrderCount", async (request,response)=>{
@@ -149,6 +168,7 @@ orderRouter.post("/adOrderCount", async (request,response)=>{
   let getDate2 = request.body.param.getDate2;
   let checkDate = request.body.param.checkDate;
   let checkSt = parseInt(request.body.param.checkSt);
+  let mem_no = request.body.param.chMem;
 
   let data = [];
   let where = " WHERE 1=1";
@@ -161,6 +181,9 @@ orderRouter.post("/adOrderCount", async (request,response)=>{
       } else if(checkSearch == "2"){
         where += " AND name LIKE ? "
         data.push("%" + searched + "%");
+      } else if(mem_no != null){
+        where += " AND mem_no = ? "
+        data.push(mem_no);
       }
     }
   
@@ -191,6 +214,7 @@ orderRouter.post("/adOrderTotalPayment", async (request,response)=>{
   let getDate2 = request.body.param.getDate2;
   let checkDate = request.body.param.checkDate;
   let checkSt = parseInt(request.body.param.checkSt);
+  let mem_no = request.body.param.chMem;
 
   let data = [];
   let where = " WHERE 1=1";
@@ -203,6 +227,9 @@ orderRouter.post("/adOrderTotalPayment", async (request,response)=>{
       } else if(checkSearch == "2"){
         where += " AND name LIKE ? "
         data.push("%" + searched + "%");
+      } else if(mem_no != null){
+        where += " AND mem_no = ? "
+        data.push(mem_no);
       }
     }
   

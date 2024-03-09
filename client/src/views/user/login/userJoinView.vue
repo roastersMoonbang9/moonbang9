@@ -348,7 +348,7 @@ export default {
           addr: this.userInfo.address,
           addrdt: this.userInfo.address_detail,
           mem_status: this.userInfo.mem_status,
-          grade_no: this.userInfo.grade_no
+          grd_no: this.userInfo.grade_no
         },
       };
       let result = await axios
@@ -357,6 +357,8 @@ export default {
       let info = result.data.affectedRows;
       if (info > 0) {
         alert("회원가입이 완료되었습니다.");
+      }else{
+        alert("회원가입에 실패하였습니다.");
       }
       this.$router.push({ path: "/" });
     },

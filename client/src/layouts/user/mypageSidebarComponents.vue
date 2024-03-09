@@ -1,25 +1,22 @@
 <template>
-    <div id="lnbMy10x10V15" class="lnbMy10x10V15">
-	<!---->
-
+    <aside id="lnbMy10x10V15" class="lnbMy10x10V15">
 	<div class="article profile new_pro21">
-		<p class="hello">안녕하세요, 이름님</p>
+		<p class="hello">안녕하세요, {{userName}}님</p>
 		<div class="figure" id="myProfile">
 			
-			<strong class="classV18 g-white">WHITE 회원</strong>
+			<strong class="classV18 g-white">{{userInfo.grd_name}} 회원</strong>
 			<div class="profile_container">
-				<img src="http://fiximage.10x10.co.kr/web2015/common/img_profile_11.png" width="100" height="100" alt="프로필이미지">
+				<img  src="../img/nomal.PNG" width="100" height="100">
 			</div>
 			<div class="pro_info_area">
 				<p class="glade"></p>
-				<p class="nick_name">프로필 입력하기</p>
+				<p class="nick_name">좋은 하루 되세요</p>
 			</div>
-			<!-- // -->
 		</div>
     <div>
 		<ul>
-			<li><a><strong>1장</strong>쿠폰</a></li>
-			<li class="mymileage"><a><strong>0P</strong>포인트</a><span id="mileageCreditAvailable"></span></li>
+			<li><a><strong>{{coupon.length}}장</strong>쿠폰</a></li>
+			<li class="mymileage"><a><strong>{{userInfo.point}}P</strong>포인트</a><span id="mileageCreditAvailable"></span></li>
 		</ul>
   </div>
 	</div>
@@ -28,34 +25,104 @@
 		<div class="quick">
 			<strong class="heading"><span></span>QUICK MENU</strong>
 			<ul>
-            <li><router-link to="/inquiry">1:1문의</router-link></li>
+            <li><router-link to="/myPage/inquiry">1:1문의</router-link></li>
             <li><router-link to="/cart">장바구니</router-link></li>
-            <li><router-link to="/orders">주문내역확인</router-link></li>
-            <li><router-link to="/edit-profile">회원정보수정</router-link></li>
-            <li><router-link to="/withdraw">회원탈퇴</router-link></li>
+            <li><router-link to="/myPage/myOrders">주문내역확인</router-link></li>
+            <li><router-link to="/myPage/editProfile">회원정보수정</router-link></li>
+            <li @click="withdraw()">회원탈퇴</li>
         </ul>
 		</div>
 	</div>
-
-</div>
+</aside>
   </template>
   
-  <script>
+<script>
+import axios from 'axios'
+
   export default {
     data() {
       return {
-        userName: '사용자 이름', // 사용자 이름
-        userGrade: '회원 등급', // 회원 등급
-        userPoints: '0' // 포인트
+        userName: this.$store.state.userStore.name, // 사용자 이름
+        userInfo: {
+            grd_name: '', // 회원 등급
+            point: 0 // 포인트
+        },
+        coupon:[]
       };
+    },
+    created(){
+        this.getGrade();
+        this.getCoupon();
+    },
+    methods: {
+        // 포인트 및 등급 정보
+        async getGrade() {
+          let result = await axios.get(`/apiuser/gradePoint/${this.$store.state.userStore.mem_no}`)
+          .catch(err => console.log(err));
+          let list = result.data[0];
+          this.userInfo = list;
+        },
+        // 쿠폰 정보
+        async getCoupon() {
+          let result = await axios.get(`/apiuser/coupon/${this.$store.state.userStore.mem_no}/0`)
+          .catch(err => console.log(err));
+          let list = result.data;
+          this.coupon = list;
+        },
+        // 회원탈퇴
+        withdraw(){
+            const swalWithBootstrapButtons = Swal.mixin({
+              customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-success"
+              },
+              buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+              title: "정말 탈퇴하시겠습니까?",
+              text: "탈퇴를 원하시나요?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "탈퇴",
+              cancelButtonText: "뒤로가기",
+              reverseButtons: true
+            }).then((result) => {
+                this.complete();
+                this.handleLogout();
+                this.goToMain();
+              if (result.isConfirmed) {
+                swalWithBootstrapButtons.fire({
+                  title: "회원탈퇴 되었습니다.",
+                  icon: "success",
+                });
+              } 
+            });
+        },
+        // 회원탈퇴처리
+        async complete(){
+          let result = await axios.put(`/apiuser/userQuit/${this.$store.state.userStore.mem_no}`)
+          .catch(err => console.log(err));
+          let list = result.data;
+          console.log(list);
+        },
+        // 탈퇴 후 로그아웃 처리
+        handleLogout() {
+        this.$store.commit('userStore/logout'); 
+        this.$router.push('/login');
+        },
+        // 메인으로 이동
+        goToMain(){
+            this.$router.push({ path : '/'})
+        }
     }
   };
-  </script>
+</script>
   
 <style scoped>
 .lnbMy10x10V15 {
     width: 212px;
     margin: 2rem 0;
+    float: left;
 }
 .lnbMy10x10V15 .article:first-child {
     margin-top: 0;
@@ -91,7 +158,6 @@
     justify-content: center;
 }
 .lnbMy10x10V15 .profile.new_pro21 .figure img {
-    padding-top: 13px;
     width: 100%;
     height: 100%;
     object-fit: cover;

@@ -78,12 +78,16 @@ userRouter.post("/userLogin", async (request, response) => {
 userRouter.post("/userJoin", async (request, response) => {
   let data = request.body.param;
   console.log(data);
-  result = await db.connection('user', 'userJoin', data).then(rlt => {console.log(rlt)}).catch(err=>{console.log(err)});
+  result = await db.connection('user', 'userJoin', data).catch(err=>{console.log(err)});
   response.send(result);
 });
 
-
-
+//회원탈퇴 userQuit
+userRouter.put("/userQuit/:mem_no", async (request, response) => {
+  let mem_no = request.params.mem_no;
+  result = await db.connection('user', 'userQuit', mem_no).catch(err=>{console.log(err)});
+  response.send(result);
+});
 
 
 // 카카오 아이디 체크 및 회원 가입

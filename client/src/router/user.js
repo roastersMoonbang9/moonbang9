@@ -10,6 +10,9 @@ import userJoinView from '../views/user/login/userJoinView.vue'
 // import ProductReview from '../views/user/product/productReview.vue'
 import Mypage from '../views/user/mypage/mypageMainView.vue'
 import myOrders from '../views/user/mypage/myOrdersView.vue'
+import myOrdersDetail from '../views/user/mypage/myOrdersDetailView.vue'
+import myOrdersEditProfile from '../views/user/mypage/myOrdersEditProfileView.vue'
+import myOrdersInquiry from '../views/user/mypage/myOrdersInquiryView.vue'
 
 export default {
         path: '/',
@@ -67,9 +70,24 @@ export default {
                 component: Mypage,
                 children: [
                     {
-                        path: 'myOrders',
+                        path: 'editProfile', // 정보수정
+                        name: 'myOrdersEditProfile',
+                        component: myOrdersEditProfile
+                    },
+                    {
+                        path: 'inquiry', //1:1 문의
+                        name: 'myOrdersInquiry',
+                        component: myOrdersInquiry
+                    },
+                    {
+                        path: 'myOrders', //주문내역
                         name: 'myOrders',
                         component: myOrders
+                    },
+                    {
+                        path: 'myOrdersDetail', //주문내역 상세
+                        name: 'myOrdersDetail',
+                        component: myOrdersDetail
                     }
                 ]
             }

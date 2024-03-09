@@ -101,8 +101,10 @@ const userUpdate =
  WHERE mem_no = ?`;
 
  //회원탈퇴
-//const userQuit =
-
+const userQuit =
+`UPDATE member 
+ SET mem_status = 0
+ WHERE mem_no = ?`;
 
  //const userDelete = 
  
@@ -141,5 +143,6 @@ WHERE mem_no = ?`;
     usedPaymentUpdate,
     registerWithKakaoAccount,
     loginWithKakaoId,
-    checkKakaoId
+    checkKakaoId,
+    userQuit
 }
