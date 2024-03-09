@@ -36,7 +36,7 @@ const test =
 
 // 주문 목록 출력(관리자)
 const adOrderList =
-`SELECT
+`SELECT 
 o.ord_no,
 o.deli_addr,
 o.deli_addrdt,

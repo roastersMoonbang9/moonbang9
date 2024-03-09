@@ -11,9 +11,9 @@ userRouter.post("/userList", async (request, response) => {
   let offset = parseInt(request.body.param.offset);
   let checkSearch = request.body.param.checkSearch;
   let searched = request.body.param.searched;
-  // let getDate1 = request.body.param.getDate1;
-  // let getDate2 = request.body.param.getDate2;
-  // let checkDate = request.body.param.checkDate;
+  let getDate1 = request.body.param.getDate1;
+  let getDate2 = request.body.param.getDate2;
+  let checkDate = request.body.param.checkDate;
   let checkLv = parseInt(request.body.param.checkLv);
 
   let data = [];
@@ -31,10 +31,15 @@ userRouter.post("/userList", async (request, response) => {
     }
   
     // 가입일자 / 탈퇴일자 있는 경우
-    // if(large_code){
-    //   where += " AND p.large_code = ? "
-    //   data.push(large_code);
-    // }
+    if(getDate1 && getDate2){
+      if(checkDate == "1"){
+        where += " AND join_dt BETWEEN ? AND ?"
+        data.push(getDate1, getDate2);
+      } else if(checkDate == "2"){
+        where += " AND unjoin_dt BETWEEN ? AND ?"
+        data.push(getDate1, getDate2);
+      }
+    }
   
     // 소분류(카테고리) 있는 경우
     if(checkLv){
@@ -146,9 +151,9 @@ userRouter.put("/userUpdate/:mem_no", async (request, response) => {
 userRouter.post("/userCount", async (request,response)=>{
   let checkSearch = request.body.param.checkSearch;
   let searched = request.body.param.searched;
-  // let getDate1 = request.body.param.getDate1;
-  // let getDate2 = request.body.param.getDate2;
-  // let checkDate = request.body.param.checkDate;
+  let getDate1 = request.body.param.getDate1;
+  let getDate2 = request.body.param.getDate2;
+  let checkDate = request.body.param.checkDate;
   let checkLv = parseInt(request.body.param.checkLv);
 
   let data = [];
@@ -166,10 +171,15 @@ userRouter.post("/userCount", async (request,response)=>{
     }
   
     // 가입일자 / 탈퇴일자 있는 경우
-    // if(large_code){
-    //   where += " AND p.large_code = ? "
-    //   data.push(large_code);
-    // }
+    if(getDate1 && getDate2){
+      if(checkDate == "1"){
+        where += " AND join_dt BETWEEN ? AND ?"
+        data.push(getDate1, getDate2);
+      } else if(checkDate == "2"){
+        where += " AND unjoin_dt BETWEEN ? AND ?"
+        data.push(getDate1, getDate2);
+      }
+    }
   
     // 회원등급 조건 존재할 경우
     if(checkLv){

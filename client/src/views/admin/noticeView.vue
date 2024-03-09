@@ -1,28 +1,6 @@
 <template>
     <div class="container">
       <h1 style="padding: 15px; font-size: 27px;">공지사항</h1>
-      <div>
-        <h4 style="margin-bottom: 20px;">검색</h4>
-        <table class="table table-bordered">
-          <tr>
-            <th>검색어</th>
-              <td>
-                  <select class="form-select" v-model="checkSearch" aria-label="Default select example">
-                      <option value="1">주문번호</option>
-                      <option value="2">주문자명</option>
-                  </select>
-              </td>
-              <td colspan="3">
-                  <input v-model="searched" class="form-control" type="text" aria-label="default input example">
-              </td>
-          </tr>
-        </table>
-      </div>
-      <div style="text-align: center; margin-bottom: 60px;">
-        <button class="btn btn-dark" @click="this.getTableList()">검색</button>
-        <button class="btn btn-secondary" @click="this.dataReset()">초기화</button>
-      </div>
-
       <button type="button" class="btn btn-outline-secondary m-2"  @click="modalOpenTF" v-if="modalOpen === false">등록</button>
       <button type="button" class="btn btn-outline-secondary m-2"  @click="modalOpenTF" v-if="modalOpen === true">닫기</button>
       <div class="table-responsive">
@@ -30,18 +8,22 @@
         <thead>
           <tr class="table-primary">
             <th class="col-1">No.</th>
+            <th class="col-1">중요도</th>
             <th class="col-2">제목</th>
-            <th class="col-6">내용</th>
-            <th>작성일자</th>
+            <th class="col-5">내용</th>
+            <th>등록일</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <!--for 과 if를 같이 사용은 불가능하다고 생각해라-->
-          <tr v-for="(table, idx) in tableList" :key="idx" @click="getNoticeInfo(table.notice_no)">
+          <tr v-for="(table, idx) in tableList" :key="idx">
             <td class="col-1">{{ table.notice_no }}</td>
+            <td class="col-1">{{ this.changeImpor(parseInt(table.impor)) }}</td>
             <td class="col-2">{{ table.title }}</td>
-            <td class="col-6" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{ table.content }}</td>
-            <td>{{ table.notice_dt }}</td>
+            <td class="col-5" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{ table.content }}</td>
+            <td>{{ this.dateFomat(table.notice_dt) }}</td>
+            <td><button class="btn" @click="delNotice(table.notice_no)">삭제</button></td>
           </tr>
         </tbody>
       </table>
@@ -95,14 +77,13 @@
               </fieldset>
               <div class="mb-3">
                 
-          <input @change="fileSelect()" for="dataFilesUpl" class="form-control" type="file" name="dataFiles"  multiple ref="images" />
-          <button class="btn btn-secondary" @click="addFile()">파일추가</button>
+          <input @change="fileSelect()" for="dataFilesUpl" class="form-control" type="file" name="dataFiles" accept="image/*" multiple ref="images"/>
           <input for="tablecd" type="hidden" name="table_cd" :value="4">
           <input for="type_cd" type="hidden" name= "type_cd" :value="2">  
 
               </div>
             <div class="d-grid gap-2 col-3 mx-auto">
-              <button type="button" class="btn btn-primary" @click="noticeInsert()">저장하기</button>
+              <button type="button" class="btn btn-primary" @click="noticeInsert()">등록하기</button>
             </div>
           </form>
         </div>
@@ -134,8 +115,6 @@
         checkImpor1 : "1",
         noticeFiles : '',
 
-        noticeInfo2 : {},
-
         tableList : [],
         
         paging : [],
@@ -156,15 +135,39 @@
       this.getTableList();    
     },
     methods : {
-      async getNoticeInfo(no) {
+      dateFomat(date){
+        let date1 = new Date(date);
+        const year = date1.getFullYear();
+        const month = ('0' + (date1.getMonth() + 1)).slice(-2);
+        const day = ('0' + date1.getDate()).slice(-2);
+        const dateStr = `${year}-${month}-${day}`;
+        return dateStr;
+      },
+      changeImpor(impor) {
+                if (impor == 0) {
+                  impor = "일반"
+                } else if (impor == 1) {
+                  impor = "중요"
+                }
+                return impor;
+            },
+      async delNotice(no) {
         console.log(no);
-        let result = await axios.get(`/api/notice/noticeInfo/${no}`)
-                                .catch(err => console.log(err));
-        this.noticeInfo2 = result.data;
-        console.log(this.noticeInfo2);
+        if(confirm('정말 삭제하시겠습니까?')){
+          let result = await axios.delete(`/api/notice/noticeDelete/${no}`)
+                                  .catch(err => console.log(err));
+          console.log(result.data);
+          this.$router.go(this.$router.currentRoute);
+        }
+        
       },
       fileSelect() {
-        this.noticeFiles = this.$refs.images.files;
+        if(this.$refs.images.files.length > 5){
+          alert('파일은 5개까지 첨부 가능합니다.');
+          this.$refs.images.value = null;
+        }else {
+          this.noticeFiles = this.$refs.images.files;
+        }
       },
       async noticeInsert(){
         this.noticeInfo.type_cd = this.tableList[0].notice_no + 1;
@@ -173,7 +176,7 @@
         formData.append('title',this.noticeInfo.title);
         formData.append('content',this.noticeInfo.content);
         formData.append('impor',this.noticeInfo.impor);
-        for (let i = 0; i < this.noticeFiles.length; i++) {
+        for (let i = 0; i < 5; i++) {
           formData.append("dataFiles", this.noticeFiles[i]);
         }
         formData.append('table_cd',this.noticeInfo.table_cd);

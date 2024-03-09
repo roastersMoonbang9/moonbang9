@@ -2,12 +2,12 @@
     <aside id="sidebar" class="sidebar">
         <ul class="sidebar-nav" id="sidebar-nav">
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link collapsed" href="#">
             <i class="bi bi-grid"></i>
             <router-link to="/admin"><span style="color: #00009cda;">메인 페이지</span></router-link>
             </a>
-        </li>
+        </li> -->
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
@@ -76,7 +76,7 @@
             <li>
                 <a href="#">
                 <i class="bi bi-circle"></i>
-                <router-link to="/admin/cancleOrderList"><span>주문 취소 목록</span></router-link>
+                <router-link to="/admin/cancelOrderList"><span>주문 취소 목록</span></router-link>
                 </a>
             </li>
             </ul>

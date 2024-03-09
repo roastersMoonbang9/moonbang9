@@ -128,7 +128,7 @@ orderRouter.post("/adOrderList", async (request, response) => {
 
 
     // ORDER BY 절 추가
-    where += " order by ord_no desc"
+    where += " order by ord_dt desc"
   
     // LIMIT / OFFSET 절 추가
     where += " LIMIT ?"
@@ -255,7 +255,7 @@ orderRouter.post("/adCancleOrderList", async (request, response) => {
         where += " AND ord_dt BETWEEN ? AND ?"
         data.push(getDate1, getDate2);
       } else if(checkDate == "2"){
-        where += " AND ord_dt BETWEEN ? AND ?"
+        where += " AND cancel_dt BETWEEN ? AND ?"
         data.push(getDate1, getDate2);
       }
     }
@@ -301,6 +301,9 @@ orderRouter.post("/adCancleOrderCount", async (request,response)=>{
       if(checkDate == "1"){
         where += " AND ord_dt BETWEEN ? AND ?"
         data.push(getDate1, getDate2);
+      } else if(checkDate == "2"){
+        where += " AND cancel_dt BETWEEN ? AND ?"
+        data.push(getDate1, getDate2);
       }
     }
 
@@ -335,6 +338,9 @@ orderRouter.post("/adCancleOrderTotalPayment", async (request,response)=>{
     if(getDate1 && getDate2){
       if(checkDate == "1"){
         where += " AND ord_dt BETWEEN ? AND ?"
+        data.push(getDate1, getDate2);
+      } else if(checkDate == "2"){
+        where += " AND cancel_dt BETWEEN ? AND ?"
         data.push(getDate1, getDate2);
       }
     }

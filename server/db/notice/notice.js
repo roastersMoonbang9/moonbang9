@@ -6,7 +6,12 @@ const noticeCount =
 FROM notice`;
 
 const noticeList = 
-`SELECT * 
+`SELECT
+notice_no,
+impor,
+title,
+notice_dt,
+content 
 FROM   notice 
 ORDER BY notice_no DESC
 LIMIT ?
@@ -16,24 +21,30 @@ const noticeInsert =
 `INSERT INTO notice
 SET ?`;
 
+const noticeDelete =
+`DELETE FROM notice
+WHERE notice_no= ?`;
+
+const noticeDeleteImage =
+`DELETE FROM file
+WHERE type_cd= ? AND table_cd = 4`;
+
 const noticeInfo =
-`SELECT 	notice_no,
-impor,
-title,
-notice_dt,
-content
-FROM 	notice
-WHERE 	notice_no =  ?`;
+`SELECT *
+FROM notice
+WHERE notice_no =  ?`;
 
 const noitceInfoImage =
-`SELECT 	file_path
-FROM 	file
-WHERE	type_cd = ? AND table_cd = 4`;
+`SELECT file_path
+FROM file
+WHERE type_cd = ? AND table_cd = 4`;
 
 module.exports = {
     noticeList,
     noticeInsert,
     noticeCount,
+    noticeDelete,
+    noticeDeleteImage,
     noticeInfo,
     noitceInfoImage
 }

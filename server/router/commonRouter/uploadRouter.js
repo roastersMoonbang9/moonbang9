@@ -44,14 +44,16 @@ fileUploadRouter.post("/", upload.array('dataFiles'), async (req,res)=>{
       content : req.body.content,
       impor : parseInt(req.body.impor)
     }
-    console.log('Received Table Data:', tableData);
   } else if(table_cd == "3"){
-    
+    table_name = "event"
+    tableData = {
+      event_name : req.body.event_name,
+      path : req.body.path,
+      status : parseInt(req.body.status)
+    }
   }
+  console.log('Received Table Data:', tableData);
 
-  
-
-   //배너 정보 
   let fileData = req.body.dataFiles; // 이미지파일 정보 
   console.log('Received File Data:', req.files);
     let imgUrlList = [];
@@ -64,7 +66,7 @@ fileUploadRouter.post("/", upload.array('dataFiles'), async (req,res)=>{
       //console.log('파일명과 확장자 분리하기', newfileName[0], newfileName[1]);
   
       let data = {
-          table_cd: req.body.table_cd, //0 = 상품 1= 리뷰 2= 1: 1 문의 3= 이벤트 4= 반품
+          table_cd: req.body.table_cd, //상품 = 0, 리뷰 = 1, 1:1문의 = 2, 이벤트 = 3, 공지 = 4
           type_cd: req.body.type_cd, // 구분번호 <-- 이거 1로 고정시키면 안됨
           file_path: file.path, // 파일경로 ..\client\src\assets\user\img\1709702569457_1.png 저장됨
           file_name: newfileName[0], // 파일 이름
