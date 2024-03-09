@@ -27,7 +27,7 @@ WHERE event_cd = ?`
 WHERE event_cd= ?`
 
 //배너 추가 
-const InsertBanner = 
+const eventInsert = 
 `INSERT INTO event 
 SET ?`
 
@@ -36,6 +36,6 @@ module.exports = {
    eventList,
    updateEvent,
    DelEvent,
-   InsertBanner
+   eventInsert
 
 }
