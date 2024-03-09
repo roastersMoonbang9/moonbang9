@@ -4,8 +4,8 @@ const db = require("../../db.js");
 
 //예시
 //상품문의 목록 출력 
-productQueryRouter.get("/query:cd", async (request,response)=>{
-  let data = request.params.cd;
+productQueryRouter.get("/query:qst_no", async (request,response)=>{
+  let data = request.params.qst_no;
   console.log('query data는'+data);
     let result = await db.connection('query','queryList' , data);
     response.send(result);

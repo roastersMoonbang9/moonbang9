@@ -14,7 +14,7 @@ deliveryRouter.post("/deliveryList", async (request,response)=>{
    let getDate1 = request.body.param.getDate1;
    let getDate2 = request.body.param.getDate2;
    let checkDate = request.body.param.checkDate;
-  //let checkLv = parseInt(request.body.param.checkLv);
+  let checkSt = parseInt(request.body.param.checkSt);
 
   let data = [];
   let where = " WHERE 1=1";
@@ -32,6 +32,11 @@ if(getDate1 && getDate2){
     data.push(getDate1, getDate2);
   }
 }
+//배송상태 분류 있는 경우
+if(checkSt){
+  where += " AND d.status = ? "
+  data.push(checkSt);
+}
 
   // ORDER BY 절 추가
   where += " order by deli_no desc"
@@ -43,8 +48,8 @@ if(getDate1 && getDate2){
    where += " OFFSET ?"
    data.push(offset);
 
-    let result = db.connection('delivery','deliveryList',data, where)
-    console.log('리절트:'+result);
+    let result = await db.connection('delivery','deliveryList',data, where)
+    //console.log('리절트:'+result);
     response.send(result);
   })
   //운송장조회 
@@ -53,8 +58,9 @@ if(getDate1 && getDate2){
   //API -> 운송장 번호 / 택배사 입력 시 배송상태 출력. 적용 HOW?? 
 
   //운송장 번호 수정 
-  deliveryRouter.put("/delivery/:dno", async (request, response) => {
-    let data = [request.body.param, request.params.dno];
+  deliveryRouter.put("/updateDelivery/:deli_no", async (request, response) => {
+    let data = [request.body.param.status, request.params.deli_no];
+    console.log('넘어가는 파라미터:'+request.body.param.status);
     let result = await db.connection('delivery','updateShipNo', data);
     response.send(result);
   });

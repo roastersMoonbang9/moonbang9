@@ -75,7 +75,16 @@
             <ProductInfo @send-image="getImage1" />
 
           </div>
+          <!-- DETAILS TABS-->
+  <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
+    <li class="nav-item"><a class="nav-link text-uppercase active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">상품 상세</a></li>
+    <li class="nav-item"><a class="nav-link text-uppercase" id="reviews-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">상품 후기</a></li>
+    <li class="nav-item"><a class="nav-link text-uppercase" id="query-tab" data-bs-toggle="tab" href="#query" role="tab" aria-controls="query" aria-selected="false">상품 문의</a></li>
+  </ul>
+  <div class="tab-content mb-5" id="myTabContent">
           <ProductReview />
+          <ProductQuery />
+        </div>
           <!-- RELATED PRODUCTS-->
           <h2 class="h5 text-uppercase mb-4">카테고리 인기상품</h2>
           <div class="row">
@@ -107,11 +116,13 @@
 <script>
 import ProductInfo from '@/components/ProductInfo.vue';
 import ProductReview from '@/components/ProductReview.vue';
+import ProductQuery from '@/components/ProductQuery.vue';
 
 export default  {
   components : {
     ProductInfo,
-    ProductReview
+    ProductReview,
+    ProductQuery
   },
   data() {
     return {
