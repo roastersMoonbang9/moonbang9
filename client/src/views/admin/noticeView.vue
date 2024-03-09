@@ -26,21 +26,21 @@
       <button type="button" class="btn btn-outline-secondary m-2"  @click="modalOpenTF" v-if="modalOpen === false">등록</button>
       <button type="button" class="btn btn-outline-secondary m-2"  @click="modalOpenTF" v-if="modalOpen === true">닫기</button>
       <div class="table-responsive">
-      <table class="table table-hover align-middle" style="font-size: 15px; text-align: center;">
+      <table class="table table-hover align-middle" style="font-size: 15px; text-align: center; table-layout: fixed;">
         <thead>
           <tr class="table-primary">
-            <th>No.</th>
-            <th>제목</th>
-            <th class="col-5">내용</th>
+            <th class="col-1">No.</th>
+            <th class="col-2">제목</th>
+            <th class="col-6">내용</th>
             <th>작성일자</th>
           </tr>
         </thead>
         <tbody>
           <!--for 과 if를 같이 사용은 불가능하다고 생각해라-->
-          <tr v-for="(table, idx) in tableList" :key="idx">
-            <td>{{ table.notice_no }}</td>
-            <td>{{ table.title }}</td>
-            <td>{{ table.content }}</td>
+          <tr v-for="(table, idx) in tableList" :key="idx" @click="getNoticeInfo(table.notice_no)">
+            <td class="col-1">{{ table.notice_no }}</td>
+            <td class="col-2">{{ table.title }}</td>
+            <td class="col-6" style="text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">{{ table.content }}</td>
             <td>{{ table.notice_dt }}</td>
           </tr>
         </tbody>
@@ -94,7 +94,9 @@
                   </div>
               </fieldset>
               <div class="mb-3">
-          <input @change="fileSelect()" for="photosUpl" class="form-control" type="file" name="photos"  multiple ref="images" />
+                
+          <input @change="fileSelect()" for="dataFilesUpl" class="form-control" type="file" name="dataFiles"  multiple ref="images" />
+          <button class="btn btn-secondary" @click="addFile()">파일추가</button>
           <input for="tablecd" type="hidden" name="table_cd" :value="4">
           <input for="type_cd" type="hidden" name= "type_cd" :value="2">  
 
@@ -131,8 +133,11 @@
         checkImpor0 : "0",
         checkImpor1 : "1",
         noticeFiles : '',
-        tableList : [],
 
+        noticeInfo2 : {},
+
+        tableList : [],
+        
         paging : [],
         pagination : {},
         allSize : 1,  // 모든 데이터 수
@@ -151,9 +156,15 @@
       this.getTableList();    
     },
     methods : {
+      async getNoticeInfo(no) {
+        console.log(no);
+        let result = await axios.get(`/api/notice/noticeInfo/${no}`)
+                                .catch(err => console.log(err));
+        this.noticeInfo2 = result.data;
+        console.log(this.noticeInfo2);
+      },
       fileSelect() {
-        console.log(this.$refs);
-        this.noticeFiles = this.$refs.images.files[0];
+        this.noticeFiles = this.$refs.images.files;
       },
       async noticeInsert(){
         this.noticeInfo.type_cd = this.tableList[0].notice_no + 1;
@@ -162,7 +173,9 @@
         formData.append('title',this.noticeInfo.title);
         formData.append('content',this.noticeInfo.content);
         formData.append('impor',this.noticeInfo.impor);
-        formData.append('photos',this.noticeFiles);
+        for (let i = 0; i < this.noticeFiles.length; i++) {
+          formData.append("dataFiles", this.noticeFiles[i]);
+        }
         formData.append('table_cd',this.noticeInfo.table_cd);
         formData.append('type_cd',this.noticeInfo.type_cd);
 

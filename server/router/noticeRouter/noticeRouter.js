@@ -22,5 +22,21 @@ noticeRouter.post("/", async (request, response)=>{
 noticeRouter.get("/", async (request,response)=>{
   let result = await db.connection('notice','noticeCount');
   response.send(result);
-})
-  module.exports = noticeRouter;
+});
+
+// 공지 단건조회
+noticeRouter.get("/noticeInfo/:notice_no", async (request,response)=>{
+  let data = request.params.notice_no;
+  console.log(data);
+  let result = (await db.connection('notice','noticeInfo', data))[0].catch(err=>console.log(err));
+  response.send(result);
+});
+
+// 공지 단건조회(이미지파일)
+noticeRouter.get("/noitceInfoImage/:notice_no", async (request,response)=>{
+  let data = request.params.notice_no;
+  let result = await db.connection('notice','noitceInfoImage', data).catch(err=>console.log(err));
+  response.send(result);
+});
+
+module.exports = noticeRouter;

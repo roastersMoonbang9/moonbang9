@@ -79,11 +79,6 @@
                 <router-link to="/admin/cancleOrderList"><span>주문 취소 목록</span></router-link>
                 </a>
             </li>
-            <li>
-                <a href="#">
-                <i class="bi bi-circle"></i><span>반품 승인 / 거절</span>
-                </a>
-            </li>
             </ul>
         </li>
 

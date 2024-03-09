@@ -12,11 +12,12 @@ const multer = require('multer');
         //저장되는 파일이름 형식 커스텀 가능
         // 오늘 날짜 + file 오리지널 이름 (중복 방지)
         filename(req, file, cb){  //db 콜백함수 통해 전송된 파일 이름 설정
+          console.log(file);
           file.originalname = Buffer.from(file.originalname, "latin1").toString(
             "utf8"
           );
           let rename = `${Date.now()}_${file.originalname}`
-    cb(null, rename); // 밀리초+파일이름으로 파일이름 재설정(파일 이름 충돌방지)
+          cb(null, rename); // 밀리초+파일이름으로 파일이름 재설정(파일 이름 충돌방지)
         },
       filefilter(req, file, cb){
         const ext = path.extname(file.originalname);
@@ -32,7 +33,7 @@ const multer = require('multer');
 
  
 
-fileUploadRouter.post("/", upload.array('photos',4), async (req,res)=>{
+fileUploadRouter.post("/", upload.array('dataFiles'), async (req,res)=>{
   let table_cd = req.body.table_cd;
   let table_name = '';
   let tableData = {};
@@ -48,9 +49,11 @@ fileUploadRouter.post("/", upload.array('photos',4), async (req,res)=>{
     
   }
 
+  
+
    //배너 정보 
-  let fileData = req.body.file; // 이미지파일 정보 
-  console.log('Received File Data:', fileData);
+  let fileData = req.body.dataFiles; // 이미지파일 정보 
+  console.log('Received File Data:', req.files);
     let imgUrlList = [];
     for(let file of req.files){
 
@@ -68,18 +71,18 @@ fileUploadRouter.post("/", upload.array('photos',4), async (req,res)=>{
           file_extn: newfileName[1], // 확장자명
           ranks: 1, // 배치순서 -> 배열로 바꿔야함    
       }
-      let eventResult = await db.connection(table_name, table_name +'Insert',tableData).catch(err => console.log(err));;
-      console.log(eventResult);
-
+      console.log(data);
       // DB insert 첨부파일 정보를 DB에 저장
-      let result = await db.connection('file','fileInsert',data).catch(err => console.log(err));;
+      let result = await db.connection('file','fileInsert',data).catch(err => console.log(err));
       console.log(result);
       
       imgUrlList.push(imgUrl);
       console.log(imgUrlList);
 
-      res.send(result);
     }
+    let eventResult = await db.connection(table_name, table_name +'Insert',tableData).catch(err => console.log(err));
+      console.log(eventResult);
+      res.send(eventResult);
   });
 
 // 첨부파일 정보 전체조회
