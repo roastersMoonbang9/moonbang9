@@ -183,7 +183,7 @@ export default {
     methods : {
         async getPopularProduct(limit){
             console.log(limit);
-            let result = await axios.get(`/api/product?limit=${limit}`);
+            let result = await axios.post(`/api/product?limit=${limit}`);
             console.log(result);
             this.popularList = result.data;
             // console.log(this.productList);

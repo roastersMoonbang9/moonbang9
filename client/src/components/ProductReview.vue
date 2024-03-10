@@ -31,8 +31,20 @@
 <script>
 import axios from 'axios';
 export default {
+  props: {
+    prdt_cd: {
+      type: String,
+      required: true,
+    },
+  },
 data(){
 return {
+  props: {
+    prdt_cd: {
+      type: String,
+      required: true,
+    },
+  },
     reviewInfo : [],
         // rv_no: '',
         // content: '',
@@ -46,11 +58,11 @@ return {
 };
 },
 created(){
-this.getReviewInfo(this.$route.query.prdt_cd);
+this.getReviewInfo();
 },
 methods : {
 async getReviewInfo(){
-    let result = await axios.get('/api/product/review/'+ this.reviewInfo.rv_no)
+    let result = await axios.get('/api/product/review/'+ this.prdt_cd)
                            .catch(err => console.log(err));
     this.reviewInfo = result.data;
     console.log(result);

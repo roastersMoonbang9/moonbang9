@@ -6,7 +6,7 @@ where prdt_cd = ?`;
 
 const queryInfo = 
 `SELECT * FROM product_question  
-WHERE qst_no = ?`;
+WHERE prdt_cd = ?`;
 
 const queryUpdate = 
 `UPDATE product_question
