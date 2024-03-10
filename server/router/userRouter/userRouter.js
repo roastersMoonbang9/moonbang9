@@ -3,7 +3,7 @@
 const express = require('express');
 const userRouter = express.Router();
 const db = require("../../db.js");
-
+const nodemailer = require('nodemailer');
 
 //회원 전체 조회(관리자)
 userRouter.post("/userList", async (request, response) => {
@@ -11,9 +11,9 @@ userRouter.post("/userList", async (request, response) => {
   let offset = parseInt(request.body.param.offset);
   let checkSearch = request.body.param.checkSearch;
   let searched = request.body.param.searched;
-  // let getDate1 = request.body.param.getDate1;
-  // let getDate2 = request.body.param.getDate2;
-  // let checkDate = request.body.param.checkDate;
+  let getDate1 = request.body.param.getDate1;
+  let getDate2 = request.body.param.getDate2;
+  let checkDate = request.body.param.checkDate;
   let checkLv = parseInt(request.body.param.checkLv);
 
   let data = [];
@@ -31,10 +31,15 @@ userRouter.post("/userList", async (request, response) => {
     }
   
     // 가입일자 / 탈퇴일자 있는 경우
-    // if(large_code){
-    //   where += " AND p.large_code = ? "
-    //   data.push(large_code);
-    // }
+    if(getDate1 && getDate2){
+      if(checkDate == "1"){
+        where += " AND join_dt BETWEEN ? AND ?"
+        data.push(getDate1, getDate2);
+      } else if(checkDate == "2"){
+        where += " AND unjoin_dt BETWEEN ? AND ?"
+        data.push(getDate1, getDate2);
+      }
+    }
   
     // 소분류(카테고리) 있는 경우
     if(checkLv){
@@ -88,6 +93,67 @@ userRouter.put("/userQuit/:mem_no", async (request, response) => {
   result = await db.connection('user', 'userQuit', mem_no).catch(err=>{console.log(err)});
   response.send(result);
 });
+
+// 이메일을 통해 아이디 찾기
+userRouter.post("/forgotUsername", async (request, response) => {
+  const userEmail = request.body.email; // 사용자가 입력한 이메일 주소
+
+  try {
+    // 이메일을 통해 사용자 정보를 데이터베이스에서 조회합니다.
+    const userData = await db.findUserByEmail(userEmail);
+
+    if (userData) {
+      // 조회된 사용자 정보에서 아이디를 가져옵니다.
+      const username = userData.username;
+
+      // 이메일로 아이디를 발송하는 로직을 구현합니다.
+      // (이 부분은 이미 작성된 sendUsernameByEmail 함수를 사용하거나 직접 작성해야 합니다.)
+
+      response.status(200).json({ success: true, message: '이메일로 아이디를 발송했습니다.' });
+    } else {
+      // 해당 이메일로 가입된 사용자가 없는 경우
+      response.status(404).json({ success: false, message: '가입된 사용자를 찾을 수 없습니다.' });
+    }
+  } catch (error) {
+    console.error('아이디 찾기 오류:', error);
+    response.status(500).json({ success: false, message: '서버 오류로 인해 아이디를 찾을 수 없습니다.' });
+  }
+});
+
+// 이메일을 통해 아이디 찾기
+async function findUsernameByEmail(email) {
+  // 이메일을 통해 사용자 정보를 데이터베이스에서 조회하는 로직을 구현해야 합니다.
+  // 여기서는 가정적으로 사용자 정보를 가져오는 함수를 호출하는 것으로 대체합니다.
+  const userData = await db.findUserByUsername(email); // 가입한 이메일과 일치하는 아이디를 가져옴
+  return userData;
+}
+
+// 이메일로 아이디 발송
+async function sendUsernameByEmail(email, username) {
+  // SMTP 전송을 위한 transporter 생성
+  let transporter = nodemailer.createTransport({
+    host: 'smtp.example.com', // 이메일 호스트
+    port: 587, // 포트
+    secure: false, // 보안 연결 사용 여부
+    auth: {
+      user: 'your_email@example.com', // 보내는 이메일 계정
+      pass: 'your_password', // 계정 비밀번호
+    },
+  });
+
+  // 발송할 이메일 내용
+  let mailOptions = {
+    from: 'your_email@example.com', // 발신자 이메일
+    to: email, // 수신자 이메일
+    subject: '아이디 찾기 결과', // 이메일 제목
+    text: `귀하의 아이디는 ${username}입니다.`, // 이메일 내용
+  };
+
+  // 이메일 발송
+  await transporter.sendMail(mailOptions);
+}
+
+
 
 
 // 카카오 아이디 체크 및 회원 가입
@@ -150,9 +216,9 @@ userRouter.put("/userUpdate/:mem_no", async (request, response) => {
 userRouter.post("/userCount", async (request,response)=>{
   let checkSearch = request.body.param.checkSearch;
   let searched = request.body.param.searched;
-  // let getDate1 = request.body.param.getDate1;
-  // let getDate2 = request.body.param.getDate2;
-  // let checkDate = request.body.param.checkDate;
+  let getDate1 = request.body.param.getDate1;
+  let getDate2 = request.body.param.getDate2;
+  let checkDate = request.body.param.checkDate;
   let checkLv = parseInt(request.body.param.checkLv);
 
   let data = [];
@@ -170,10 +236,15 @@ userRouter.post("/userCount", async (request,response)=>{
     }
   
     // 가입일자 / 탈퇴일자 있는 경우
-    // if(large_code){
-    //   where += " AND p.large_code = ? "
-    //   data.push(large_code);
-    // }
+    if(getDate1 && getDate2){
+      if(checkDate == "1"){
+        where += " AND join_dt BETWEEN ? AND ?"
+        data.push(getDate1, getDate2);
+      } else if(checkDate == "2"){
+        where += " AND unjoin_dt BETWEEN ? AND ?"
+        data.push(getDate1, getDate2);
+      }
+    }
   
     // 회원등급 조건 존재할 경우
     if(checkLv){

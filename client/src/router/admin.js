@@ -5,7 +5,7 @@ import adminView from '../views/admin/AdminMainViews.vue'
 import orderListView from '../views/admin/OrderListView.vue'
 import memberlistView from '../views/admin/MemberListView.vue'
 import GradeView from '../views/admin/GradeList.vue'
-import cancleOrderListView from '../views/admin/CancleOrderListView.vue'
+import cancelOrderListView from '../views/admin/CancelOrderListView.vue'
 import store from '../store/index.js'
 
 export default {
@@ -59,9 +59,9 @@ export default {
 
         },
         {
-            path: 'cancleOrderList',
-            name: 'cancleOrderList',
-            component: cancleOrderListView
+            path: 'cancelOrderList',
+            name: 'cancelOrderList',
+            component: cancelOrderListView
         }
     ]
 }

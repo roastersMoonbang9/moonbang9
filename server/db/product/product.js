@@ -57,16 +57,16 @@ ORDER BY opt_number`;
 // 상품상세 페이지 안 : 나머지 이미지들
 const productImages =
 `SELECT p.prdt_cd
-        , f.table_cd
-        , f.type_cd
-        , f.file_path
-        , f.file_name
-        , f.file_extn
-        , f.ranks
+, f.table_cd
+, f.type_cd
+, f.file_path
+, f.file_name
+, f.file_extn
+, f.ranks
 FROM product p JOIN file f
-               ON p.prdt_cd = f.type_cd
-WHERE p.prdt_cd = ?
-ORDER BY ranks`;
+       ON p.prdt_cd = f.type_cd
+WHERE p.prdt_cd = 'CB00001'
+ORDER BY f.ranks;`;
 
 // 상품상세 페이지에서 선택한 상품들 장바구니에 담기
 const insertCart = 

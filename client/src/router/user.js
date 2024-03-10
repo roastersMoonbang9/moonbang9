@@ -14,6 +14,7 @@ import myOrdersDetail from '../views/user/mypage/myOrdersDetailView.vue'
 import myOrdersEditProfile from '../views/user/mypage/myOrdersEditProfileView.vue'
 import myOrdersInquiry from '../views/user/mypage/myOrdersInquiryView.vue'
 
+
 export default {
         path: '/',
         name: 'home',

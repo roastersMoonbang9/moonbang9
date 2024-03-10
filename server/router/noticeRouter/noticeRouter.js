@@ -22,5 +22,30 @@ noticeRouter.post("/", async (request, response)=>{
 noticeRouter.get("/", async (request,response)=>{
   let result = await db.connection('notice','noticeCount');
   response.send(result);
-})
-  module.exports = noticeRouter;
+});
+
+// 공지 삭제
+noticeRouter.delete("/noticeDelete/:notice_no", async (request, response)=>{
+  let data = parseInt(request.params.notice_no);
+  let result2 = await db.connection('notice','noticeDeleteImage', data);
+  console.log(result2);
+  let result = await db.connection('notice','noticeDelete', data);
+  response.send(result);
+});
+
+// 공지 단건조회
+noticeRouter.get("/noticeInfo/:notice_no", async (request,response)=>{
+  let data = parseInt(request.params.notice_no);
+  console.log(data);
+  let result = await db.connection('notice','noticeInfo', data);
+  response.send(result);
+});
+
+// 공지 단건조회(이미지파일)
+noticeRouter.get("/noitceInfoImage/:notice_no", async (request,response)=>{
+  let data = parseInt(request.params.notice_no);
+  let result = await db.connection('notice','noitceInfoImage', data);
+  response.send(result);
+});
+
+module.exports = noticeRouter;

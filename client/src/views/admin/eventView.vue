@@ -54,16 +54,28 @@
         <fieldset class="row mb-3">
             <legend for="bannStatus" class="col-form-label col-sm-2 pt-0">활성화 여부</legend>
             <div class="col-sm-10">
-                <div class="form-check">
-                    <input for="bannSt" class="form-check-input" type="radio" name="bannStatus" value="1" v-model="bannerInfo.status">
+              <ul class="nav">
+                <li class="nav-item">
+                  <div class="form-check">
+                    <input for="bannSt" class="form-check-input" type="radio" name="gridRadios1" id="gridRadios1" :value="checkSt0"  v-model="bannerInfo.status" checked>
                     <label class="form-check-label" for="gridRadios1">
-                        활성화
+                        활성화&nbsp;&nbsp;&nbsp;
                     </label>
-                </div>
+                  </div>
+                </li>
+                <li class="nav-item">
+                  <div class="form-check">
+                    <input for="bannSt" class="form-check-input" type="radio" name="gridRadios2" id="gridRadios2" :value="checkSt1"  v-model="bannerInfo.status" >
+                    <label class="form-check-label" for="gridRadios2">
+                        비활성화
+                    </label>
+                  </div>
+                </li>
+              </ul>
             </div>
         </fieldset>
         <div class="mb-3">
-    <input @change="fileSelect()" for="photosUpl" class="form-control" type="file" name="photos"  multiple ref="images" />
+    <input @change="fileSelect()" for="dataFilesUpl" class="form-control" type="file" name="dataFiles" accept="image/*" multiple ref="images" />
           <input for="tablecd" type="hidden" name="table_cd" :value="4">
           <input for="type_cd" type="hidden" name= "type_cd" :value="2">  
 
@@ -87,22 +99,14 @@
         bannerInfo: {
           event_name: '',
           path: '',
-          status: 0, 
+          status: "0", 
           table_cd: '',
           type_cd: ''
         },
+        checkSt0 : "0",
+        checkSt1 : "1",
         bannerImage: '',
-        // fileList:[{
-        //   event_cd: '',
-        //   event_name: '',
-        //   event_impt: '',
-        //   path: '',
-        //   crd_date: '',
-        //   extn: '',
-        //   status:'',
-        //   image: ''
-        // }
-        // ],
+
         paging : [],
         allSize : 1,  // 모든 데이터 수
         pageSize : 5, // 한 페이지에서 보여줄 데이터 수
@@ -118,8 +122,14 @@
     },
     methods : {
       fileSelect() {
-        console.log(this.$refs);
-        this.bannerImage = this.$refs.images.files[0];
+        console.log(this.$refs.images.files.length);
+        if(this.$refs.images.files.length > 1){
+          alert('배너이미지는 1개만 첨부 가능합니다.');
+          this.$refs.images.value = null;
+        }else {
+          this.bannerImage = this.$refs.images.files[0];
+        }
+        console.log(this.bannerImage);
       },
       async bannerInsert(){
         this.bannerInfo.type_cd = this.eventList[0].event_cd + 1;
@@ -128,7 +138,7 @@
         formData.append('event_name',this.bannerInfo.name);
         formData.append('path',this.bannerInfo.path);
         formData.append('status',this.bannerInfo.status);
-        formData.append('photos',this.bannerImage);
+        formData.append('dataFiles',this.bannerImage);
         formData.append('table_cd',this.bannerInfo.table_cd);
         formData.append('type_cd',this.bannerInfo.type_cd);
 

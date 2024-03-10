@@ -65,22 +65,6 @@
                                 </label>
                                 </div>
                             </li>
-                            <li class="nav-item">
-                                <div class="form-check">
-                                <input v-bind:value="checkStatus4" v-model="checkSt" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4">
-                                <label class="form-check-label" for="flexRadioDefault4">
-                                    취소&nbsp;&nbsp;&nbsp;
-                                </label>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <div class="form-check">
-                                <input v-bind:value="checkStatus5" v-model="checkSt" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault5">
-                                <label class="form-check-label" for="flexRadioDefault5">
-                                    반품
-                                </label>
-                                </div>
-                            </li>
                         </ul>
                     </td>
                 </tr>
@@ -95,9 +79,8 @@
         <table class="table table-hover" style="font-size: 15px;">
             <thead>
             <tr class="table-primary">
-                <th>번호</th>
-                <th>주문일</th>
                 <th>주문번호</th>
+                <th>주문일</th>
                 <th>주문자</th>
                 <th>수령자</th>
                 <th>주문금액</th>
@@ -111,9 +94,8 @@
             <tbody>
             <!--for 과 if를 같이 사용은 불가능하다고 생각해라-->
             <tr v-for="(table, idx) in tableList" :key="idx">
-                <td>{{ idx + 1 }}</td>
-                <td>{{ table.ord_dt }}</td>
                 <td>{{ table.ord_no }}</td>
+                <td>{{ this.dateFomat(table.ord_dt) }}</td>
                 <td>{{ table.name }}</td>
                 <td>{{ table.rcv_name }}</td>
                 <td>{{ table.total_price }}</td>
@@ -154,8 +136,6 @@
                 checkStatus1 : null,
                 checkStatus2 : "1",
                 checkStatus3 : "2",
-                checkStatus4 : "3",
-                checkStatus5 : "4",
                 checkSt : null,
                 totalPayment : 0,
 
@@ -173,6 +153,14 @@
             }
         },
         methods : {
+            dateFomat(date){
+                let date1 = new Date(date);
+                const year = date1.getFullYear();
+                const month = ('0' + (date1.getMonth() + 1)).slice(-2);
+                const day = ('0' + date1.getDate()).slice(-2);
+                const dateStr = `${year}-${month}-${day}`;
+                return dateStr;
+            },
             checkStatus(st) {
                 if (st == 1) {
                     st = "결제 완료"

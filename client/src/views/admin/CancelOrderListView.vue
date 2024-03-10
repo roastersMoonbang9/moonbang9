@@ -49,10 +49,9 @@
         <table class="table table-hover" style="font-size: 15px;">
             <thead>
             <tr class="table-primary">
-                <th>번호</th>
+                <th>주문번호</th>
                 <th>주문일</th>
                 <th>취소일</th>
-                <th>주문번호</th>
                 <th>주문자</th>
                 <th>결제금액</th>
             </tr>
@@ -60,10 +59,9 @@
             <tbody>
             <!--for 과 if를 같이 사용은 불가능하다고 생각해라-->
             <tr v-for="(table, idx) in tableList" :key="idx">
-                <td>{{ idx + 1 }}</td>
-                <td>{{ table.ord_dt }}</td>
-                <td>{{ table.ord_dt }}</td>
                 <td>{{ table.ord_no }}</td>
+                <td>{{ this.dateFomat(table.ord_dt) }}</td>
+                <td>{{ this.dateFomat(table.cancle_dt) }}</td>
                 <td>{{ table.name }}</td>
                 <td>{{ table.total_payment }}</td>
             </tr>
@@ -111,6 +109,14 @@
             }
         },
         methods : {
+            dateFomat(date){
+                let date1 = new Date(date);
+                const year = date1.getFullYear();
+                const month = ('0' + (date1.getMonth() + 1)).slice(-2);
+                const day = ('0' + date1.getDate()).slice(-2);
+                const dateStr = `${year}-${month}-${day}`;
+                return dateStr;
+            },
             getToday() {
                 let today = new Date();
                 this.getDate2 = this.changeDate(today);
