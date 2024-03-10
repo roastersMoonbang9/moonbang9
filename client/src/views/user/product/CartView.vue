@@ -1,73 +1,70 @@
 <template>
-<div>
+<div class="cartWrap">
     <div>
-        <h1 class="cartt">장바구니</h1>
+        <h3 class="overHidden cartt tMarj2" id="bagGrpTitle0">장바구니</h3>
     </div>
-    <section class="py-5">
-          <div class="row" style="display: block;">
-            <div class="mb-4 mb-lg-0" style="margin: 0 auto;">
-              <!-- CART TABLE-->
-              <div class="table-responsive mb-4">
-                <table class="table text-nowrap" style="text-align: center; font-size: 12px;">
-                  <thead class="bg-light">
-                    <tr>
-                      <th class="border-0 p-3" scope="col" style="width: 1rem;"><input type="checkbox" name="cart_checkbox" v-model="selectAll"></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">상품코드</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">상품정보</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">판매가격</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">수량</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase">주문금액</strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th>
-                      <th class="border-0 p-3" scope="col"> <strong class="text-sm text-uppercase"></strong></th>
-                    </tr>
-                  </thead>
-                  <tbody class="border-0">
-                    <tr v-for="(list, idx) in cartList" v-bind:key="idx">
-                      <th class="border-0 p-3" scope="col"><input type="checkbox" v-model="selected" :key="idx" :value="list"></th>
-                      <th class="border-0 p-3" scope="col"><strong class="text-sm text-uppercase">{{list.prdt_cd}}</strong></th>
-                      <th class="ps-0 py-3 border-light" scope="row">
-                        <div class="d-flex align-items-center"><a class="reset-anchor d-block animsition-link" href="detail.html"><img src="../../../../public/product-detail-3.jpg" alt="..." width="70"/></a>
-                          <div class="ms-3"><p class="mb-0 small">{{list.prdt_name}}</p><p class="mb-0 small" v-if="list.opt_name != null">옵션 : {{list.opt_name}}</p></div>
-                        </div>
-                      </th>
-                      <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">{{list.sale_price}}</p>
-                      </td>
-                      <td class="p-3 align-middle border-light">
-                        <div class="border align-items-center justify-content-between px-0">
-                          <div class="quantity">
-                            <button class="bi bi-chevron-left" @click="minusQty($event,idx)"></button>
-                            <input class="form-control form-control-sm border-0 shadow-0 p-0" min="1" type="number" :value="list.cart_qty" :key="idx" @input="cartQty($event,idx)" style="-moz-appearance: textfield;"/>
-                            <button class="bi bi-chevron-right" @click="addQty(idx)"></button>
-                          </div>
-                        </div>
-                        <input class="form-control form-control-sm border-0 shadow-0 p-0 btn btn-secondary" type="button" value="수정" @click="modCartQty(list)"/>
-                      </td>
-                      <td class="p-3 align-middle border-light">
-                        <p class="mb-0 small">{{list.total_price}}</p>
-                      </td>
-                      <td class="p-3 align-middle border-light"></td>
-                      <td class="p-3 align-middle border-light">
-                        <div class="d-flex flex-column d-grid gap-4 align-items-center">
-                          <input type="button" value="바로주문" @click="goToPayment([list])">
-                          <input type="button" value="삭제" @click="delCartInfo(list,idx)">
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                  <tfoot style="border : none; border-style : none;">
-                    <tr style="border-style : none;">
-                      <td style="border-style : none;"><button type="button" class="btn btn-secondary btn btnWhite2 btnW185 lMar10 sece" @click="delCartList()">선택삭제</button></td>
-                    </tr>
-                    <tr>
-                      <!--페이징 컴포넌트 자리-->
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
+    <table class="baseTable tMar10" id="bagGrpItem0">
+		<caption>장바구니 목록(텐바이텐 배송 상품)</caption>
+		<colgroup>
+			<col width="35px"><col width="70px"><col width="90px"><col width="55px"><col width="110px"><col width=""><col width="80px"><col width="95px"><col width="95px"><col width="90px"><col width="100px">
+		</colgroup>
+	<thead>
+		<tr>
+			<th><input type="checkbox" name="chk_item3" v-model="selectAll"></th>
+			<th></th>
+			<th>상품코드</th>
+			<th></th>
+			<th colspan="2">상품정보</th>
+			<th>판매가격</th>
+			<th>수량</th>
+			<th>주문금액</th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr mix="3" v-for="(list, idx) in cartList" v-bind:key="idx">
+			<td class="rt"><input type="checkbox" name="chk_item" v-model="selected" :key="idx" :value="list"></td>
+			<td></td>
+			<td>{{list.prdt_cd}}</td>
+      <td></td>
+			<td><img src="http://webimage.10x10.co.kr/image/small/558/S005586306-3.jpg" width="50px" height="50px"></td>
+			<td class="lt">
+				<p class="tPad05 cnt">{{list.prdt_name}}</p>
+				<p class="tPad02" v-if="list.opt_name != null"><strong>옵션</strong> : {{list.opt_name}}</p>
+			</td>
+			<td>
+						<p class="txtML cr999 cnt">{{list.price}}원</p>
+						<p class="crRed" v-if="list.price != list.sale_price"><strong>{{list.sale_price}}원</strong></p>
+			</td>
+			<td>
+				<p class="cnt">
+				<input name="itemea" class="txtInp ct" min="1" type="number" :value="list.cart_qty" :key="idx" @input="cartQty($event,idx)" style="-moz-appearance: textfield; width:30px;">
+				<span class="orderNumAtc">
+					<span><img src="http://fiximage.10x10.co.kr/web2013/common/btn_num_up.png" alt="갯수 더하기" @click="addQty(idx)" style="cursor:pointer"></span>
+					<span class="tPad02"><img src="http://fiximage.10x10.co.kr/web2013/common/btn_num_down.png" alt="갯수 빼기" @click="minusQty($event,idx)" style="cursor:pointer"></span>
+				</span>
+				</p>
+				<p class="tPad03"><button type="button" class="btn btn-secondary btn btnS3 btnGry2 fn" style="width:41px;" @click="modCartQty(list)">수정</button></p>
+			</td>
+				<td>{{list.total_price}}원</td>
+				<td></td>
+			
+			<td class="rt">
+				<p><button type="button" class="btn btn-secondary btn btnS3 btnRed btnW70 fn" @click="goToPayment([list])">바로 주문</button></p>
+				<p class="tPad03"><button type="button" class="btn btn-secondary btn btnS3 btnGry2 btnW70 fn" @click="delCartInfo(list,idx)"><em class="btnDel">삭제</em></button></p>
+			</td>
+		</tr>
+		</tbody>
+
+		<tfoot>
+		<tr>
+			<td colspan="11" id="grpTot3" value="텐바이텐 배송 상품">
+				<button type="button" class="btn btn-secondary btn btnWhite2 btnW185 sece" @click="delCartList()">선택삭제</button>
+			</td>
+		</tr>
+		</tfoot>
+	</table>
         <!--주문금액 컴포넌트-->
         <TotalOrderPrice v-bind:list="selected"/>
 
@@ -104,21 +101,6 @@
                 this.selected = value ? this.cartList : [];
             }
         },
-
-        // selectAll: {
-        //     get() {
-        //         return this.cartList ? (this.selected ? (this.selected.length === this.cartList.length) : false) : false;
-        //     },
-        //     set(value) {
-        //         const selected = [];
-        //         if (value && this.cartList != []) {
-        //             this.cartList.forEach((list) => {
-        //                 selected.push(list);
-        //             });
-        //         }
-        //         this.selected = selected;
-        //     },
-        // },
     },
     methods: {
         //장바구니 목록
@@ -224,37 +206,164 @@
   <style>
   .lMar10 {
     margin-left: 10px;
+    margin-top: 3rem;
   }
   .bPad20 {
     padding-bottom: 20px;
     margin: 30px;
-}
-
-.tPad20 {
+  }
+  
+  .tPad20 {
     padding-top: 20px;
-}
-.ftRt {
+  }
+  .ftRt {
     float: right;
-}
-.btnW185 {
+  }
+  .btnW185 {
     width: 183px;
     padding-left: 0;
     padding-right: 0;
-}
-
-.btnB1 {
+  }
+  
+  .btnB1 {
     font-size: 13px;
     line-height: 13px;
     padding: 18px 36px;
+  }
+  .sece{
+    width: 130px;
+    border-radius: 20px;
+    padding: 14px 36px;
+    font-size: 13px;
+    line-height: 13px;
+  }
+  .cartt{
+    margin-left: 3rem;
+    margin-bottom: 1rem;
+  }
+  .cartWrap .baseTable {
+    border-bottom: none;
+    text-align: center;
 }
-.sece{
-  width: 125px;
-  border-radius: 20px;
-  padding: 14px 36px;
-  font-size: 13px;
-  line-height: 13px;
+.baseTable {
+    border-top: 2px solid #555;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
 }
-.cartt{
-  margin-left: 3rem;
+caption {
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+    text-indent: -9999px;
+}
+.cartWrap .baseTable th {
+  font-weight:bold; 
+  background:#fff; 
+  font-size:13px;
+}
+.cartWrap .baseTable td {
+  padding:15px 0px; 
+  border-top:1px solid #eaeaea; 
+  font-size:13px; 
+  color:#888; 
+  line-height:16px;
+}
+.cartWrap .baseTable thead th {
+  padding:7px 0; 
+  border-bottom:1px solid #ccc; 
+  color:#888;
+}
+.cartWrap .baseTable td.rt {
+  padding-left:10px; 
+  padding-right:10px;
+}
+.cartWrap .baseTable tfoot {
+  background:#f7f7f7; 
+  color:#000; 
+  text-align:left;
+}
+.cartWrap .baseTable tfoot td {
+  padding:15px 10px; 
+  font-size:12px; 
+  height:35px;
+}
+.cartWrap .baseTable tr.orderWord td {
+  border-top:1px dashed #e4e4e4; 
+  padding:10px 0;
+}
+.cartWrap .baseTable tr.orderWord td.bdrNone {
+  border-top:none;
+}
+.cartWrap .baseTable tr.orderWord td.rt {
+  padding:13px 10px;
+}
+.cartWrap .baseTable .txtInp {
+    height: 18px;
+    padding: 0 5px;
+    font-size: 11px;
+}
+.ct {
+    text-align: center;
+}
+.orderNumAtc {
+    display: inline-block;
+    vertical-align: top;
+    width: 13px;
+    height: 20px;
+}
+.orderNumAtc span {
+    display: block;
+    width: 13px;
+    height: 9px;
+    vertical-align: top;
+}
+.orderNumAtc span img {
+    display: inline;
+    vertical-align: top;
+}
+.tPad03 {
+    padding-top: 3px;
+}
+.fn {
+    font-weight: normal;
+    font-weight: normal !important;
+    font-style: normal !important;
+}
+
+.btnGry2 {
+    color: #fff;
+    background: #aaa;
+    border: 1px solid #aaa;
+}
+.btnS3 {
+    font-size: 11px;
+    line-height: 1.1;
+    padding: 2px 8px;
+}
+.baseTable td.lt {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.btnRed {
+    color: #fff;
+    background: #d50c0c;
+    border: 1px solid #d50c0c;
+}
+.btnDel {
+    padding-left: 13px;
+    background: url(http://fiximage.10x10.co.kr/web2013/common/btn_close_popup.gif) left 2px no-repeat;
+}
+.btnW70 {
+    width: 68px;
+    padding-left: 0;
+    padding-right: 0;
+}
+.cnt{
+  margin-bottom: 0;
+}
+.tMarj2{
+  margin-top: 3rem;
 }
   </style>

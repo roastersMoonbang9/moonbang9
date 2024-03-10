@@ -71,14 +71,6 @@ userRouter.get("/userInfo/:mem_no", async (request, response) => {
   response.send(result);
 })
 
-//회원 가입 : post => body
-userRouter.post("/userJoin", async (request, response) => {
-  let data = request.body.param;
-  console.log(data);
-  result = await db.connection('user', 'userJoin', data).then(rlt => {console.log(rlt)}).catch(err=>{console.log(err)});
-  response.send(result);
-});
-
 //회원 로그인 확인
 userRouter.post("/userLogin", async (request, response) => {
   let data = [request.body.param.id, request.body.param.pwd];
@@ -86,6 +78,21 @@ userRouter.post("/userLogin", async (request, response) => {
   let result = (await db.connection('user', 'userLogin', data));
   response.send(result);
 })
+
+//회원 가입 : post => body
+userRouter.post("/userJoin", async (request, response) => {
+  let data = request.body.param;
+  console.log(data);
+  result = await db.connection('user', 'userJoin', data).catch(err=>{console.log(err)});
+  response.send(result);
+});
+
+//회원탈퇴 userQuit
+userRouter.put("/userQuit/:mem_no", async (request, response) => {
+  let mem_no = request.params.mem_no;
+  result = await db.connection('user', 'userQuit', mem_no).catch(err=>{console.log(err)});
+  response.send(result);
+});
 
 // 이메일을 통해 아이디 찾기
 userRouter.post("/forgotUsername", async (request, response) => {

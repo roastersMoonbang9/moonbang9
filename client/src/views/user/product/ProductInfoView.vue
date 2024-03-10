@@ -51,7 +51,27 @@
 
 
               <!-- PRODUCT SLIDER-->
-              <!-- 캐러셀 -->
+              <div class="row m-sm-0">
+                <div class="col-sm-2 p-sm-0 order-2 order-sm-1 mt-2 mt-sm-0 px-xl-2">
+                  <div class="swiper product-slider-thumbs">
+                    <div class="swiper-wrapper" style="flex-direction: column;">
+                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" :src="getImage1(data)" alt="..."></div>
+                      <!-- <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" src="img/product-detail-1.jpg" alt="..."></div> -->
+                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" src="img/product-detail-2.jpg" alt="..."></div>
+                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" src="img/product-detail-3.jpg" alt="..."></div>
+                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" src="img/product-detail-4.jpg" alt="..."></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-10 order-1 order-sm-2">
+                  <div class="swiper product-slider">
+                    <div class="swiper-wrapper" style="flex-direction: column;">
+                      <div class="swiper-slide h-auto"><a class="glightbox product-view" href="img/product-detail-2.jpg" data-gallery="gallery2" data-glightbox="Product item 1"><img class="img-fluid" src="img/product-detail-2.jpg" alt="..."></a></div>
+                      <div class="swiper-slide h-auto"><a class="glightbox product-view" href="img/product-detail-2.jpg" data-gallery="gallery2" data-glightbox="Product item 2"><img class="img-fluid" src="img/product-detail-2.jpg" alt="..."></a></div>
+                      <div class="swiper-slide h-auto"><a class="glightbox product-view" href="img/product-detail-3.jpg" data-gallery="gallery2" data-glightbox="Product item 3"><img class="img-fluid" src="img/product-detail-3.jpg" alt="..."></a></div>
+                      <div class="swiper-slide h-auto"><a class="glightbox product-view" href="img/product-detail-4.jpg" data-gallery="gallery2" data-glightbox="Product item 4"><img class="img-fluid" src="img/product-detail-4.jpg" alt="..."></a></div>
+             <!-- -->
+             <!-- 캐러셀 -->
                 <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                   <div class="carousel-indicators">
                     <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
