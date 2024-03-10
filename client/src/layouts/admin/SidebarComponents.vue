@@ -28,12 +28,14 @@
             </li>
             <li>
                 <a href="#">
-                <i class="bi bi-circle"></i><span>쿠폰 관리</span>
+                <i class="bi bi-circle"></i>
+                <router-link to="/admin/coupon"><span>쿠폰 관리</span></router-link>
                 </a>
             </li>
             <li>
                 <a href="#">
-                <i class="bi bi-circle"></i><span>쿠폰 적용</span>
+                <i class="bi bi-circle"></i>
+                <router-link to="/admin/possCoupon"><span>쿠폰 적용</span></router-link>
                 </a>
             </li>
             </ul>
@@ -46,17 +48,23 @@
             <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
                 <a href="#">
-                <i class="bi bi-circle"></i><span>전체 상품 관리</span>
+                <i class="bi bi-circle"></i><span>상품 목록</span>
                 </a>
             </li>
             <li>
                 <a href="#">
-                <i class="bi bi-circle"></i><span>상품 리뷰 관리</span>
+                <i class="bi bi-circle"></i>
+                <router-link to="/admin/productAdd"><span>상품 등록</span></router-link>
                 </a>
             </li>
             <li>
                 <a href="#">
-                <i class="bi bi-circle"></i><span>상품 문의 관리</span>
+                <i class="bi bi-circle"></i><span>상품 리뷰</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                <i class="bi bi-circle"></i><span>상품 문의</span>
                 </a>
             </li>
             </ul>
@@ -117,7 +125,7 @@
             </ul>
         </li>
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
             <i class="bi bi-gem"></i><span style="color: #00009cda;">통계 분석</span><i class="bi bi-chevron-down ms-auto"></i>
             </a>
@@ -138,7 +146,7 @@
                 </a>
             </li>
             </ul>
-        </li>
+        </li> -->
 
         </ul>
 

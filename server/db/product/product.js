@@ -80,11 +80,23 @@ const insertCart =
 `INSERT INTO cart
 SET ?`;
 
+// 상품등록(관리자)
+const productInsert =
+`INSERT INTO product
+SET ?`;
+
+// 옵션등록(관리자)
+const optionsInsert =
+`INSERT INTO options
+SET ?`;
+
 module.exports = {    
     productList,
     productCount,
     productInfo,
     productOptions,
     productImages,
-    insertCart
+    insertCart,
+    productInsert,
+    optionsInsert
 }
