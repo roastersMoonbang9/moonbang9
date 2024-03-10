@@ -6,6 +6,7 @@ import orderListView from '../views/admin/OrderListView.vue'
 import memberlistView from '../views/admin/MemberListView.vue'
 import GradeView from '../views/admin/GradeList.vue'
 import cancelOrderListView from '../views/admin/CancelOrderListView.vue'
+import adminProductView from '../views/admin/AdminProductView.vue'
 import store from '../store/index.js'
 
 export default {
@@ -62,6 +63,11 @@ export default {
             path: 'cancelOrderList',
             name: 'cancelOrderList',
             component: cancelOrderListView
+        },
+        {
+            path: 'adminProduct',
+            name: 'adminProduct',
+            component: adminProductView
         }
     ]
 }

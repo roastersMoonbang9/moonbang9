@@ -46,7 +46,7 @@
             <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
             <li>
                 <a href="#">
-                <i class="bi bi-circle"></i><span>전체 상품 관리</span>
+                <i class="bi bi-circle"></i><router-link to="/admin/adminProduct"><span>전체 상품 관리</span></router-link>
                 </a>
             </li>
             <li>
