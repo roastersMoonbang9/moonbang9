@@ -116,7 +116,7 @@
                 <div class="ct tMar60 bPad20">
                     
                     <button class="btn btnB2 btnWhite2 btnW220" @click="homeBtn()">쇼핑 계속하기</button>
-                    <button class="lMar10 btn btnB2 btnRed btnW220" @click="mypageBtn()"><em class="whiteArr02">나의 주문내역 확인</em></button>
+                    <button class="btn btnB2 btnRed btnW220" @click="mypageBtn()"><em class="whiteArr02">나의 주문내역 확인</em></button>
                     
                 </div>
             </div>

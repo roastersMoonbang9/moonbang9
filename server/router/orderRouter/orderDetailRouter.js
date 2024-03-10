@@ -38,8 +38,15 @@ orderDetailRouter.post("/usOrderDetailList", async (request, response) => {
     data.push(offset);
     
     let result = await db.connection('order_detail', 'usOrderDetailList', data, where).catch(err => console.log(err));
+    let newResult = []
+    for(let i of result){
+      let result2 = await db.connection('review','checkReview', [i.ord_no, i.prdt_cd]).catch(err => console.log(err));
+      let result3 = {...i,...result2[0]}
+      newResult.push(result3)
+    }
+    console.log(newResult)
     
-    response.send(result);
+    response.send(newResult);
 })
 
 // 테스트

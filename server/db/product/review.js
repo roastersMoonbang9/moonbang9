@@ -30,12 +30,24 @@ const reviewDel =
 `DELETE FROM event
 WHERE event_cd= ?`;
 
+//리뷰 확인
+const checkReview = `
+SELECT COUNT(*) as revCount
+FROM review
+WHERE ord_no = ? and prdt_cd = ?`;
+
+// 마이페이지 리뷰 삭제 
+const usreviewDel = 
+`DELETE FROM review
+WHERE ord_no = ? and prdt_cd = ?`;
 
 module.exports = {
     reviewList,
     reviewInfo,
     reviewUpdate,
     reviewInsert,
-    reviewDel
+    reviewDel,
+    checkReview,
+    usreviewDel
     
 }

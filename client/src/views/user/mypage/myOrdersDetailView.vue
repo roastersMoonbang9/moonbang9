@@ -1,5 +1,5 @@
 <template>
-<div class="myContent">
+<div class="myContent" style="float: none;">
 		<div class="titleSection">
 			<h3>주문상세조회</h3>
 		</div>
@@ -21,22 +21,52 @@
 								<th scope="col">재구매</th>
 							</tr>
 						</thead>
+                        <!-- {{ reviewList }} -->
 						<tbody>
 	                        <tr v-for="(table, idx) in tableList" :key="idx">
 								<td>이미지</td>
-								<td>{{ table.prdt_name }} <br><span v-if="table.opt_name != null">옵션 : {{table.opt_name}}</span></td>
+								<td>{{ table.prdt_name }}<br><span v-if="table.opt_name != null">옵션 : {{table.opt_name}}</span></td>
 								<td>{{ table.detail_cnt }}개</td>
 								<td>{{ table.price }}원</td>
 								<td>{{ table.sum_price }}원</td>
-								<td><button>리뷰작성</button></td>
-								<td><button>재구매</button></td>
+								<td v-if="table.revCount == 0"><button @click="reviewShow(table.prdt_cd,table.ord_no)" v-if="!reviewBtn" style="border: 1px solid #ccc;border-radius: 5px;">리뷰작성</button><button style="border: 1px solid #ccc;border-radius: 5px;" @click="reviewShow(table.prdt_cd,table.ord_no)" v-else>리뷰닫기</button></td>
+                                <td v-else><button @click="reviewDel(table.prdt_cd,table.ord_no)" v-if="!reviewBtn">리뷰삭제</button></td>
+                                <td><button style="border: 1px solid #ccc;border-radius: 5px;" @click="recart(table)">재구매</button></td>
             				</tr>
-                            <tr>
-                                <td>리뷰작성하기</td>
+                            <tr v-show="reviewBtn">
+                                <td colspan="7" style="text-align: left;">리뷰작성하기</td>
                             </tr>
-                            <tr>
-                                <td>리뷰작성하기</td>
+                            <tr style="border-style: hidden;" v-show="reviewBtn">
+                                <td style="text-align: right;">별점</td>
+                                <td>
+                                    <div class="star-rating space-x-4 mx-auto">
+	                                    <input type="radio" id="5-stars" name="rating" value="5" v-model="reviewList.ratings"/>
+	                                    <label for="5-stars" class="star pr-4">★</label>
+	                                    <input type="radio" id="4-stars" name="rating" value="4" v-model="reviewList.ratings"/>
+	                                    <label for="4-stars" class="star">★</label>
+	                                    <input type="radio" id="3-stars" name="rating" value="3" v-model="reviewList.ratings"/>
+	                                    <label for="3-stars" class="star">★</label>
+	                                    <input type="radio" id="2-stars" name="rating" value="2" v-model="reviewList.ratings"/>
+	                                    <label for="2-stars" class="star">★</label>
+	                                    <input type="radio" id="1-star" name="rating" value="1" v-model="reviewList.ratings" />
+	                                    <label for="1-star" class="star">★</label>
+                                    </div>
+                                </td>
+                                <td colspan="5"></td>
+                            </tr>
+                            <tr v-show="reviewBtn">
+                                <td style="text-align: right;">내용</td>
+                                <td colspan="6"><textarea cols="80" rows="10" style="width: 90%; height: 6.25em; border: 1px solid #000; resize: none;" v-model="reviewList.content" placeholder="리뷰는 300자까지 입력이 가능합니다."></textarea></td>
+                            </tr>
+                            <tr style="border-style: hidden;" v-show="reviewBtn">
                                 <td></td>
+                                <td style="text-align: right;" colspan="2"><input type="file" accept="image/*"></td>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr v-show="reviewBtn">
+                                <td></td>
+                                <td style="text-align: left;" colspan="2"><button style="margin: 0 15px 0 30px; border: 1px solid #ccc;border-radius: 5px;" @click="insertReview">등록</button><button @click="reviewRefesh()" style="border: 1px solid #ccc;border-radius: 5px;">취소</button></td>
+                                <td colspan="4"></td>
                             </tr>
 	                        <tr v-if="tableList.length == 0">
 								<td colspan="6">검색된 주문내역이 없습니다.</td>
@@ -64,7 +94,7 @@ v-on:firstPage="firstPage" v-on:lastPaging="lastPaging" v-on:changeNowPage="chan
 					<ul class="info_list person_info delivery">
 						<li><strong>수령인</strong><span>{{ tableList1.rcv_name }}</span></li>
 						<li><strong>연락처</strong><span>{{ tableList1.rcv_phone }}</span></li>
-						<li><strong>배송지</strong><span>{{ tableList1.rcv_postcode }}</span><br>{{ tableList1.deli_addr }}<br>{{ tableList1.deli_addrdt }}</li>
+						<li><strong>배송지</strong><span>[{{ tableList1.rcv_postcode }}]</span><span>{{ tableList1.deli_addr }},{{ tableList1.deli_addrdt }}</span></li>
 					</ul>
 				</div>
 			</div>
@@ -75,7 +105,6 @@ v-on:firstPage="firstPage" v-on:lastPaging="lastPaging" v-on:changeNowPage="chan
 				<div class="info_head">
 					<h3 class="h3">주문금액</h3>
 					<strong class="detail_order_price">{{ tableList1.total_payment }}원</strong>
-                    {{ tableList1 }}
 				</div>
 				<div class="info_cont">
 					<ul class="info_list">
@@ -114,29 +143,21 @@ v-on:firstPage="firstPage" v-on:lastPaging="lastPaging" v-on:changeNowPage="chan
         <div class="info_area ">
 				<div class="info_head">
 					<h3 class="h3">포인트 혜택</h3>
-					<strong class="detail_order_price">총 3,115원</strong>
+					<strong class="detail_order_price">총 {{ tableList1.accu_pnt }}원</strong>
 				</div>
 				<div class="info_cont">
 					<ul class="info_list">
 						<li>
 							<div class="total">
 								<strong>기본적립</strong>
-								<em class="amount"><span>0</span>원</em>
-							</div>
-						</li>
-						<li>
-							<div class="total">
-								<strong>리뷰적립</strong>
-								<em class="amount"><span>0</span>원</em>
+								<em class="amount"><span>{{ tableList1.accu_pnt }}</span>원</em>
 							</div>
 						</li>
 					</ul>
 				</div>
-
             </div>
         </div>
     </div>
-
     </div>
 </template>
 
@@ -155,6 +176,15 @@ export default{
                 totalPayment : 0,
                 ord_no : "", // 주문번호
                 tableList1 : {}, //첫번째 리스트만
+                reviewBtn : false, // 리뷰작성 활성화
+                reviewList : { //리뷰 리스트
+                    content : "",
+                    rating : 1,
+                    prdt_cd : "",
+                    mem_no : this.$store.state.userStore.mem_no,
+                    ord_no : "",
+                    rv_dt : this.getDateToday()
+                },
 
                 // 리스트
                 tableList : [],
@@ -174,10 +204,7 @@ export default{
         this.getTableList();
     },
     methods:{
-            dataReset(){
-                this.checkSearch = "1",
-                this.searched = null
-            },
+            // 주문상세 리스트
             async getTableList(curPage) {
                 curPage = this.judgePage(curPage);
                 if (!curPage || curPage <= 0) 
@@ -192,14 +219,15 @@ export default{
                         limit : this.pageSize,
                         offset : (curPage - 1) * this.pageSize,
                         checkSearch : this.checkSearch,
-                        searched : this.ord_no
+                        searched : this.ord_no,
+
                     }
                 }
                 let result = await axios.post("/api/order/usOrderDetailList", data)
                                         .catch(err => console.log(err));
                 console.log(result);
                 this.tableList = result.data;
-                this.tableList1 = result.data[0]
+                this.tableList1 = result.data[0];
 
             },
             // 테이블 행 총 갯수 가져오기
@@ -264,9 +292,102 @@ export default{
                 res = `${y}년${m}월${d}일`;
 
             return res;
+            },
+            // ratingToPercent() {
+            //     const score = +this.restaurant.averageScore * 20;
+            //     return score + 1.5;
+            // },
+            //리뷰 활성화
+            reviewShow(prdt_cd, ord_no){
+                if(this.reviewBtn == true){
+                    this.reviewBtn = false;
+                    this.reviewList.prdt_cd = ""
+                    this.reviewList.ord_no = ""
+                }else if(this.reviewBtn == false){
+                    this.reviewBtn = true;
+                    this.reviewList.prdt_cd = prdt_cd
+                    this.reviewList.ord_no = ord_no
+                }
+            },
+            //오늘 날짜 계산
+            getDateToday() {
+              let res = null;
+              let date = new Date();
+              let y = date.getFullYear();
+              let m = ("0" + (date.getMonth() + 1)).slice(-2);
+              let d = ("0" + date.getDate()).slice(-2);
+            
+              res = `${y}-${m}-${d}`;
+            
+              return res;
+            },
+            //리뷰 등록 이벤트
+            async insertReview(){
+                let data = {
+                    param : {
+                        content : this.reviewList.content,
+                        rating : this.reviewList.rating,
+                        prdt_cd : this.reviewList.prdt_cd,
+                        mem_no : this.reviewList.mem_no,
+                        ord_no : this.reviewList.ord_no,
+                        rv_dt : this.reviewList.rv_dt
+                    }
+                }
+
+                let result = await axios.post(`/api/product/review`, data) 
+                                        .catch(err => console.log(err));
+                let info = result.data.affectedRows;
+                if (info > 0) {
+                  alert("리뷰가 등록되었습니다.");
+                  this.reviewShow(this.reviewList.prdt_cd, this.reviewList.ord_no)
+                }else{
+                  alert("리뷰등록에 실패하였습니다.");
+                  this.reviewShow(this.reviewList.prdt_cd, this.reviewList.ord_no)
+                }
+            },
+            //등록된 리뷰 확인
+            async reviewDel(prdt_cd,ord_no){
+                let data = {
+                    prdt_cd : prdt_cd,
+                    ord_no : ord_no
+                }
+                let result = await axios.post(`/api/product/reviewDelete`, data) 
+                                        .catch(err => console.log(err));
+                let info = result.data.affectedRows;
+                if (info > 0) {
+                  alert("리뷰가 삭제되었습니다.");
+                  this.getTableList();
+                }else{
+                  alert("리뷰삭제에 실패하였습니다.");
+                }
+                
+            },
+            // 리뷰 취소
+            reviewRefesh(){
+                this.reviewList.content = ""
+            },
+            // 재구매
+            recart(table){
+                let data = {
+                    prdt_cd : table.reviewList,
+                    prdt_name : table.prdt_name,
+                    brand : table.brand,
+                    large_code : table.large_code,
+                    small_code : table.small_code,
+                    price : table.price,
+                    sale_price : table.sale_price,
+                    dc_pct : table.dc_pct,
+                    image : table.image,
+                    cart_cd : table.cart_cd,
+                    cart_qty : table.cart_qty,
+                    opt_cd : table.opt_cd,
+                    opt_name : table.opt_name,
+                    total_price : table.total_price,
+                }
             }
+            // JSON.parse(sessionStorage.getItem("data"));
+        }
     }
-}
 </script>
 
 <style>
@@ -342,6 +463,8 @@ select.optSelect {
     margin-top: 8px;
     padding: 0 15px;
     background-color: #ccc;
+    border: 1px solid #fff;
+    border-radius: 10px;
 }
 .info_area .info_cont {
     position: relative;
@@ -404,7 +527,7 @@ select.optSelect {
     color: #252525;
 }
 .info_list li span {
-    color: #8f8f8f;
+    color: #000;
 }
 
 .info_list li strong {
@@ -506,6 +629,7 @@ select.optSelect {
     position: relative;
     width: 78px;
     font-weight: 500;
+    color: #8f8f8f;
 }
 
 .info_list li strong {
@@ -628,5 +752,35 @@ select.optSelect {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+.star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  font-size: 1.25rem;
+  line-height: 2.5rem;
+  justify-content: space-around;
+  padding: 0 0.2em;
+  text-align: center;
+  width: 5em;
+}
+ 
+.star-rating input {
+  display: none;
+}
+ 
+.star-rating label {
+  -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 2.3px;
+  -webkit-text-stroke-color: #2b2a29;
+  cursor: pointer;
+}
+ 
+.star-rating :checked ~ label {
+  -webkit-text-fill-color: #000;
+}
+ 
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  -webkit-text-fill-color: #000;
 }
 </style>

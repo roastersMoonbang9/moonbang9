@@ -1,5 +1,5 @@
 <template>
-    <aside id="lnbMy10x10V15" class="lnbMy10x10V15">
+    <aside id="lnbMy10x10V15" class="lnbMy10x10V15" style="float: none;">
 	<div class="article profile new_pro21">
 		<p class="hello">안녕하세요, {{userName}}님</p>
 		<div class="figure" id="myProfile">
@@ -23,13 +23,13 @@
 
 	<div class="article nav15" style="margin-top:10rem;">
 		<div class="quick">
-			<strong class="heading"><span></span>QUICK MENU</strong>
+			<strong class="heading" style="font-size: 14px;"><span></span>QUICK MENU</strong>
 			<ul>
             <li><router-link to="/myPage/inquiry">1:1문의</router-link></li>
             <li><router-link to="/cart">장바구니</router-link></li>
             <li><router-link to="/myPage/myOrders">주문내역확인</router-link></li>
             <li><router-link to="/myPage/editProfile">회원정보수정</router-link></li>
-            <li @click="withdraw()">회원탈퇴</li>
+            <li @click="withdraw()"><a href="/" @click.prevent="">회원탈퇴</a></li>
         </ul>
 		</div>
 	</div>
@@ -71,32 +71,24 @@ import axios from 'axios'
         },
         // 회원탈퇴
         withdraw(){
-            const swalWithBootstrapButtons = Swal.mixin({
-              customClass: {
-                confirmButton: "btn btn-danger",
-                cancelButton: "btn btn-success"
-              },
-              buttonsStyling: false
-            });
-            swalWithBootstrapButtons.fire({
-              title: "정말 탈퇴하시겠습니까?",
-              text: "탈퇴를 원하시나요?",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonText: "탈퇴",
-              cancelButtonText: "뒤로가기",
-              reverseButtons: true
-            }).then((result) => {
-                this.complete();
-                this.handleLogout();
-                this.goToMain();
-              if (result.isConfirmed) {
-                swalWithBootstrapButtons.fire({
-                  title: "회원탈퇴 되었습니다.",
-                  icon: "success",
-                });
-              } 
-            });
+          let vue = this;
+          Swal.fire({
+          title: "정말 탈퇴하시겠습니까?",
+          text: "탈퇴를 원하시나요?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#6799FF",
+          cancelButtonColor: "#FF8383",
+          confirmButtonText: "뒤로 가기",
+          cancelButtonText: "탈퇴하기"
+          }).then((result) => {
+            if (result.isConfirmed) {
+            }else{
+              vue.complete();
+              vue.handleLogout();
+              vue.$router.push({path : `/`});
+            }
+          });
         },
         // 회원탈퇴처리
         async complete(){
