@@ -113,7 +113,7 @@
             <tbody>
             <!--for 과 if를 같이 사용은 불가능하다고 생각해라-->
             <tr v-for="(table, idx) in tableList" :key="idx">
-                <td>{{ idx + 1 }}</td>
+                <td>{{ table.mem_no }}</td>
                 <td>{{ table.name }}</td>
                 <td>{{ table.id }}</td>
                 <td>{{ this.changeLv(parseInt(table.grd_no)) }}</td>
@@ -121,7 +121,7 @@
                 <td>{{ table.email }}</td>
                 <td>{{ table.point }}</td>
                 <td>{{ table.used_payment }}</td>
-                <td>{{ table.post_cd }}</td>
+                <td>{{ this.dateFomat(table.join_dt) }}</td>
             </tr>
             </tbody>
         </table>
@@ -172,6 +172,14 @@
             }
         },
         methods : {
+            dateFomat(date){
+                let date1 = new Date(date);
+                const year = date1.getFullYear();
+                const month = ('0' + (date1.getMonth() + 1)).slice(-2);
+                const day = ('0' + date1.getDate()).slice(-2);
+                const dateStr = `${year}-${month}-${day}`;
+                return dateStr;
+            },
             changeLv(lv) {
                 if (lv == 1) {
                     lv = "WHITE"

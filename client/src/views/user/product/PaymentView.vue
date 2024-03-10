@@ -108,7 +108,7 @@
             <!--:true-value="trueValueMethod()" :false-value="falseValueMethod()"-->
 					</div>
           <div class="ct tPad30 bPad20" id="nextbutton1" name="nextbutton1" style="display: flex;justify-content: center;">
-						<button class="btn btnB2 btnWhite2 btnW220" @click="backBtn"><em class="gryArr02">이전 페이지</em></button>
+						<button class="lMar10 btn btnB2 btnWhite2 btnW220" @click="backBtn"><em class="gryArr02">이전 페이지</em></button>
 						<button name="btnPay" id="btnPay" class="lMar10 btn btnB2 btnRed btnW220" @click="PaymentBtn">결제하기</button>
 					</div>
   </template>

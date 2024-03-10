@@ -2,7 +2,7 @@
 
 // 회원 전체 조회(관리자)
 const userList = 
-`SELECT
+`SELECT 
         mem_no,
         id,
         name,
@@ -18,7 +18,9 @@ const userList =
         token,
         mem_status,
         grd_no,
-        used_payment
+        used_payment,
+        join_dt,
+        unjoin_dt
 FROM    member`;
 
 // 회원 개별 조회
@@ -101,8 +103,10 @@ const userUpdate =
  WHERE mem_no = ?`;
 
  //회원탈퇴
-//const userQuit =
-
+const userQuit =
+`UPDATE member 
+ SET mem_status = 0
+ WHERE mem_no = ?`;
 
  //const userDelete = 
  
@@ -141,5 +145,6 @@ WHERE mem_no = ?`;
     usedPaymentUpdate,
     registerWithKakaoAccount,
     loginWithKakaoId,
-    checkKakaoId
+    checkKakaoId,
+    userQuit
 }

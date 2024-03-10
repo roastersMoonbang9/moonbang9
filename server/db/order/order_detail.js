@@ -46,6 +46,7 @@ const orderDetailAdd =
 SET ?`;
 
 
+
 module.exports = {
     orderDetailList,
     orderDetailLists,

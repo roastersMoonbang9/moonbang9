@@ -36,7 +36,7 @@ const test =
 
 // 주문 목록 출력(관리자)
 const adOrderList =
-`SELECT
+`SELECT 
 o.ord_no,
 o.deli_addr,
 o.deli_addrdt,
@@ -58,6 +58,7 @@ m.name
 FROM member m right outer JOIN orders o 
 ON m.mem_no = o.mem_no`;
 
+
 // 주문수 확인(관리자)
 const adOrderCount = 
 `SELECT count(ord_no) as count
@@ -70,6 +71,18 @@ const adOrderTotalPayment =
 FROM member m  right outer JOIN orders o 
 ON m.mem_no = o.mem_no`;
 
+// 상품명 및 상품갯수
+const usOrderCount =
+`SELECT 
+        count(*) as prod_count, 
+        (SELECT 
+            prdt_name 
+        FROM order_detail d 
+        JOIN product p ON d.prdt_cd = p.prdt_cd 
+        WHERE d.ord_no=? limit 1) as prod_name 
+FROM order_detail d 
+JOIN product p ON d.prdt_cd = p.prdt_cd 
+WHERE d.ord_no=?`;
 
 module.exports = {
     orderAdd,
@@ -77,5 +90,6 @@ module.exports = {
     test,
     adOrderList,
     adOrderCount,
-    adOrderTotalPayment
+    adOrderTotalPayment,
+    usOrderCount
 }

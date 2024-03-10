@@ -1,67 +1,250 @@
 <template>
-    <aside class="sidebar">
-        <div class="user-info">
-        <div class="user-name">{{ userName }}</div>
-        <div class="user-grade">등급: {{ userGrade }}</div>
-        <div class="user-points">포인트: {{ userPoints }}</div>
-        </div>
-        <div class="menu">
-        <ul>
-            <li><router-link to="/inquiry">1:1문의</router-link></li>
+    <aside id="lnbMy10x10V15" class="lnbMy10x10V15">
+	<div class="article profile new_pro21">
+		<p class="hello">안녕하세요, {{userName}}님</p>
+		<div class="figure" id="myProfile">
+			
+			<strong class="classV18 g-white">{{userInfo.grd_name}} 회원</strong>
+			<div class="profile_container">
+				<img  src="../img/nomal.PNG" width="100" height="100">
+			</div>
+			<div class="pro_info_area">
+				<p class="glade"></p>
+				<p class="nick_name">좋은 하루 되세요</p>
+			</div>
+		</div>
+    <div>
+		<ul>
+			<li><a><strong>{{coupon.length}}장</strong>쿠폰</a></li>
+			<li class="mymileage"><a><strong>{{userInfo.point}}P</strong>포인트</a><span id="mileageCreditAvailable"></span></li>
+		</ul>
+  </div>
+	</div>
+
+	<div class="article nav15" style="margin-top:10rem;">
+		<div class="quick">
+			<strong class="heading"><span></span>QUICK MENU</strong>
+			<ul>
+            <li><router-link to="/myPage/inquiry">1:1문의</router-link></li>
             <li><router-link to="/cart">장바구니</router-link></li>
-            <li><router-link to="/orders">주문내역확인</router-link></li>
-            <li><router-link to="/edit-profile">회원정보수정</router-link></li>
-            <li><router-link to="/withdraw">회원탈퇴</router-link></li>
+            <li><router-link to="/myPage/myOrders">주문내역확인</router-link></li>
+            <li><router-link to="/myPage/editProfile">회원정보수정</router-link></li>
+            <li @click="withdraw()">회원탈퇴</li>
         </ul>
-        </div>
-    </aside>
+		</div>
+	</div>
+</aside>
   </template>
   
-  <script>
+<script>
+import axios from 'axios'
+
   export default {
     data() {
       return {
-        userName: '사용자 이름', // 사용자 이름
-        userGrade: '회원 등급', // 회원 등급
-        userPoints: '0' // 포인트
+        userName: this.$store.state.userStore.name, // 사용자 이름
+        userInfo: {
+            grd_name: '', // 회원 등급
+            point: 0 // 포인트
+        },
+        coupon:[]
       };
+    },
+    created(){
+        this.getGrade();
+        this.getCoupon();
+    },
+    methods: {
+        // 포인트 및 등급 정보
+        async getGrade() {
+          let result = await axios.get(`/apiuser/gradePoint/${this.$store.state.userStore.mem_no}`)
+          .catch(err => console.log(err));
+          let list = result.data[0];
+          this.userInfo = list;
+        },
+        // 쿠폰 정보
+        async getCoupon() {
+          let result = await axios.get(`/apiuser/coupon/${this.$store.state.userStore.mem_no}/0`)
+          .catch(err => console.log(err));
+          let list = result.data;
+          this.coupon = list;
+        },
+        // 회원탈퇴
+        withdraw(){
+            const swalWithBootstrapButtons = Swal.mixin({
+              customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-success"
+              },
+              buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+              title: "정말 탈퇴하시겠습니까?",
+              text: "탈퇴를 원하시나요?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "탈퇴",
+              cancelButtonText: "뒤로가기",
+              reverseButtons: true
+            }).then((result) => {
+                this.complete();
+                this.handleLogout();
+                this.goToMain();
+              if (result.isConfirmed) {
+                swalWithBootstrapButtons.fire({
+                  title: "회원탈퇴 되었습니다.",
+                  icon: "success",
+                });
+              } 
+            });
+        },
+        // 회원탈퇴처리
+        async complete(){
+          let result = await axios.put(`/apiuser/userQuit/${this.$store.state.userStore.mem_no}`)
+          .catch(err => console.log(err));
+          let list = result.data;
+          console.log(list);
+        },
+        // 탈퇴 후 로그아웃 처리
+        handleLogout() {
+        this.$store.commit('userStore/logout'); 
+        this.$router.push('/login');
+        },
+        // 메인으로 이동
+        goToMain(){
+            this.$router.push({ path : '/'})
+        }
     }
   };
-  </script>
+</script>
   
-  <!-- <style scoped>
-  .content {
-    display: flex;
-  }
-  
-  .sidebar {
-    width: 250px;
-    background-color: #f0f0f0;
-    padding: 20px;
-    position: relative;
-  }
-  
-  .user-info {
-    margin-bottom: 20px;
-  }
-  
-  .user-name {
+<style scoped>
+.lnbMy10x10V15 {
+    width: 212px;
+    margin: 2rem 0;
+    float: left;
+}
+.lnbMy10x10V15 .article:first-child {
+    margin-top: 0;
+}
+.lnbMy10x10V15 .profile {
+    padding-top: 29px;
+    background-color: #fff;
+    text-align: center;
+}
+
+.lnbMy10x10V15 .article {
+    margin-top: 20px;
+}
+.lnbMy10x10V15 .profile .hello {
+    color: #000;
+    font-size: 14px;
     font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .menu ul {
+    line-height: 1.25em;
+}
+.lnbMy10x10V15 .profile .figure {
+    position: relative;
+    margin-top: 15px;
+}
+.lnbMy10x10V15 .profile.new_pro21 .figure .profile_container {
+    width: 100px;
+    height: 106px;
+    margin: 0 auto;
+    border-radius: 100%;
+    overflow: hidden;
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.lnbMy10x10V15 .profile.new_pro21 .figure img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.lnbMy10x10V15 .profile .figure a {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 112px;
+    height: 112px;
+    margin-left: -56px;
+    background: url(http://fiximage.10x10.co.kr/web2015/my10x10/bg_sprite.png) no-repeat 0 0;
+    font-size: 11px;
+    text-indent: -999em;
+}
+
+a:link, a:active, a:visited {
+    color: #555;
+}
+.lnbMy10x10V15 .profile .figure .pro_info_area {
+    margin-top: 12px;
+    text-align: center;
+}
+.lnbMy10x10V15 .profile .figure .pro_info_area .glade {
+    font-size: 12px;
+    color: #999;
+}
+.lnbMy10x10V15 .profile .figure .pro_info_area .nick_name {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+.lnbMy10x10V15 .profile ul {
+    margin-top: 24px;
+    border-top: 1px dotted #ccdbe1;
+    margin-left: -1px;
     list-style: none;
     padding: 0;
-  }
-  
-  .menu ul li {
-    margin-bottom: 10px;
-  }
-  
-  .menu ul li a {
-    text-decoration: none;
-    color: #333;
-  }
-  </style> -->
+}
+.lnbMy10x10V15 .profile ul li {
+    float: left;
+    width: 50%;
+    border-bottom: 1px solid #f4eade;
+}
+.lnbMy10x10V15 .profile ul li a {
+    display: block;
+    padding: 13px 0;
+    border-left: 1px solid #f4eade;
+    background-color: #f9f9f9;
+    color: #555;
+    font-size: 13px;
+}
+.lnbMy10x10V15 .profile ul li a strong {
+    display: block;
+    color: #000;
+}
+.lnbMy10x10V15 .article {
+    margin-top: 20px;
+}
+.lnbMy10x10V15 .quick {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+}
+.lnbMy10x10V15 .heading {
+    display: block;
+    overflow: hidden;
+    position: relative;
+    width: 212px;
+    height: 38px;
+    color: #000;
+    font-size: 11px;
+    line-height: 38px;
+    text-align: center;
+}
+.lnbMy10x10V15 .quick ul {
+    padding: 14px 20px 20px;
+    list-style: none;
+}
+.lnbMy10x10V15 .quick ul li {
+    margin-top: 14px;
+    font-size: 13px;
+    line-height: 1.25em;
+}
+.lnbMy10x10V15 .quick ul li a {
+    color: #555;
+}
+</style>
   

@@ -25,6 +25,12 @@ gradeRouter.get("/grade", async (request,response)=>{
     let result = await db.connection('grade','gradeUpdate', data);
     response.send(result);
   });
-
+  
+  // 회원 등급 및 포인트 조회
+  gradeRouter.get("/gradePoint/:mno", async (request, response) => {
+    let mno = request.params.mno;
+    let result = await db.connection('grade','gradePoint', mno);
+    response.send(result);
+  });
 
   module.exports = gradeRouter;

@@ -7,7 +7,7 @@
       </a>
     </div>
     <nav class="header-nav ms-auto">
-        <a class="nav-item pe-3" href="#" style="font-size: 17px;"><router-link to="/admin">관리자홈 </router-link></a>
+        <a class="nav-item pe-3" href="#" style="font-size: 17px;"><router-link to="/admin/memberList">관리자홈 </router-link></a>
         <a class="nav-item pe-3" href="#" style="font-size: 17px;"><router-link to="/"> 쇼핑몰 </router-link></a>
         <a class="nav-item pe-3" href="#" style="font-size: 17px;" @click="handleLogout()"> 로그아웃</a>
     </nav>
