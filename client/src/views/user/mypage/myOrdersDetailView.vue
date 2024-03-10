@@ -8,29 +8,36 @@
 					<table class="baseTable">
 						<caption>주문배송조회 목록</caption>
 							<colgroup>
-								 <col width="88"><col width="88"> <col width="88"><col width="50"> <col width="130"> <col width="81"> <col width="100">
+								 <col width="88"><col width="88"> <col width="88"><col width="50"> <col width="130"> <col width="81"><col width="81">
 							</colgroup>
 						<thead>
 							<tr>
-                                <th scope="col">상품</th>
-								<th scope="col">상품옵션</th>
+                                <th scope="col">이미지</th>
+								<th scope="col">상품</th>
 								<th scope="col">수량</th>
-								<th scope="col">배송비</th>
-								<th scope="col">금액</th>
-								<th scope="col">주문일자</th>
-								<th scope="col">주문상태</th>
+								<th scope="col">단건가격</th>
+								<th scope="col">총 금액</th>
+								<th scope="col">리뷰</th>
+								<th scope="col">재구매</th>
 							</tr>
 						</thead>
 						<tbody>
 	                        <tr v-for="(table, idx) in tableList" :key="idx">
-								<td>{{ table.prod_name }}</td>
-								<td>옵션</td>
-								<td>갯수</td>
-								<td>배송비</td>
-								<td>{{ table.total_payment }}원</td>
-								<td>{{ getDate(table.ord_dt) }}</td>
-								<td>{{ this.checkStatus(table.status) }}</td>
+								<td>이미지</td>
+								<td>{{ table.prdt_name }} <br><span v-if="table.opt_name != null">옵션 : {{table.opt_name}}</span></td>
+								<td>{{ table.detail_cnt }}개</td>
+								<td>{{ table.price }}원</td>
+								<td>{{ table.sum_price }}원</td>
+								<td><button>리뷰작성</button></td>
+								<td><button>재구매</button></td>
             				</tr>
+                            <tr>
+                                <td>리뷰작성하기</td>
+                            </tr>
+                            <tr>
+                                <td>리뷰작성하기</td>
+                                <td></td>
+                            </tr>
 	                        <tr v-if="tableList.length == 0">
 								<td colspan="6">검색된 주문내역이 없습니다.</td>
             				</tr>
@@ -45,8 +52,94 @@ v-on:firstPage="firstPage" v-on:lastPaging="lastPaging" v-on:changeNowPage="chan
 				</div>
 			</fieldset>
 		</div>
+
+        <div class="fls">
+        <!--배송정보-->
+        <div class="detail_section">
+			<div class="info_area">
+				<div class="info_head">
+					<h3 class="h3">배송지정보</h3>
+				</div>
+				<div class="info_cont">
+					<ul class="info_list person_info delivery">
+						<li><strong>수령인</strong><span>{{ tableList1.rcv_name }}</span></li>
+						<li><strong>연락처</strong><span>{{ tableList1.rcv_phone }}</span></li>
+						<li><strong>배송지</strong><span>{{ tableList1.rcv_postcode }}</span><br>{{ tableList1.deli_addr }}<br>{{ tableList1.deli_addrdt }}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+        <!--주문금액-->
+        <div class="detail_section type_payment_info" style="width: 37%;">
+        <div class="info_area ">
+				<div class="info_head">
+					<h3 class="h3">주문금액</h3>
+					<strong class="detail_order_price">{{ tableList1.total_payment }}원</strong>
+                    {{ tableList1 }}
+				</div>
+				<div class="info_cont">
+					<ul class="info_list">
+						<li>
+							<div class="total">
+								<strong>상품금액</strong>
+								<em class="amount"><span>{{tableList1.sum_price}}</span>원</em>
+							</div>
+						</li>
+						<li>
+							<div class="total">
+								<strong>배송비</strong>
+								<em class="amount"><span>{{tableList1.deli_cost}}</span>원</em>
+							</div>
+						</li>
+						<li>
+							<div class="total">
+								<strong>쿠폰할인</strong>
+								<em class="amount"><span>{{tableList1.cpn_disc}}</span>원</em>
+							</div>
+						</li>
+						<li>
+							<div class="total">
+								<strong>포인트할인</strong>
+								<em class="amount"><span>{{tableList1.used_point}}</span>원</em>
+							</div>
+						</li>
+						
+					</ul>
+				</div>
+        </div>
+    </div>
+
+            <!--포인트 혜택-->
+            <div class="detail_section type_payment_info" style="width: 30%;">
+        <div class="info_area ">
+				<div class="info_head">
+					<h3 class="h3">포인트 혜택</h3>
+					<strong class="detail_order_price">총 3,115원</strong>
+				</div>
+				<div class="info_cont">
+					<ul class="info_list">
+						<li>
+							<div class="total">
+								<strong>기본적립</strong>
+								<em class="amount"><span>0</span>원</em>
+							</div>
+						</li>
+						<li>
+							<div class="total">
+								<strong>리뷰적립</strong>
+								<em class="amount"><span>0</span>원</em>
+							</div>
+						</li>
+					</ul>
+				</div>
+
+            </div>
+        </div>
+    </div>
+
     </div>
 </template>
+
 <script>
 import axios from 'axios'
 import Paging from '@/components/PagingComponent.vue';
@@ -57,18 +150,11 @@ export default{
     },
     data(){
         return{
-            checkSearch : "2",
+            checkSearch : "1",
                 searched : null,
-                checkDate : "1",
-                getDate1 : null,
-                getDate2 : null,
-                checkStatus1 : null,
-                checkStatus2 : "1",
-                checkStatus3 : "2",
-                checkStatus4 : "3",
-                checkStatus5 : "4",
-                checkSt : null,
                 totalPayment : 0,
+                ord_no : "", // 주문번호
+                tableList1 : {}, //첫번째 리스트만
 
                 // 리스트
                 tableList : [],
@@ -84,66 +170,14 @@ export default{
         };
     },
     created(){
+        this.ord_no = this.$route.query.no;
         this.getTableList();
     },
     methods:{
-        checkStatus(st) {
-                if (st == 1) {
-                    st = "결제 완료"
-                } else if (st == 2) {
-                    st = "BASIC"
-                } else if (st == 3) {
-                    st = "VIP"
-                } else if (st == 4) {
-                    st = "GOLD"
-                }
-                return st;
-            },
-            getToday() {
-                let today = new Date();
-                this.getDate2 = this.changeDate(today);
-                this.getDate1 = this.changeDate(today);
-            },
-            getYesterday() {
-                let yesterday = new Date();
-                this.getDate2 = this.changeDate(yesterday);
-                yesterday.setDate(yesterday.getDate()-1);
-                this.getDate1 = this.changeDate(yesterday);
-            },
-            getWeekAgo(){
-                let weekAgo = new Date();
-                this.getDate2 = this.changeDate(weekAgo);
-                weekAgo.setDate(weekAgo.getDate()-7);
-                this.getDate1 = this.changeDate(weekAgo);
-            },
-            getOneMonthAgo() {
-                let oneMonthAgo = new Date();
-                this.getDate2 = this.changeDate(oneMonthAgo);
-                oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-                this.getDate1 = this.changeDate(oneMonthAgo);
-            },
-            getThreeMonthAgo() {
-                let threeMonthAgo = new Date();
-                this.getDate2 = this.changeDate(threeMonthAgo);
-                threeMonthAgo.setMonth(threeMonthAgo.getMonth() - 3);
-                this.getDate1 = this.changeDate(threeMonthAgo);
-            },
-            changeDate(value) {
-            let year = value.getFullYear();
-            let month = ('0'+(value.getMonth()+1)).slice(-2);
-            let day = ('0'+ value.getDate()).slice(-2);
-            
-            return `${year}-${month}-${day}`;
-            },
             dataReset(){
-                this.checkSearch = "2",
-                this.searched = null,
-                this.getDate1 = null,
-                this.checkDate = "1",
-                this.getDate2 = null,
-                this.checkSt = null
+                this.checkSearch = "1",
+                this.searched = null
             },
-
             async getTableList(curPage) {
                 curPage = this.judgePage(curPage);
                 if (!curPage || curPage <= 0) 
@@ -152,51 +186,31 @@ export default{
                 this.startPage = this.judgePage(curPage - gap);
                 this.endPage = this.startPage + this.navSize - 1;
                 await this.getTableCount(curPage);
-                await this.getTableSum();
                 this.curPage = curPage;
                 let data = {
                     param : {
                         limit : this.pageSize,
                         offset : (curPage - 1) * this.pageSize,
                         checkSearch : this.checkSearch,
-                        searched : this.$store.state.userStore.name,
-                        getDate1 : this.getDate1,
-                        checkDate : this.checkDate,
-                        getDate2 : this.getDate2,
-                        checkSt : this.checkSt,
-                        chMem : this.$store.state.userStore.mem_no
+                        searched : this.ord_no
                     }
                 }
-                let result = await axios.post("/api/order/adOrderList", data)
+                let result = await axios.post("/api/order/usOrderDetailList", data)
                                         .catch(err => console.log(err));
                 console.log(result);
-                //오우야 너무 돌렸다ㅋㅋ
-                let a = result.data[0]
-                let b = result.data[1]
-                let results = [];
-                for(let i=0;i<a.length;i++){
-                    let c = b[i]
-                    let sum = {...a[i], ...c[0]}
-                    results.push(sum)
-                }
-                this.tableList = results;
+                this.tableList = result.data;
+                this.tableList1 = result.data[0]
 
-                console.log(results);
             },
             // 테이블 행 총 갯수 가져오기
             async getTableCount() {
                 let data = {
                     param : {
                         checkSearch : this.checkSearch,
-                        searched : this.$store.state.userStore.name,
-                        getDate1 : this.getDate1,
-                        checkDate : this.checkDate,
-                        getDate2 : this.getDate2,
-                        checkSt : this.checkSt,
-                        chMem : this.$store.state.userStore.mem_no
+                        searched : this.ord_no
                     }
                 }
-                let result = await axios.post(`/api/order/adOrderCount`, data) 
+                let result = await axios.post(`/api/order/usOrderDetailCount`, data) 
                                         .catch(err => console.log(err));
                 this.allSize = result.data[0].count;
                 this.lastPage = Math.ceil(this.allSize / this.pageSize);
@@ -206,23 +220,6 @@ export default{
                                 endPage : this.endPage, 
                                 curPage : this.curPage
                                 }
-            },
-            // 테이블 총 주문액 가져오기
-            async getTableSum() {
-                let data = {
-                    param : {
-                        checkSearch : this.checkSearch,
-                        searched : this.$store.state.userStore.name,
-                        getDate1 : this.getDate1,
-                        checkDate : this.checkDate,
-                        getDate2 : this.getDate2,
-                        checkSt : this.checkSt,
-                        chMem : this.$store.state.userStore.mem_no
-                    }
-                }
-                let result = await axios.post(`/api/order/adOrderTotalPayment`, data) 
-                                        .catch(err => console.log(err));
-                this.totalPayment = result.data[0].SUM;
             },
             judgePage(page) {
                 if (!page || page <= 0) 
@@ -284,7 +281,7 @@ export default{
     height: 703px;
     padding: 40px 30px;
     background: #fff;
-    font-size: 12px;
+    font-size: 14px;
 }
 .myContent .titleSection {
     margin: 0 -30px 45px;
@@ -339,5 +336,297 @@ select.optSelect {
     border: 1px solid #ccc;
     border-radius: 20px;
     margin: 0 10px;
+}
+.detail_section {
+    position: relative;
+    margin-top: 8px;
+    padding: 0 15px;
+    background-color: #ccc;
+}
+.info_area .info_cont {
+    position: relative;
+    margin-top: 0;
+    padding: 14px 0;
+}
+
+.info_cont {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #efefef;
+}
+.info_list.person_info li {
+    position: relative;
+    min-height: 19px;
+    padding-left: 100px;
+    line-height: 19px;
+}
+
+.info_list li {
+    position: relative;
+    padding-left: 84px;
+    color: #222;
+}
+.info_list.person_info strong {
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    width: 100px;
+    margin-left: 0px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #8f8f8f;
+}
+
+.info_list li strong {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 84px;
+}
+.info_list li strong, .info_list li b {
+    font-weight: normal;
+}
+.info_list.person_info li {
+    position: relative;
+    min-height: 19px;
+    padding-left: 100px;
+    line-height: 19px;
+}
+.info_list.delivery span {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.info_list.person_info span {
+    display: block;
+    word-wrap: break-word;
+    color: #252525;
+}
+.info_list li span {
+    color: #8f8f8f;
+}
+
+.info_list li strong {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 84px;
+}
+.info_list li strong, .info_list li b {
+    font-weight: normal;
+}
+.info_list.person_info div {
+    word-wrap: break-word;
+}
+.info_list.person_info li + li {
+    margin-top: 9px;
+}
+
+.info_list.person_info li {
+    position: relative;
+    min-height: 19px;
+    padding-left: 100px;
+    line-height: 19px;
+}
+.info_list li + li {
+    margin-top: 6px;
+}
+.info_list li {
+    position: relative;
+    padding-left: 84px;
+    color: #222;
+}
+.info_cont ul {
+    list-style: none;
+    padding: 0;
+}
+.detail_section.type_payment_info .info_head {
+    letter-spacing: -0.5px;
+}
+
+.info_area .info_head .h3 {
+    display: inline-block;
+    color: #222;
+    font-size: 16px;
+    line-height: 20px;
+    white-space: nowrap;
+}
+.info_area .info_head .detail_order_price {
+    float: right;
+    color: #aa2909;
+    letter-spacing: -0.5px;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.detail_section.type_payment_info .info_cont {
+    padding-bottom: 16px;
+}
+
+.info_area .info_cont {
+    position: relative;
+    margin-top: 0;
+    padding: 14px 0;
+}
+.info_cont {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #efefef;
+}
+.detail_section.type_payment_info .info_list {
+    margin-top: -3px;
+}
+.detail_section.type_payment_info .info_list li {
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.5px;
+}
+
+.detail_section.type_payment_info li {
+    padding-left: 0;
+}
+.info_list li {
+    position: relative;
+    padding-left: 84px;
+    color: #222;
+}
+.detail_section.type_payment_info .info_list li {
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.5px;
+}
+
+.info_list li {
+    position: relative;
+    padding-left: 84px;
+    color: #222;
+}
+.detail_section.type_payment_info .info_list li strong {
+    position: relative;
+    width: 78px;
+    font-weight: 500;
+}
+
+.info_list li strong {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 84px;
+}
+.detail_section.type_payment_info .info_list li .total:after {
+    display: block;
+    clear: both;
+    content: '';
+}
+.detail_section.type_payment_info .info_list li .total:after {
+    display: block;
+    clear: both;
+    content: '';
+}
+.detail_section.type_payment_info .info_list li {
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.5px;
+}
+.info_list li {
+    position: relative;
+    padding-left: 84px;
+    color: #222;
+}
+.detail_section .amount {
+    float: right;
+    font-weight: 500;
+    font-family: -apple-system, BlinkMacSystemFont, Helvetica, AppleSDGothicNeo-Regular, "나눔고딕", nanumgothic, sans-serif;
+    white-space: nowrap;
+}
+.detail_section {
+    position: relative;
+    margin-top: 8px;
+    padding: 0 15px;
+    background-color: #eee;
+}
+.info_area .info_head .point_benefit {
+    position: absolute;
+    top: 15px;
+    right: 0px;
+    font-weight: 600;
+    font-size: 16px;
+    white-space: nowrap;
+}
+.text_point_color {
+    color: #aa2909;
+}
+.info_area label.info_head {
+    display: block;
+}
+
+.info_area .info_head {
+    position: relative;
+    padding: 15px 0px 11px;
+}
+:checked + .info_area label.info_head + .info_cont {
+    display: block;
+}
+
+.info_area label.info_head + .info_cont {
+    display: none;
+}
+.info_area .info_cont {
+    position: relative;
+    margin-top: 0;
+    padding: 14px 0;
+}
+.info_cont {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #efefef;
+}
+.info_list.point {
+    margin-top: -3px;
+}
+.info_list.point li {
+    padding-left: 0;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.5px;
+}
+
+.info_list li {
+    position: relative;
+    padding-left: 84px;
+    color: #222;
+}
+.info_list.point li .summary_num {
+    float: right;
+    font-weight: 500;
+    font-family: -apple-system, BlinkMacSystemFont, Helvetica, AppleSDGothicNeo-Regular, "나눔고딕", nanumgothic, sans-serif;
+}
+.info_list.point li .inner_list {
+    margin-top: 12px;
+}
+.info_list.point li span {
+    color: #222;
+}
+.info_list.point li .inner_list li .benefit_name, .info_list.point li .inner_list li .benefit_sum {
+    white-space: nowrap;
+}
+
+.info_list.point li span {
+    color: #222;
+}
+.inner_list .benefit_sum {
+    float: right;
+    letter-spacing: 0;
+}
+.inner_list .benefit_sum em {
+    font-size: 15px;
+    vertical-align: top;
+    font-weight: 500;
+}
+.fls{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 </style>

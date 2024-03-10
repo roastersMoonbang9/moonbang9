@@ -183,9 +183,9 @@ export default {
     methods : {
         async getPopularProduct(limit){
             console.log(limit);
-            let result = await axios.get(`/api/product?limit=${limit}`);
-            console.log(result);
-            this.popularList = result.data;
+            // let result = await axios.get(`/api/product?limit=${limit}`);
+            // console.log(result);
+            // this.popularList = result.data;
             // console.log(this.productList);
         }
     }
