@@ -16,9 +16,10 @@ FROM delivery d JOIN orders o ON d.ord_no = o.ord_no`;
 //배송 수정
 const updateShipNo = 
 `UPDATE delivery 
-SET ship_no = ?
+SET status = ?
 WHERE deli_no = ?`
 
+//페이징 용 수량카운트
 const deliveryCount = 
 `SELECT count(deli_no) as count 
 FROM delivery`;

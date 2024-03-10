@@ -18,8 +18,10 @@ gradeRouter.get("/grade", async (request,response)=>{
   })
 
   //적립률 수정
-  gradeRouter.put("/grade/:gno", async (request, response) => {
-    let data = [request.body.param, request.params.gno];
+  gradeRouter.put("/grade/:grd_no", async (request, response) => {
+    let data = [request.body.param, request.params.grd_no];
+    //console.log('받아오는 파라미터:'+request.body.param);
+    //console.log('받아오는 grd_no: '+ request.body.params);
     let result = await db.connection('grade','gradeUpdate', data);
     response.send(result);
   });
