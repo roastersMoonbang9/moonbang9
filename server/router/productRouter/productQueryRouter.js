@@ -20,6 +20,7 @@ productQueryRouter.get("/queryList:prdt_cd", async (request,response)=>{
  //등록 : post => body
  productQueryRouter.post("/addQuery", async (request, response)=>{
   let data = request.body.param; // { param : { .. } }
+  console.log('문의등록:'+request.body.param);
   let result = await db.connection('query','queryInsert', data);
   response.send(result);
 });
@@ -31,8 +32,8 @@ productQueryRouter.put("/query/:qno", async (request, response) => {
   response.send(result);
 });
   //상품문의 삭제 
-  productQueryRouter.delete("/query/:cd", async (request,response)=>{
-    let cd = request.params.cd;
+  productQueryRouter.delete("/queryDel/:qst_no", async (request,response)=>{
+    let cd = request.params.qst_no;
     let result = await db.connection('query','queryDel',cd);
     response.send(result);
   })
