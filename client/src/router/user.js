@@ -60,11 +60,6 @@ export default {
                 name: 'productInfo',
                 component: ProductInfo
             },
-            // {
-            //     path: 'productReview',
-            //     name: 'productReview',
-            //     component: ProductReview
-            // },
             {
                 path: 'mypage/',
                 name: 'mypage',

@@ -67,17 +67,16 @@
                 </tr>
           </table>
       </div>
-
       <div style="text-align: center; margin-bottom: 60px;">
-          <button type="button" class="btn btn-secondary" style="float: right;" @click="this.getTableList()">검색</button>
-          <button class="btn btn-secondary" style="float: right;" @click="this.dataReset()">초기화</button>
+            <button class="btn btn-secondary" style="float: right;" @click="this.dataReset()">초기화</button>
+          <button type="button" class="btn btn-dark" style="float: right;" @click="this.getTableList()">검색</button>
       </div>
       <div>
       <p>총 검색 수 : {{ this.allSize }} 개</p>
       <table class="table table-hover" style="font-size: 15px;">
         <thead>
           <tr class="table-primary">
-            <th><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></th>
+            <th><input class="form-check-input" type="checkbox" name="deliCheck" v-model="selectAll"></th>
             <th>번호</th>
             <th>주문번호</th>
             <th>주문일자</th>
@@ -88,20 +87,20 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(delivery, idx) in deliveryList" :key="idx">
-            <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+          <tr v-for="(table, idx) in tableList" :key="idx">
+            <td><input class="form-check-input" type="checkbox" v-model="selected" key:="idx" :value="table"></td>
             <td>{{ idx + 1 }}</td>
-            <td>{{ delivery.deli_no }}</td>
-            <td>{{ delivery.ord_dt }}</td>
-            <td>{{ delivery.fulladdr }}</td>
-            <td>{{ delivery.ship_no }}</td>
-            <td>{{ delivery.status }}</td>
-            <td>{{ delivery.total_price }}</td>
+            <td>{{ table.ord_no }}</td>
+            <td>{{ table.ord_dt }}</td>
+            <td>{{ table.fulladdr }}</td>
+            <td>{{ table.ship_no }}</td>
+            <td>{{ this.changeStatus(parseInt(table.status)) }}</td>
+            <td>{{ table.total_price }}</td>
           </tr>
-          
         </tbody>
       </table>
-      <button type="button" class="btn btn-outline-secondary m-2" style="float: left;">주문서 출력</button>
+      <button type="button" class="btn btn-outline-secondary m-2" style="float: left;" @click="changeToShip()">배송처리</button>
+      <button type="button" class="btn btn-outline-secondary m-2" style="float: left;" @click="changeToComp()" >배송완료</button>
       <!-- 1) 페이징 테그 복붙 -->
       <Paging 
       :pagination="pagination"
@@ -129,14 +128,14 @@ import Paging from '@/components/PagingComponent.vue';
               getDate1 : null,
               getDate2 : null,
               checkStatus1 : null,
-              checkStatus2 : "1",
-              checkStatus3 : "2",
-              checkStatus4 : "3",
+              checkStatus2 : "0",
+              checkStatus3 : "1",
+              checkStatus4 : "2",
               checkSt : null,
 
               // 리스트
-              deliveryList:[],
               tableList : [],
+              selected:[],
               //3) 페이징 [] 가져오기
               paging : [],
               pagination : {},
@@ -147,22 +146,33 @@ import Paging from '@/components/PagingComponent.vue';
               curPage : 1,  // 현재 페이지
               startPage : 1,  // 페이지네이션 시작번호
               endPage : 1,  // 페이지네이션 끝번호
-          }
-      },
+                      }
+        },
+    computed: {
+        selectAll: {
+          get() {
+                return this.selected.length === this.tableList.length;
+            },
+            set(value) {
+                this.selected = value ? this.tableList : [];
+            }
+        },
+
+    },
       methods : 
       {
-        // changeLv(lv) {
-        //         if (lv == 1) {
-        //             lv = "WHITE"
-        //         } else if (lv == 2) {
-        //             lv = "BASIC"
-        //         } else if (lv == 3) {
-        //             lv = "VIP"
-        //         } else if (lv == 4) {
-        //             lv = "GOLD"
-        //         }
-        //         return lv;
-        //     },
+        changeStatus(status) {
+                if (status == 0) {
+                    status = "배송 준비"
+                } else if (status == 1) {
+                    status = "배송 중"
+                } else if (status == 2) {
+                    status = "배송 완료"
+                }
+                return status;
+            },
+            
+
         getToday() {
                 let today = new Date();
                 this.getDate2 = this.changeDate(today);
@@ -229,13 +239,13 @@ import Paging from '@/components/PagingComponent.vue';
                         getDate1 : this.getDate1,
                         checkDate : this.checkDate,
                         getDate2 : this.getDate2,
-                        //checkLv : this.checkLv
+                        checkSt : this.checkSt
                     }
                 }
         let result = await axios.post('/api/order/deliveryList',data)
                                 .catch(err => console.log(err));
                                 console.log(result);
-        this.deliveryList = result.data;
+        this.tableList = result.data;
       },
       //5) AXIOS.GET ()수정할 주소를 가져와서 수정
           async getTableCount() {
@@ -246,7 +256,7 @@ import Paging from '@/components/PagingComponent.vue';
                         getDate1 : this.getDate1,
                         checkDate : this.checkDate,
                         getDate2 : this.getDate2,
-                        //checkLv : this.checkLv
+                        checkSt : this.checkSt
                     }
                 }
               let result = await axios.post(`/api/order/deliveryCount`,data) //쿼리문에 count문이 있어야함
@@ -291,7 +301,62 @@ import Paging from '@/components/PagingComponent.vue';
           changeNowPage(page){
               this.curPage = page
               this.getTableList(this.curPage);
-          }
-      }
+                },
+
+                //선택한 건 배송 중으로 변경
+    async changeToShip() {
+        let change = false;
+        let data = {
+                param: {
+                 status: 1  //  1  "배송 중"
+            }
+        }
+        for (let i of this.selected) {
+            let result = await axios.put('/api/order/updateDelivery/' + i.deli_no, data)
+            .catch(err => console.log(err));
+
+        console.log('업데이트:' + result);
+        console.log('선택한 배송번호:' + i.deli_no);
+    if (result.data.changedRows > 0) {
+        change = true;
+    }
+        };
+        if(change){Swal.fire({
+            icon: "success",
+            title: "배송 처리 되었습니다.",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }  
+},
+async changeToComp() {
+// 배송완료에서 배송중으로 바꿔도 가능.. 원래 안되는건데.. 
+let change = false;
+let data = {
+        param: {
+         status: 2  //  1  "배송 완료"
+    }
+}
+for (let i of this.selected) {
+    let result = await axios.put('/api/order/updateDelivery/' + i.deli_no, data)
+    .catch(err => console.log(err));
+
+console.log('업데이트:' + result);
+console.log('선택한 배송번호:' + i.deli_no);
+if (result.data.changedRows > 0) {
+    change = true;
+}
+};
+Swal.fire({
+    icon: "success",
+    title: "배송 완료",
+    showConfirmButton: false,
+    timer: 1500
+});
+this.$router.go(this.$router.currentRoute); //리로드는 되지만 목록은 사라짐. 다시 검색으로 눌러 찾아야함
+
+
+},
+    }
     }
 </script>
