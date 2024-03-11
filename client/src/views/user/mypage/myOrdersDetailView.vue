@@ -24,13 +24,13 @@
                         <!-- {{ reviewList }} -->
 						<tbody>
 	                        <tr v-for="(table, idx) in tableList" :key="idx">
-								<td>이미지</td>
+								<td><img v-bind:src="imgMod(table.image)" width="50px" height="50px" alt="이미지 없음"></td>
 								<td>{{ table.prdt_name }}<br><span v-if="table.opt_name != null">옵션 : {{table.opt_name}}</span></td>
 								<td>{{ table.detail_cnt }}개</td>
 								<td>{{ table.price }}원</td>
 								<td>{{ table.sum_price }}원</td>
 								<td v-if="table.revCount == 0"><button @click="reviewShow(table.prdt_cd,table.ord_no)" v-if="!reviewBtn" style="border: 1px solid #ccc;border-radius: 5px;">리뷰작성</button><button style="border: 1px solid #ccc;border-radius: 5px;" @click="reviewShow(table.prdt_cd,table.ord_no)" v-else>리뷰닫기</button></td>
-                                <td v-else><button @click="reviewDel(table.prdt_cd,table.ord_no)" v-if="!reviewBtn">리뷰삭제</button></td>
+                                <td v-else><button @click="reviewDel(table.prdt_cd,table.ord_no)" style="border: 1px solid #ccc;border-radius: 5px;" v-if="!reviewBtn">리뷰삭제</button></td>
                                 <td><button style="border: 1px solid #ccc;border-radius: 5px;" @click="recart(table)">재구매</button></td>
             				</tr>
                             <tr v-show="reviewBtn">
@@ -82,7 +82,6 @@ v-on:firstPage="firstPage" v-on:lastPaging="lastPaging" v-on:changeNowPage="chan
 				</div>
 			</fieldset>
 		</div>
-
         <div class="fls">
         <!--배송정보-->
         <div class="detail_section">
@@ -191,7 +190,7 @@ export default{
                 paging : [],
                 pagination : {},
                 allSize : 0,  // 모든 데이터 수
-                pageSize : 10, // 한 페이지에서 보여줄 데이터 수
+                pageSize : 5, // 한 페이지에서 보여줄 데이터 수
                 navSize : 5,  // 페이지네이션이 보여줄 최대 페이지 수
                 lastPage : 1,  // Math.ceil(allSize / pageSize) 마지막 페이지
                 curPage : 1,  // 현재 페이지
@@ -334,12 +333,22 @@ export default{
                     }
                 }
 
+                if(this.reviewList.content == ""){
+                    Swal.fire({
+                      icon: "error",
+                      title: "내용이 존재하지 않습니다. <br>내용 작성후 다시 시도해 주세요."
+                    });
+
+                    return 
+                }
+
                 let result = await axios.post(`/api/product/review`, data) 
                                         .catch(err => console.log(err));
                 let info = result.data.affectedRows;
                 if (info > 0) {
                   alert("리뷰가 등록되었습니다.");
                   this.reviewShow(this.reviewList.prdt_cd, this.reviewList.ord_no)
+                  this.getTableList();
                 }else{
                   alert("리뷰등록에 실패하였습니다.");
                   this.reviewShow(this.reviewList.prdt_cd, this.reviewList.ord_no)
@@ -369,7 +378,7 @@ export default{
             // 재구매
             recart(table){
                 let data = {
-                    prdt_cd : table.reviewList,
+                    prdt_cd : table.prdt_cd,
                     prdt_name : table.prdt_name,
                     brand : table.brand,
                     large_code : table.large_code,
@@ -384,8 +393,13 @@ export default{
                     opt_name : table.opt_name,
                     total_price : table.total_price,
                 }
+                sessionStorage.setItem("payList", JSON.stringify(data ));
+                this.$router.push({ name: 'payment'});
+            },
+            // 이미지 자르기
+            imgMod(img){
+                return 'img/' + img.substring(30)
             }
-            // JSON.parse(sessionStorage.getItem("data"));
         }
     }
 </script>

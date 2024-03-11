@@ -86,9 +86,10 @@ const checkKakaoId =
         used_payment 
 FROM member
 WHERE id=?
-AND     mem_status != 0`;
+AND     mem_status in (1,2,3)`;
 
-// 카카오 아이디로 회원 가입
+
+// 카카오 아이디로 회원 가입    
 const registerWithKakaoAccount = 
 `INSERT INTO member 
  SET ?`;
