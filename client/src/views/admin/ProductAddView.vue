@@ -167,7 +167,7 @@
             this.productInfo.sale_price = this.productInfo.price * ((100-dc)/100);
           }
       },
-      fileSelect() {
+      async fileSelect() {
         if(this.$refs.images.files.length > 4){
           alert('사진은 4개까지 첨부 가능합니다.');
           this.$refs.images.value = null;
@@ -176,8 +176,20 @@
         }
       },
       async productInsert(){
+        let codeResult = await axios.get("/api/product/productCode/"+ this.productInfo.large_code+this.productInfo.small_code).catch(err => console.log(err));
+        if(codeResult.data[0] != null){
+          console.log(codeResult.data[0].prdt_cd);
+          let codeNum = codeResult.data[0].prdt_cd.substring(2);
+          console.log(codeNum);
+          console.log(parseInt(codeNum)+1);
+          console.log("000" + (parseInt(codeNum)+1));
+          let code = "000" + (parseInt(codeNum)+1);
+          this.productInfo.type_cd = this.productInfo.large_code+this.productInfo.small_code + code;
+        } else {
+          this.productInfo.type_cd = this.productInfo.large_code+this.productInfo.small_code + "00001";
+        }
+        
         let dc_pct = (this.productInfo.dc_pct)/100;
-        this.productInfo.type_cd = this.productInfo.large_code+this.productInfo.small_code+"0001";
         this.productInfo.table_cd = 0;
         let formData = new FormData(window.Document.productForm); //form 안의 값을 다 넣어줌
         formData.append('prdt_name',this.productInfo.prdt_name);

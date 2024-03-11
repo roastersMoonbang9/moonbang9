@@ -1,7 +1,7 @@
 const express = require('express');
 const fileUploadRouter = express.Router();
 const db = require("../../db.js");
-const imageUpload = '../client/src/assets/user/img';
+const imageUpload = '../client/public/img';
 const multer = require('multer');
 
 //파일저장경로
@@ -66,7 +66,7 @@ fileUploadRouter.post("/", upload.array('dataFiles'), async (req,res)=>{
       dc_pct : req.body.dc_pct,
       sale_price : req.body.sale_price,
       prdt_detail : req.body.prdt_detail,
-      image : req.body.image
+      image : req.files[0].path
     }
     let eventResult = await db.connection('product','productInsert',tableData).catch(err => console.log(err));
     console.log(eventResult);
