@@ -81,12 +81,12 @@
             <div v-for="(product,idx) in popularList" v-bind:key="idx" class="col-xl-3 col-lg-4 col-sm-6">
               <div class="product text-center">
                 <div class="position-relative mb-3">
-                  <div class="badge text-white bg-"></div><a class="d-block" href="#" @click="goToProductInfo(product.prdt_cd)"><img class="img-fluid w-100" v-bind:src="`img/${product.image}`" alt="..."></a>
+                  <div class="badge text-white bg-"></div><a class="d-block" href="#" @click="goToProductInfo(product.prdt_cd)"><img class="img-fluid w-100" v-bind:src="`img/${product.image.substring(21)}`" alt="..."></a>
                   <div class="product-overlay">
                     <ul class="mb-0 list-inline">
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
-                      <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li>
-                      <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li>
+                      <!-- <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li> -->
+                      <!-- <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a></li> -->
+                      <!-- <li class="list-inline-item me-0"><a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal"><i class="fas fa-expand"></i></a></li> -->
                     </ul>
                   </div>
                 </div>

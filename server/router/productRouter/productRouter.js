@@ -79,7 +79,7 @@ productRouter.post("/", async (request,response)=>{
       where += " ORDER BY p.sale_price DESC";
       break;
     case 'dc_pct':
-      where += " ORDER BY p.dc_pct";
+      where += " ORDER BY p.dc_pct DESC";
       break;
     default :
       where += " ORDER BY d.sell DESC";
