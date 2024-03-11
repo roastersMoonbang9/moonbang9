@@ -64,7 +64,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="/admin/productQuery">
                 <i class="bi bi-circle"></i><span>상품 문의</span>
                 </a>
             </li>
