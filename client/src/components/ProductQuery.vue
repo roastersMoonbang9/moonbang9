@@ -1,8 +1,40 @@
 <template>
-  <div>
-    <button @click="clickQueryForm()" class="btn btn-primary mb-3">문의하기</button>
-    <!-- 문의 등록 -->
-    <div v-if="queryFormShow">
+    
+   
+
+    <!--문의 목록-->
+    
+      <div class="p-4 p-lg-5 bg-white" >
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button @click="clickQueryForm()" class="btn btn-outline-secondary mb-3 " >문의하기</button>
+      </div>
+      <div v-if="queryL">
+        <table class="table table-hover">
+          <tbody>
+            <tr>
+              <th>제목</th>
+              <th>내용</th>
+              <th>등록일</th>
+              <th>아이디</th>
+              <th></th>
+            </tr>
+            <tr :key="i" v-for="(query, i) in queryList">
+              <td>{{ query.title }}</td>
+              <td>{{ query.content }}</td>
+              <td>{{ dateFomat(query.qst_dt) }}</td>
+              <td>{{ hideId(query.id) }}</td>
+              <!-- 아이디 동일할때만 삭세하거나 수정할 수 있도록 -->
+              <td v-if="isCurrentUser(query.id)">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button @click="deleteQuery(query.qst_no)" class="btn btn-light btn-sm">삭제</button>
+              </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+         <!-- 문의 등록 -->
+    <div v-if="queryForm">
       <form @submit.prevent="submitQuery()">
         <div class="mb-3">
           <label for="queryTitle" class="form-label">제목</label>
@@ -12,29 +44,10 @@
           <label for="queryContent" class="form-label">내용</label>
           <textarea v-model="newQuery.content" class="form-control" id="queryContent" rows="3" required></textarea>
         </div>
-        <button type="submit" class="btn btn-success">등록</button>
-        <button type="button" @click="cancelQuery" class="btn btn-danger">취소</button>
+        <button type="submit" class="btn btn-secondary mb-3">등록</button>
+        <button type="button" @click="clickQueryForm()" class="btn btn-outline-secondary mb-3">취소</button>
       </form>
     </div>
-
-    <!--문의 목록-->
-    <div id="productQuery" role="tabpanel" aria-labelledby="description-tab" v-if="queryOpen">
-      <div class="p-4 p-lg-5 bg-white">
-        <h6 class="text-uppercase">상품문의 </h6>
-        <table class="table table-hover">
-          <tbody>
-            <tr :key="i" v-for="(query, i) in queryList">
-              <td>{{ query.title }}</td>
-              <td>{{ query.content }}</td>
-              <td>{{ dateFomat(query.qst_dt) }}</td>
-              <td>{{ hideId(query.id) }}</td>
-              <!-- 아이디 동일할때만 삭세하거나 수정할 수 있도록 -->
-              <td v-if="isCurrentUser(query.id)">
-                <button @click="deleteQuery(query.qst_no)" class="btn btn-danger">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
         <Paging 
         :pagination="pagination"
         v-on:prevPage="prevPage"
@@ -43,8 +56,6 @@
         v-on:lastPaging="lastPaging"
         v-on:changeNowPage="changeNowPage"/>
       </div>
-    </div>
-  </div>
 </template>
 <script>
 import axios from 'axios';
@@ -63,6 +74,7 @@ export default {
     return {
       queryList: [],
       queryForm: false,
+      queryL: true,
       newQuery: {
         qst_no: '',
         title: '',
@@ -88,6 +100,11 @@ export default {
     let cd = this.$route.query.prdt_cd;
     // this.getQueryList(cd);
   },
+  // watch(){
+  //   changeList(){
+  //   this.refreshQuery = this.
+  //   }
+  // },
   methods: {
     dateFomat(date){
                 let date1 = new Date(date);
@@ -100,12 +117,13 @@ export default {
     async getQueryList(prdt_cd) {
       let result = await axios.get('/api/product/queryList/'+ prdt_cd)
         .catch(err => console.log(err));
-      this.queryList = result.data; //여기있는 data를 못읽어옴....
+      this.queryList = result.data; 
       console.log(result);
 
     },
     clickQueryForm() {
-      this.queryFormShow = !this.queryFormShow; //false였던 문의글 등록 true
+      this.queryForm = !this.queryForm; //false였던 문의글 등록 true
+      this.queryL = ! this.queryL;
     },
     isCurrentUser(queryUserId) { //작성자와 같은 사람일경우 
       return this.$store.state.userStore.id === queryUserId;
@@ -113,15 +131,14 @@ export default {
     async submitQuery() {
       let data = {
         param: {
-          qst_cd: this.queryList[0].qst_cd + 1,
           title: this.newQuery.title,
           content: this.newQuery.content,
           id: this.$store.state.userStore.id,
           status: 0,
-          prdt_cd: prdt_cd,
+          prdt_cd: this.$route.query.prdt_cd,
         }
       }
-      let result = await axios.post('/api/product/addQuery/',data) //등록 안됨....
+      let result = await axios.post('/api/product/addQuery/',data) 
         .catch(err => console.log(err));
       this.newQuery = result.data;
       console.log(result);
@@ -130,13 +147,23 @@ export default {
         title: '',
         content: '',
       };
-      this.queryFormShow = false; //저장 후 목록 이동
+      this.queryForm = false; //저장 후 목록 이동
+      //중간에 새로고침 해줘야함
+      this.queryL = true;
+      
+
+      //새로 고침 안됨
     },
     async deleteQuery(qst_no){
-      let result = await axios.delete(`/api/product/queryDel/${qst_no}`)
+      let result = await axios.delete('/api/product/queryDel/'+qst_no)
         .catch(err => console.log(err));
-      this.queryList = result.data; //여기있는 data를 못읽어옴....
       console.log(result);
+      if (result.data.affectedRows > 0) {
+                Swal.fire('삭제되었습니다');
+                }
+      this.queryL = true;
+      this.queryForm = false;
+     
     }
 
   },

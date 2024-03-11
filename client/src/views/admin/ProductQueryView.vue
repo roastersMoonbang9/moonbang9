@@ -1,17 +1,11 @@
 <template>
     <div class="container">
-        <h1 style="padding: 15px; font-size: 27px; margin: 30px;">배송 조회</h1>
+        <h1 style="padding: 15px; font-size: 27px; margin: 30px;">상품 문의 관리</h1>
         <div>
             <h4 style="margin-bottom: 20px;">조건검색</h4>
             <table class="table table-bordered">
                 <tr>
-                    <th>주문번호</th>
-                    <td colspan="3">
-                        <input v-model="searched" class="form-control" type="text" aria-label="default input example">
-                    </td>
-                </tr>
-                <tr>
-                    <th>주문 기간</th>
+                    <th>문의 기간</th>
                     <td>
                         <span><input class="form-control" v-model="getDate1" type="date"
                                 aria-label="default input example"></span>
@@ -29,7 +23,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>배송 상태</th>
+                    <th>답변 상태</th>
                     <td colspan="4">
                         <ul class="nav">
                             <li class="nav-item">
@@ -46,7 +40,7 @@
                                     <input v-bind:value="checkStatus2" v-model="checkSt" class="form-check-input"
                                         type="radio" name="flexRadioDefault" id="flexRadioDefault2">
                                     <label class="form-check-label" for="flexRadioDefault2">
-                                        배송 준비&nbsp;&nbsp;&nbsp;
+                                        답변 없음&nbsp;&nbsp;&nbsp;
                                     </label>
                                 </div>
                             </li>
@@ -55,16 +49,7 @@
                                     <input v-bind:value="checkStatus3" v-model="checkSt" class="form-check-input"
                                         type="radio" name="flexRadioDefault" id="flexRadioDefault3">
                                     <label class="form-check-label" for="flexRadioDefault3">
-                                        배송 중&nbsp;&nbsp;&nbsp;
-                                    </label>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <div class="form-check">
-                                    <input v-bind:value="checkStatus4" v-model="checkSt" class="form-check-input"
-                                        type="radio" name="flexRadioDefault" id="flexRadioDefault4">
-                                    <label class="form-check-label" for="flexRadioDefault4">
-                                        배송 완료&nbsp;&nbsp;&nbsp;
+                                        답변 완료&nbsp;&nbsp;&nbsp;
                                     </label>
                                 </div>
                             </li>
@@ -82,42 +67,43 @@
             <table class="table table-hover" style="font-size: 15px;">
                 <thead>
                     <tr class="table-primary">
-                        <th><input class="form-check-input" type="checkbox" name="deliCheck" v-model="selectAll"></th>
                         <th>번호</th>
-                        <th>주문번호</th>
-                        <th>주문일자</th>
-                        <th>배송정보</th>
-                        <th>운송장번호</th>
-                        <th>배송상태</th>
-                        <th>총주문액</th>
+                        <th>상품번호</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>작성일자</th>
+                        <th>답변상태</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(table, idx) in tableList" :key="idx">
-                        <td><input class="form-check-input" type="checkbox" v-model="selected" key:="idx"
-                                :value="table"></td>
                         <td>{{ idx + 1 }}</td>
-                        <td>{{ table.ord_no }}</td>
-                        <td>{{ dateFomat(table.ord_dt)}}</td>
-                        <td>{{ table.fulladdr }}</td>
-                        <td>{{ table.ship_no }}</td>
+                        <td>{{ table.prdt_cd }}</td>
+                        <td>{{ table.title }}</td>
+                        <td>{{ table.id }}</td>
+                        <td>{{ dateFomat(table.qst_dt)}}</td>
                         <td>{{ this.changeStatus(parseInt(table.status)) }}</td>
-                        <td>{{ table.total_price }}</td>
                     </tr>
+                    <div v-if="queryForm">
+                        <form @submit.prevent="submitQueryAnsw()">
+                            <div class="mb-3">
+                                <label for="queryAnswer" class="form-label">답변</label>
+                                <textarea v-model="table.answer" class="form-control" id="queryContent" rows="3"
+                                    required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-secondary mb-3">등록</button>
+                        </form>
+                    </div>
                 </tbody>
             </table>
-            <button type="button" class="btn btn-outline-secondary m-2" style="float: left;"
-                @click="changeToShip()">배송처리</button>
-            <button type="button" class="btn btn-outline-secondary m-2" style="float: left;"
-                @click="changeToComp()">배송완료</button>
             <!-- 1) 페이징 테그 복붙 -->
             <Paging :pagination="pagination" v-on:prevPage="prevPage" v-on:nextPage="nextPage"
                 v-on:firstPage="firstPage" v-on:lastPaging="lastPaging" v-on:changeNowPage="changeNowPage" />
         </div>
     </div>
 </template>
-<script>
 
+<script>
 import axios from 'axios'
 // 2) 임포트 해주기 
 import Paging from '@/components/PagingComponent.vue';
@@ -129,14 +115,13 @@ export default {
     data() {
         return {
 
-            searched: null,
             getDate1: null,
             getDate2: null,
-            checkStatus1: null,
-            checkStatus2: "0",
-            checkStatus3: "1",
-            checkStatus4: "2",
+            checkStatus1: null, //전체
+            checkStatus2: "0", //답변없음
+            checkStatus3: "1", //답변 완료
             checkSt: null,
+            queryForm: false,
 
             // 리스트
             tableList: [],
@@ -153,19 +138,7 @@ export default {
             endPage: 1,  // 페이지네이션 끝번호
         }
     },
-    computed: {
-        selectAll: {
-            get() {
-                return this.selected.length === this.tableList.length;
-            },
-            set(value) {
-                this.selected = value ? this.tableList : []; //false일경우 빈 배열로
-            }
-        },
-
-    },
     methods:
-    
     {
         dateFomat(date){
         let date1 = new Date(date);
@@ -177,15 +150,12 @@ export default {
       },
         changeStatus(status) {
             if (status == 0) {
-                status = "배송 준비"
+                status = "답변 없음"
             } else if (status == 1) {
-                status = "배송 중"
-            } else if (status == 2) {
-                status = "배송 완료"
-            }
+                status = "답변 완료"
+            } 
             return status;
         },
-
 
         getToday() {
             let today = new Date();
@@ -256,7 +226,7 @@ export default {
                     checkSt: this.checkSt
                 }
             }
-            let result = await axios.post('/api/order/deliveryList', data)
+            let result = await axios.post('/api/product/queryListAll', data)
                 .catch(err => console.log(err));
             console.log(result);
             this.tableList = result.data;
@@ -372,6 +342,9 @@ export default {
 
 
         },
+    clickQueryForm() {
+      this.queryForm = !this.queryForm; //false였던 답변 등록창 true
+    },
     }
 }
 </script>

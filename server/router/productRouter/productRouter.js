@@ -208,10 +208,12 @@ productRouter.post("/insertCart", async (request, response)=>{
   response.send(result);
 });
 
-
-
-
-
+// 상품번호조회(관리자)
+productRouter.get("/productCode/:prdt_cd", async (request,response)=>{
+  let data = request.params.prdt_cd+"%";
+  let result = await db.connection('product','productCode', data);
+  response.send(result);
+});
 
 
 module.exports = productRouter;

@@ -11,7 +11,8 @@ r.rv_no
 ,r.rv_dt
 ,r.ord_no
 FROM review r join order_detail o on r.ord_no = o.ord_no JOIN member m ON  m.mem_no = r.mem_no 
-WHERE o.prdt_cd =?`;
+WHERE o.prdt_cd =?
+group by r.ord_no`;
 
 const reviewInfo = 
 `SELECT * FROM review 

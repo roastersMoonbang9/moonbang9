@@ -49,12 +49,6 @@ orderDetailRouter.post("/usOrderDetailList", async (request, response) => {
     response.send(newResult);
 })
 
-// 테스트
-/*orderDetailRouter.get(`/usOrderDetailLists/:ord_no`, async (request, response) => {
-  let ord_no = request.params.ord_no;
-  let result = await db.connection('order_detail', 'usOrderDetailList',ord_no).catch(err => console.log(err));
-  response.send(result);
-})*/
 
 // 상세주문 수 조회(유저)
 orderDetailRouter.post("/usOrderDetailCount", async (request,response)=>{

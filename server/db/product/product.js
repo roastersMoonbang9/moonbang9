@@ -81,6 +81,13 @@ const insertCart =
 `INSERT INTO cart
 SET ?`;
 
+// 상품번호조회(관리자)
+const productCode = 
+`SELECT prdt_cd
+FROM product
+WHERE prdt_cd LIKE ?
+ORDER BY prdt_cd DESC`;
+
 // 상품등록(관리자)
 const productInsert =
 `INSERT INTO product
@@ -99,5 +106,6 @@ module.exports = {
     productImages,
     insertCart,
     productInsert,
-    optionsInsert
+    optionsInsert,
+    productCode
 }

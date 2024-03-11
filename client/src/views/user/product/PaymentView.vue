@@ -16,13 +16,12 @@
       <tbody>
         <tr v-for="(list, idx) in paymentList" v-bind:key="idx">
           <td>{{list.prdt_cd}}</td>
-          <td><img src="http://webimage.10x10.co.kr/image/small/606/S006060421.jpg" width="50px" height="50px" alt="01-Custard [커스터드]"></td>
+          <td><img v-bind:src="imgMod(list.image)" width="50px" height="50px" alt="01-Custard [커스터드]"></td>
           <td class="lt"><p class="tPad05">{{list.prdt_name}}</p><p class="tPad02" v-if="list.opt_name != null">옵션 : {{list.opt_name}}</p></td>
           <td> {{list.sale_price}}원 </td>
           <td> {{ list.cart_qty }}개 </td>
           <td>{{list.total_price}}원 </td>
         </tr>
-        {{ paymentList }}
       </tbody>
     </table>
         <!--주문금액 컴포넌트-->
@@ -397,6 +396,10 @@ export default {
           return false;
       }
       return true;
+    },
+    // 이미지 자르기
+    imgMod(img){
+      return 'img/' + img.substring(30)
     }
 },
   components: { TotalOrderPrice,DiscountAndFinalPrice, AddrsPost }

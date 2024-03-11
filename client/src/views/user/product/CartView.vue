@@ -28,7 +28,7 @@
 			<td></td>
 			<td>{{list.prdt_cd}}</td>
       <td></td>
-			<td><img src="http://webimage.10x10.co.kr/image/small/558/S005586306-3.jpg" width="50px" height="50px"></td>
+			<td><img v-bind:src="imgMod(list.image)" width="50px" height="50px"></td>
 			<td class="lt">
 				<p class="tPad05 cnt">{{list.prdt_name}}</p>
 				<p class="tPad02" v-if="list.opt_name != null"><strong>옵션</strong> : {{list.opt_name}}</p>
@@ -197,6 +197,10 @@
         //뒤로가기
         goToback() {
             this.$router.go(-1);
+        },
+        // 이미지 자르기
+        imgMod(img){
+          return 'img/' + img.substring(30)
         }
     },
     components: { TotalOrderPrice }
