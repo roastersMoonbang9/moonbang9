@@ -181,13 +181,14 @@ export default {
       this.getPopularProduct(8);
     },
     methods : {
-        async getPopularProduct(limit){
-            console.log(limit);
-            // let result = await axios.get(`/api/product?limit=${limit}`);
-            // console.log(result);
-            // this.popularList = result.data;
-            // console.log(this.productList);
-            let result = await axios.post(`/api/product?limit=${limit}`);
+        // async getPopularProduct(limit){
+        //     console.log(limit);
+        //     // let result = await axios.get(`/api/product?limit=${limit}`);
+        //     // console.log(result);
+        //     // this.popularList = result.data;
+        //     // console.log(this.productList);
+        //     let result = await axios.post(`/api/product?limit=${limit}`);
+        // },
         async getPopularProduct(limit1){
           let data = {
             param : {

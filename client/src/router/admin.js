@@ -77,6 +77,7 @@ export default {
             name: 'adminProduct',
             component: adminProductView
         },
+        {
             path: 'possCoupon',
             name: 'possCoupon',
             component: PossCouponView

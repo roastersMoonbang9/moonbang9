@@ -44,6 +44,7 @@
     </div>
 
     <section class="py-5">
+      <div>
       <div class="container">
         <div class="row mb-5">
           <div class="col-lg-6">
@@ -142,7 +143,7 @@
 
 
             
-          </div>
+          
           
           <ProductInfo @send-image="getImage1" />
 
@@ -168,9 +169,10 @@
               <p class="small text-muted">$250</p>
             </div>
           </div>
-
         </div>
+
       </div>
+      
     </section>
 
   </div>
@@ -180,6 +182,7 @@
 import axios from 'axios';
 import ProductInfo from '@/components/ProductInfo.vue';
 import ProductReview from '@/components/ProductReview.vue';
+import ProductQuery from '@/components/ProductQuery.vue';
 
 export default  {
 components : {
@@ -201,6 +204,7 @@ created() {
 computed : {
   getRealImage1() {
     return this.image1; // image1 바뀐것 감지해서 사진 다시 로드
+  },
   components : {
     ProductInfo,
     ProductReview
@@ -236,35 +240,35 @@ methods: {
       
     }
 },
-  computed : {
-    getRealImage1() {
-      return this.image1; // image1 바뀐것 감지해서 사진 다시 로드
-    }
-  },
-  methods: {
-    getImage1(data){
-      console.log('자식으로부터 받은 상품 대표이미지 파일명 : '+ data);
-      this.image1 = data; //ProductInfo.vue로부터 image1 파일명 받아오고 나면 감지해서 파일명 교체
-    },
-    async getImages(cd) { //여기가 문제.....데이터를 제대로 못받아옴?
-      console.log('코드 : ' + cd)
-      let result = await axios.get("/api/product/productImages/" + cd);
-      this.imagePath = result.data;
-        console.log('getImages결과 : ' + this.imagePath);
-        // this.imagePath = result.data;
-        // console.log('이미지패스리스트 : ' + this.imagePath);
+  // computed : {
+  //   getRealImage1() {
+  //     return this.image1; // image1 바뀐것 감지해서 사진 다시 로드
+  //   }
+  // },
+  // methods: {
+  //   getImage1(data){
+  //     console.log('자식으로부터 받은 상품 대표이미지 파일명 : '+ data);
+  //     this.image1 = data; //ProductInfo.vue로부터 image1 파일명 받아오고 나면 감지해서 파일명 교체
+  //   },
+  //   async getImages(cd) { //여기가 문제.....데이터를 제대로 못받아옴?
+  //     console.log('코드 : ' + cd)
+  //     let result = await axios.get("/api/product/productImages/" + cd);
+  //     this.imagePath = result.data;
+  //       console.log('getImages결과 : ' + this.imagePath);
+  //       // this.imagePath = result.data;
+  //       // console.log('이미지패스리스트 : ' + this.imagePath);
         
-        // imageList.forEach(ele => {
-        //   console.log(ele.file_path);
-        //   let path = ele.file_path + ele.file_name + '.' + ele.file_extn;
-        //   console.log(path);
-        //   let realPath = {path};
-        //   this.imagePath.splice(this.imagePath.length, 0, realPath);
-        //   console.log(realPath);
-        // });
-        // console.log('나머지 사진주소 : ' + this.imagePath)
+  //       // imageList.forEach(ele => {
+  //       //   console.log(ele.file_path);
+  //       //   let path = ele.file_path + ele.file_name + '.' + ele.file_extn;
+  //       //   console.log(path);
+  //       //   let realPath = {path};
+  //       //   this.imagePath.splice(this.imagePath.length, 0, realPath);
+  //       //   console.log(realPath);
+  //       // });
+  //       // console.log('나머지 사진주소 : ' + this.imagePath)
         
-      }
-  },
+  //     }
+  // },
 }
 </script>
