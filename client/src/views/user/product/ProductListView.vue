@@ -65,111 +65,52 @@
             <div class="row">
               <!-- SHOP SIDEBAR-->
               <div class="col-lg-3 order-2 order-lg-1">
-                <h5 class="text-uppercase mb-4">Categories</h5>
-                <div class="py-2 px-4 bg-dark text-white mb-3"><strong class="small text-uppercase fw-bold">다이어리</strong></div>
+                <h5 class="text-uppercase mb-4">카테고리</h5>
+                <!-- <div class="py-2 px-4 bg-dark text-white mb-3"><strong class="small text-uppercase fw-bold"><a class="reset-anchor" href="#!" @click="goToList('A')">다이어리</a></strong></div> -->
+                <div class="py-2 px-4 bg-light mb-3"><strong class="small text-uppercase fw-bold"><a class="reset-anchor" href="#!" @click="goToList('A')">다이어리</a></strong></div>
                 <ul class="list-unstyled small text-muted ps-lg-4 font-weight-normal">
-                  <li class="mb-2"><a class="reset-anchor" href="#!">다이어리</a></li>
-                  <li class="mb-2"><a class="reset-anchor" href="#!">플래너</a></li>
-                  <li class="mb-2"><a class="reset-anchor" href="#!">달력</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('A', 'A')">다이어리</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('A', 'B')">플래너</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('A', 'C')">달력</a></li>
                 </ul>
-                <div class="py-2 px-4 bg-light mb-3"><strong class="small text-uppercase fw-bold">Health &amp; Beauty</strong></div>
+                <div class="py-2 px-4 bg-light mb-3"><strong class="small text-uppercase fw-bold"><a class="reset-anchor" href="#!" @click="goToList('B')">노트</a></strong></div>
                 <ul class="list-unstyled small text-muted ps-lg-4 font-weight-normal">
-                  <li class="mb-2"><a class="reset-anchor" href="#!">Shavers</a></li>
-                  <li class="mb-2"><a class="reset-anchor" href="#!">bags</a></li>
-                  <li class="mb-2"><a class="reset-anchor" href="#!">Cosmetic</a></li>
-                  <li class="mb-2"><a class="reset-anchor" href="#!">Nail Art</a></li>
-                  <li class="mb-2"><a class="reset-anchor" href="#!">Skin Masks &amp; Peels</a></li>
-                  <li class="mb-2"><a class="reset-anchor" href="#!">Korean cosmetics</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('B', 'A')">베이직노트</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('B', 'B')">양장노트</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('B', 'C')">스프링노트</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('B', 'D')">수첩</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('B', 'E')">메모지</a></li>
                 </ul>
-                <div class="py-2 px-4 bg-light mb-3"><strong class="small text-uppercase fw-bold">Electronics</strong></div>
+                <div class="py-2 px-4 bg-light mb-3"><strong class="small text-uppercase fw-bold"><a class="reset-anchor" href="#!" @click="goToList('C')">필기류</a></strong></div>
                 <ul class="list-unstyled small text-muted ps-lg-4 font-weight-normal mb-5">
-                  <li class="mb-2"><a class="reset-anchor" href="#!">Electronics</a></li>
-                  <li class="mb-2"><a class="reset-anchor" href="#!">USB Flash drives</a></li>
-                  <li class="mb-2"><a class="reset-anchor" href="#!">Headphones</a></li>
-                  <li class="mb-2"><a class="reset-anchor" href="#!">Portable speakers</a></li>
-                  <li class="mb-2"><a class="reset-anchor" href="#!">Cell Phone bluetooth headsets</a></li>
-                  <li class="mb-2"><a class="reset-anchor" href="#!">Keyboards</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('C', 'A')">연필</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('C', 'B')">펜</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('C', 'C')">형광펜</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('C', 'D')">지우개</a></li>
                 </ul>
-                <h6 class="text-uppercase mb-4">Price range</h6>
-                <div class="price-range pt-4 mb-5">
-                  <div id="range"></div>
-                  <div class="row pt-2">
-                    <div class="col-6"><strong class="small fw-bold text-uppercase">From</strong></div>
-                    <div class="col-6 text-end"><strong class="small fw-bold text-uppercase">To</strong></div>
-                  </div>
-                </div>
-                <h6 class="text-uppercase mb-3">Show only</h6>
-                <div class="form-check mb-1">
-                  <input class="form-check-input" type="checkbox" id="checkbox_1">
-                  <label class="form-check-label" for="checkbox_1">Returns Accepted</label>
-                </div>
-                <div class="form-check mb-1">
-                  <input class="form-check-input" type="checkbox" id="checkbox_2">
-                  <label class="form-check-label" for="checkbox_2">Returns Accepted</label>
-                </div>
-                <div class="form-check mb-1">
-                  <input class="form-check-input" type="checkbox" id="checkbox_3">
-                  <label class="form-check-label" for="checkbox_3">Completed Items</label>
-                </div>
-                <div class="form-check mb-1">
-                  <input class="form-check-input" type="checkbox" id="checkbox_4">
-                  <label class="form-check-label" for="checkbox_4">Sold Items</label>
-                </div>
-                <div class="form-check mb-1">
-                  <input class="form-check-input" type="checkbox" id="checkbox_5">
-                  <label class="form-check-label" for="checkbox_5">Deals &amp; Savings</label>
-                </div>
-                <div class="form-check mb-4">
-                  <input class="form-check-input" type="checkbox" id="checkbox_6">
-                  <label class="form-check-label" for="checkbox_6">Authorized Seller</label>
-                </div>
-                <h6 class="text-uppercase mb-3">Buying format</h6>
-                <div class="form-check mb-1">
-                  <input class="form-check-input" type="radio" name="customRadio" id="radio_1">
-                  <label class="form-check-label" for="radio_1">All Listings</label>
-                </div>
-                <div class="form-check mb-1">
-                  <input class="form-check-input" type="radio" name="customRadio" id="radio_2">
-                  <label class="form-check-label" for="radio_2">Best Offer</label>
-                </div>
-                <div class="form-check mb-1">
-                  <input class="form-check-input" type="radio" name="customRadio" id="radio_3">
-                  <label class="form-check-label" for="radio_3">Auction</label>
-                </div>
-                <div class="form-check mb-1">
-                  <input class="form-check-input" type="radio" name="customRadio" id="radio_4">
-                  <label class="form-check-label" for="radio_4">Buy It Now</label>
-                </div>
+                <div class="py-2 px-4 bg-light mb-3"><strong class="small text-uppercase fw-bold"><a class="reset-anchor" href="#!" @click="goToList('D')">사무용품</a></strong></div>
+                <ul class="list-unstyled small text-muted ps-lg-4 font-weight-normal mb-5">
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('D', 'A')">복사용지</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('D', 'B')">필통</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('D', 'C')">가위</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('D', 'D')">계산기</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('D', 'E')">풀</a></li>
+                </ul>
+                <div class="py-2 px-4 bg-light mb-3"><strong class="small text-uppercase fw-bold"><a class="reset-anchor" href="#!" @click="goToList('E')">데코레이션</a></strong></div>
+                <ul class="list-unstyled small text-muted ps-lg-4 font-weight-normal mb-5">
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('E', 'A')">스티커</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('E', 'B')">스탬프</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('E', 'C')">테이프</a></li>
+                  <li class="mb-2"><a class="reset-anchor" href="#!" @click="goToList('E', 'D')">포스터</a></li>
+                </ul>
+                
               </div>
               <!-- SHOP LISTING-->
-              <div class="col-lg-9 order-1 order-lg-2 mb-5 mb-lg-0">
-                <div class="row mb-3 align-items-center">
-                  <div class="col-lg-6 mb-2 mb-lg-0">
-                    <p class="text-sm text-muted mb-0">Showing 1–12 of 53 results</p>
-                  </div>
-                  <div class="col-lg-6">
-                    <ul class="list-inline d-flex align-items-center justify-content-lg-end mb-0">
-                      <li class="list-inline-item text-muted me-3"><a class="reset-anchor p-0" href="#!"><i class="fas fa-th-large"></i></a></li>
-                      <li class="list-inline-item text-muted me-3"><a class="reset-anchor p-0" href="#!"><i class="fas fa-th"></i></a></li>
-                      <li class="list-inline-item">
-
-                        <select v-model="sort" class="selectpicker" data-customclass="form-control form-control-sm">
-                          <option value="regis_dt">신상품순</option>
-                          <option value="popular" selected>인기상품순</option>
-                          <option value="low_price">낮은가격순</option>
-                          <option value="high_price">높은가격순</option>
-                          <option value="dc_pct">할인율순</option>
-                        </select>
-
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+              
 
                 <ProductList />
 
                
-              </div>
             </div>
           </div>
         </section>
@@ -189,6 +130,13 @@ import ProductList from '../../../components/ProductList.vue'
             /* where : searched,large_code,small_code, 등록일, 수정일
                order : 신상품순,높은가격,낮은가격,할인율순,인기상품순(default) */
           };
+      },
+      methods : {
+        goToList(large, small) {
+        this.large_code = large;
+        this.small_code = small;
+        this.$router.push({ path : '/product', query : { 'large_code' : this.large_code , 'small_code' : this.small_code }})
+      },
       }
     }
 </script>

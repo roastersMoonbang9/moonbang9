@@ -98,8 +98,10 @@ productRouter.post("/", async (request,response)=>{
   where += " LIMIT ?"
   data.push(limit);
 
-  where += " OFFSET ?"
-  data.push(offset);
+  if(offset){
+    where += " OFFSET ?"
+    data.push(offset);    
+  }
 
   let result = await db.connection('product','productList', data, where).catch((err)=> console.log(err));
   console.log(result);
@@ -189,7 +191,9 @@ productRouter.get("/productOptions/:prdt_cd", async (request,response)=>{
 // 상품상세 페이지 - 나머지 이미지들
 productRouter.get("/productImages/:prdt_cd", async (request,response)=>{
   let data = request.params.prdt_cd;
+
   let result = await db.connection('product','productImages', data);
+  console.log('상품이미지result : ' + result[0]);
   response.send(result);
 });
 

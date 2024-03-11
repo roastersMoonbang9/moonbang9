@@ -49,7 +49,7 @@
             <div class="row px-4 px-lg-5">
               <div class="col-lg-6">
                 <p class="text-muted small text-uppercase mb-2">New Inspiration 2024</p>
-                <h1 class="h2 text-uppercase mb-3">MOONBANG9</h1><a class="btn btn-dark" href="shop.html">카테고리 상품보기</a>
+                <h1 class="h2 text-uppercase mb-3">MOONBANG9</h1><a class="btn btn-dark" href="#" @click="goToList()">전체 상품 보기</a>
               </div>
             </div>
           </div>
@@ -61,11 +61,11 @@
             <h2 class="h5 text-uppercase mb-4">Browse our categories</h2>
           </header>
           <div class="row">
-            <div class="col-md-4"><a class="category-item" href="shop.html"><img class="img-fluid" src="img/cat-img-1.jpg" alt=""/><strong class="category-item-title">노트</strong></a>
+            <div class="col-md-4"><a class="category-item" href="#" @click="goToList('A')"><img class="img-fluid" src="img/cat-img-1.jpg" alt=""/><strong class="category-item-title">다이어리</strong></a>
             </div>
-            <div class="col-md-4"><a class="category-item mb-4" href="shop.html"><img class="img-fluid" src="img/cat-img-2.jpg" alt=""/><strong class="category-item-title">필기류</strong></a><a class="category-item" href="shop.html"><img class="img-fluid" src="img/cat-img-3.jpg" alt=""/><strong class="category-item-title">사무용품</strong></a>
+            <div class="col-md-4"><a class="category-item mb-4" href="#" @click="goToList('B')"><img class="img-fluid" src="img/cat-img-2.jpg" alt=""/><strong class="category-item-title">노트</strong></a><a class="category-item" href="#" @click="goToList('C')"><img class="img-fluid" src="img/cat-img-3.jpg" alt=""/><strong class="category-item-title">필기류</strong></a>
             </div>
-            <div class="col-md-4"><a class="category-item" href="shop.html"><img class="img-fluid" src="img/cat-img-4.jpg" alt=""/><strong class="category-item-title">데코레이션</strong></a>
+            <div class="col-md-4"><a class="category-item" href="#" @click="goToList('D')"><img class="img-fluid" src="img/cat-img-4.jpg" alt=""/><strong class="category-item-title">데코레이션</strong></a>
             </div>
           </div>
         </section>
@@ -81,7 +81,7 @@
             <div v-for="(product,idx) in popularList" v-bind:key="idx" class="col-xl-3 col-lg-4 col-sm-6">
               <div class="product text-center">
                 <div class="position-relative mb-3">
-                  <div class="badge text-white bg-"></div><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="img/product-8.jpg" alt="..."></a>
+                  <div class="badge text-white bg-"></div><a class="d-block" href="#" @click="goToProductInfo(product.prdt_cd)"><img class="img-fluid w-100" :src="require(`@/assets/user/img/${product.image}`)" alt="..."></a>
                   <div class="product-overlay">
                     <ul class="mb-0 list-inline">
                       <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
@@ -172,7 +172,8 @@ import axios from "axios";
 export default {
     data() {
         return {
-            popularList : []
+            popularList : [],
+            large_code : null
         }
     },
     created() {
@@ -181,26 +182,24 @@ export default {
       this.getPopularProduct(8);
     },
     methods : {
-        // async getPopularProduct(limit){
-        //     console.log(limit);
-        //     // let result = await axios.get(`/api/product?limit=${limit}`);
-        //     // console.log(result);
-        //     // this.popularList = result.data;
-        //     // console.log(this.productList);
-        //     let result = await axios.post(`/api/product?limit=${limit}`);
-        // },
-        async getPopularProduct(limit1){
-          let data = {
-            param : {
-                limit : limit1,
-                offset : 0,
-            }
+      goToList(large) {
+        this.large_code = large;
+        this.$router.push({ path : '/product', query : { 'large_code' : this.large_code }})
+      },
+      async getPopularProduct(limit){
+        let data = {
+          param : {
+              limit : limit
           }
-            console.log(limit1);
-            let result = await axios.post(`/api/product`, data);
-            console.log(result);
-            this.popularList = result.data;
         }
+          console.log(limit);
+          let result = await axios.post(`/api/product`, data);
+          console.log(result);
+          this.popularList = result.data;
+      },
+      goToProductInfo(prdt_cd){
+        this.$router.push({ path : 'productInfo', query : { 'prdt_cd' : prdt_cd }})
+      }
     }
 }
 </script>

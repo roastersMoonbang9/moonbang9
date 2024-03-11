@@ -41,7 +41,7 @@
       v-model="selectedOption"
       @change="selectOption(selectedOption)"
     >
-      <option :value="null">상품을 선택해주세요</option>
+      <option :value="null" disabled style="display: none;">상품을 선택해주세요</option>
       <option :key="idx" v-for="(option, idx) in productOptions" :value="idx">
         {{ option.opt_number }} {{ option.opt_name }}
       </option>
@@ -199,7 +199,7 @@ export default {
       this.productInfo = result.data;
       console.log(result);
       // 상품 대표 이미지 ProductInfoView에게 전달
-      this.$emit('send-image', this.productInfo.image);
+      // this.$emit('send-image', this.productInfo.image);
     },
     // 상품 옵션 목록
     async getProductOptions(cd) {

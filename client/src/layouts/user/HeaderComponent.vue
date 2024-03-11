@@ -18,47 +18,16 @@
                 <li class="nav-item">
                   <!-- Link--><router-link to="/" class="nav-link active">Home</router-link>
                 </li>
-                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">다이어리</a>
+                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">PRODUCT</a>
                   <div class="dropdown-menu mt-3 shadow-sm" aria-labelledby="pagesDropdown">
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('A', 'A')">다이어리</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('A', 'B')">플래너</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('A', 'C')">달력</button>
+                    <button class="dropdown-item border-0 transition-link" @click="goToList('A')">다이어리</button>
+                    <button class="dropdown-item border-0 transition-link" @click="goToList('B')">노트</button>
+                    <button class="dropdown-item border-0 transition-link" @click="goToList('C')">필기류</button>
+                    <button class="dropdown-item border-0 transition-link" @click="goToList('D')">사무용품</button>
+                    <button class="dropdown-item border-0 transition-link" @click="goToList('E')">데코레이션</button>
                   </div>
                 </li>
-                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">노트</a>
-                  <div class="dropdown-menu mt-3 shadow-sm" aria-labelledby="pagesDropdown">
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('B', 'A')">베이직노트</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('B', 'B')">양장노트</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('B', 'C')">스프링노트</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('B', 'D')">수첩</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('B', 'E')">메모지</button>
-                  </div>
-                </li>
-                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">필기류</a>
-                  <div class="dropdown-menu mt-3 shadow-sm" aria-labelledby="pagesDropdown">
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('C', 'A')">연필</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('C', 'B')">펜</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('C', 'C')">형광펜</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('C', 'D')">지우개</button>
-                  </div>
-                </li>
-                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">사무용품</a>
-                  <div class="dropdown-menu mt-3 shadow-sm" aria-labelledby="pagesDropdown">
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('D', 'A')">복사용지</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('D', 'B')">필통</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('D', 'C')">가위</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('D', 'D')">계산기</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('D', 'E')">풀</button>
-                  </div>
-                </li>
-                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">데코레이션</a>
-                  <div class="dropdown-menu mt-3 shadow-sm" aria-labelledby="pagesDropdown">
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('E', 'A')">스티커</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('E', 'B')">스탬프</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('E', 'C')">테이프</button>
-                    <button class="dropdown-item border-0 transition-link" @click="goToList('E', 'D')">포스터</button>
-                  </div>
-                </li>
+                
               </ul>
               <ul class="navbar-nav ms-auto">               
                 <li v-if="isLogin" class="nav-item"><p class="nav-link" >{{ this.$store.state.userStore.name }}님</p></li>
@@ -101,10 +70,9 @@ export default {
         alert("로그아웃 되었습니다.");
         this.$router.push('/login');
     },
-      goToList(large, small) {
+      goToList(large) {
         this.large_code = large;
-        this.small_code = small;
-        this.$router.push({ path : '/product', query : { 'large_code' : this.large_code , 'small_code' : this.small_code }})
+        this.$router.push({ path : '/product', query : { 'large_code' : this.large_code }})
       },
       goToCart(){
         if(this.isLogin){

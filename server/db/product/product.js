@@ -66,7 +66,7 @@ const productImages =
 , f.ranks
 FROM product p JOIN file f
        ON p.prdt_cd = f.type_cd
-WHERE p.prdt_cd = 'CB00001'
+WHERE p.prdt_cd = ?
 ORDER BY f.ranks;`;
 
 // 상품상세 페이지에서 선택한 상품들 장바구니에 담기
