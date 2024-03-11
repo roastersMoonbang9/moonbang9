@@ -187,6 +187,18 @@ export default {
             // console.log(result);
             // this.popularList = result.data;
             // console.log(this.productList);
+            let result = await axios.post(`/api/product?limit=${limit}`);
+        async getPopularProduct(limit1){
+          let data = {
+            param : {
+                limit : limit1,
+                offset : 0,
+            }
+          }
+            console.log(limit1);
+            let result = await axios.post(`/api/product`, data);
+            console.log(result);
+            this.popularList = result.data;
         }
     }
 }

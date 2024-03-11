@@ -37,6 +37,12 @@ import axios from 'axios';
 import Paging from '@/components/PagingComponent.vue';
 //./../assets/user/img/{{ product.image }}
   export default {
+    props : {
+      sort : {
+        type : String,
+        default : 'popular'
+      }
+    },
     components : {
       Paging
     },

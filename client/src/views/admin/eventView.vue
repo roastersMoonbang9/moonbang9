@@ -1,7 +1,7 @@
 <template>
     <div class="container">
       <h1 style="padding: 15px; font-size: 27px;">이벤트</h1>
-      <button type="button" class="btn btn-outline-secondary m-2">선택 삭제</button>
+      <button type="button" class="btn btn-outline-secondary m-2">선택 삭제</button> <!--  @click="deleteSelected()"-->
       <button type="button" class="btn btn-outline-secondary m-2"  @click="modalOpenTF" v-if="modalOpen === false">추가</button>
       <button type="button" class="btn btn-outline-secondary m-2"  @click="modalOpenTF" v-if="modalOpen === true">닫기</button>
 
@@ -9,6 +9,7 @@
         <thead>
           <tr class="table-primary">
             <th><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></th>
+          <!--<th><input class="form-check-input" type="checkbox"  name="bannerCheck" v-model="selectAll"></th> -->  
             <th>코드</th>
             <th>배너이름</th>
             <th>이미지</th>
@@ -21,6 +22,7 @@
           <!--for 과 if를 같이 사용은 불가능하다고 생각해라-->
           <tr v-for="(event, idx) in eventList" :key="idx">
             <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
+         <!--<td><input class="form-check-input" type="checkbox" v-model="selected" key:="idx" value="event"></td> --> 
             <td>{{ event.event_cd }}</td>
             <td>{{ event.event_name }}</td>
             <td>{{ event.image }}</td>
@@ -95,6 +97,7 @@
     data () {
       return {
         eventList : [],
+        // selected: [],
         modalOpen: false,
         bannerInfo: {
           event_name: '',
@@ -119,8 +122,20 @@
     },
     mounted() {
       this.getTableList();    
+    // },
+    // computed: {
+    //     selectAll: {
+    //         get() {
+    //             return this.selected.length === this.eventList.length;
+    //         },
+    //         set(value) {
+    //             this.selected = value ? this.eventList : [];
+    //         }
+    //     },
+
     },
     methods : {
+      
       fileSelect() {
         console.log(this.$refs.images.files.length);
         if(this.$refs.images.files.length > 1){
@@ -197,8 +212,23 @@
           this.modalOpen = false;
         }
       }
+    //   ,
+    //   async deleteSelected() {
+    // if (this.selected.length === 0) {
+    //   alert('선택된 항목이 없습니다.');
+    //   return;
+    // }
+    //   for (let i of this.selected) {
+    //             let result = await axios.delete('/api/notice/eventDel/' + i.event_cd)
+    //                 .catch(err => console.log(err));
+    //             console.log(result);
+    //         }
+      
+    //   // Clear the selection
+    //   this.selected = [];
+    // }
+  } 
     }
-  }
   </script>
   
   <style scoped>
