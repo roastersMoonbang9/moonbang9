@@ -11,7 +11,7 @@ import CouponView from '../views/admin/CouponView.vue'
 import PossCouponView from '../views/admin/PossCouponView.vue'
 import ProductAddView from '../views/admin/ProductAddView.vue'
 import store from '../store/index.js'
-import ProductQueryView from '@/views/admin/ProductQueryView.vue'
+import ProductQueryAdminView from '@/views/admin/ProductQueryAdminView.vue'
 
 export default {
     path: '/admin',
@@ -91,7 +91,7 @@ export default {
         {
             path: 'productQuery',
             name: 'productQuery',
-            component: ProductQueryView
+            component: ProductQueryAdminView
         }
         
     ]

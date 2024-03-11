@@ -21,7 +21,7 @@
             <tr :key="i" v-for="(query, i) in queryList">
               <td>{{ query.title }}</td>
               <td>{{ query.content }}</td>
-              <td>{{ dateFomat(query.qst_dt) }}</td>
+              <td>{{ query.qst_dt }}</td>
               <td>{{ hideId(query.id) }}</td>
               <!-- 아이디 동일할때만 삭세하거나 수정할 수 있도록 -->
               <td v-if="isCurrentUser(query.id)">
@@ -140,7 +140,8 @@ export default {
       }
       let result = await axios.post('/api/product/addQuery/',data) 
         .catch(err => console.log(err));
-      this.newQuery = result.data;
+        let newQueryData = result.data;
+      this.queryList.unshift(newQueryData);
       console.log(result);
 
       this.newQuery = {

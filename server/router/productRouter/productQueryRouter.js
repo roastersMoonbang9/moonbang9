@@ -24,21 +24,21 @@ productQueryRouter.get("/queryList/:prdt_cd", async (request,response)=>{
     let data = [];
     let where = " WHERE 1=1";
 
-  // 주문일자 있는 경우
+  // 문의일자 있는 경우
   if(getDate1 && getDate2){
     if(checkDate == "1"){
-      where += " AND ord_dt BETWEEN ? AND ?"
+      where += " AND qst_dt BETWEEN ? AND ?"
       data.push(getDate1, getDate2);
     }
   }
   //답변상태 분류 있는 경우
   if(checkSt){
-    where += " AND d.status = ? "
+    where += " AND status = ? "
     data.push(checkSt);
   }
   
     // ORDER BY 절 추가
-    where += " order by deli_no desc"
+    where += " order by qst_no desc"
   
      // LIMIT / OFFSET 절 추가
      where += " LIMIT ?"
@@ -80,6 +80,27 @@ productQueryRouter.put("/queryAns/:qst_no", async (request, response) => {
     let cd = request.params.qst_no;
     console.log('상품삭제:'+cd);
     let result = await db.connection('product_query','queryDel',cd);
+    response.send(result);
+  });
+
+  productQueryRouter.post("/queryCount", async (request,response)=>{
+    //let checkSearch = request.body.param.checkSearch;
+    // let getDate1 = request.body.param.getDate1;
+    // let getDate2 = request.body.param.getDate2;
+    // let checkDate = request.body.param.checkDate;
+    // let checkSt = parseInt(request.body.param.checkSt);
+  
+    let data = [];
+    let where = " WHERE 1=1";
+      
+    
+      // // 회원등급 조건 존재할 경우
+      // if(checkSt){
+      //   where += " AND status = ? "
+      //   data.push(checkSt);
+      // }
+  
+    let result = await db.connection('product_query','queryCount', data, where);
     response.send(result);
   })
 

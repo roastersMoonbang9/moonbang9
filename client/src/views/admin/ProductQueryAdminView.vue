@@ -196,8 +196,6 @@ export default {
 
 
         dataReset() {
-            this.checkSearch = "1",
-                this.searched = null,
                 this.getDate1 = null,
                 this.checkDate = "1",
                 this.getDate2 = null,
@@ -218,15 +216,13 @@ export default {
                 param: {
                     limit: this.pageSize,
                     offset: (curPage - 1) * this.pageSize,
-                    checkSearch: this.checkSearch,
-                    searched: this.searched,
                     getDate1: this.getDate1,
                     checkDate: this.checkDate,
                     getDate2: this.getDate2,
                     checkSt: this.checkSt
                 }
             }
-            let result = await axios.post('/api/product/queryListAll', data)
+            let result = await axios.get('/api/product/queryListAll', data)
                 .catch(err => console.log(err));
             console.log(result);
             this.tableList = result.data;
@@ -235,15 +231,13 @@ export default {
         async getTableCount() {
             let data = {
                 param: {
-                    checkSearch: this.checkSearch,
-                    searched: this.searched,
                     getDate1: this.getDate1,
                     checkDate: this.checkDate,
                     getDate2: this.getDate2,
                     checkSt: this.checkSt
                 }
             }
-            let result = await axios.post(`/api/order/deliveryCount`, data) //쿼리문에 count문이 있어야함
+            let result = await axios.post(`/api/product/queryCount`, data) //쿼리문에 count문이 있어야함
                 .catch(err => console.log(err));
             this.allSize = result.data[0].count;
             this.lastPage = Math.ceil(this.allSize / this.pageSize);
