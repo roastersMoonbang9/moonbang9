@@ -22,7 +22,7 @@ WHERE event_cd = ?`
 
 // 이벤트 삭제
 
-  const DelEvent = 
+  const delEvent = 
 `DELETE FROM event
 WHERE event_cd= ?`
 
@@ -35,7 +35,7 @@ module.exports = {
    eventCount,
    eventList,
    updateEvent,
-   DelEvent,
+   delEvent,
    eventInsert
 
 }

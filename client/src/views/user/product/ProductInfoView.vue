@@ -1,6 +1,8 @@
 <template>
   <div>
-
+<head>
+<link rel="stylesheet" href="vendor/swiper/swiper-bundle.min.css">
+</head>
     <!--  Modal -->
     <div class="modal fade" id="productView" tabindex="-1">
       <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -49,6 +51,62 @@
 
 
             <!-- PRODUCT SLIDER-->
+            <!-- 캐러셀 -->
+              <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                  <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                </div>
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img :src="require('@/assets/user/img/' + getRealImage1)" class="d-block w-100" alt="...">
+                  </div>
+                  <div v-for="(path, idx) in imagePath" v-bind:key="idx" class="carousel-item" >
+                    <img :src="getRealPath" class="d-block w-100" alt="...">
+                  </div>
+                  <!-- <div class="carousel-item">
+                    <img src="img/product-detail-1.jpg" class="d-block w-100" alt="...">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="img/product-detail-1.jpg" class="d-block w-100" alt="...">
+                  </div> -->
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+
+
+            
+          </div>
+          
+          <ProductInfo @send-image="getImage1" />
+
+        </div>
+        <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link text-uppercase" id="description-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="description" aria-selected="false">상품 후기</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-uppercase active" id="reviews-tab" data-bs-toggle="tab" href="#query" role="tab" aria-controls="reviews" aria-selected="true">상품 관련 문의</a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="description-tab">
+            <ProductReview :prdt_cd="prdt_cd" />
+          </div>
+          <div class="tab-pane fade show active" id="query" role="tabpanel" aria-labelledby="reviews-tab">
+            <ProductQuery :prdt_cd="prdt_cd" />
+          </div>
+        </div>
             <div class="row m-sm-0">
                 <div class="col-sm-2 p-sm-0 order-2 order-sm-1 mt-2 mt-sm-0 px-xl-2">
                   <div class="swiper product-slider-thumbs">
@@ -124,6 +182,25 @@ import ProductInfo from '@/components/ProductInfo.vue';
 import ProductReview from '@/components/ProductReview.vue';
 
 export default  {
+components : {
+  ProductInfo,
+  ProductReview,
+  ProductQuery
+},
+data() {
+  return {
+    image1 : 'moonbang9_logo.png', //메인 사진 받아오지 못할때 기본으로 뜨는 로고 파일명
+    // imageList : [],
+    imagePath : []
+  }
+},
+created() {
+  let cd = this.$route.query.prdt_cd
+  this.getImages(cd);
+},
+computed : {
+  getRealImage1() {
+    return this.image1; // image1 바뀐것 감지해서 사진 다시 로드
   components : {
     ProductInfo,
     ProductReview
@@ -135,10 +212,30 @@ export default  {
       imagePath : []
     }
   },
-  created() {
-    let cd = this.$route.query.prdt_cd
-    this.getImages(cd);
+  getRealPath(){
+    return this.imagePath;
+  }
+},
+methods: {
+  getImage1(data){
+    console.log('자식으로부터 받은 상품 대표이미지 파일명 : '+ data);
+    this.image1 = data; //ProductInfo.vue로부터 image1 파일명 받아오고 나면 감지해서 파일명 교체
   },
+  async getImages(cd) {
+      let result = await axios.get("/api/product//productImages/" + cd);
+      let imageList = [];
+      imageList = result.data;
+      
+      imageList.forEach(ele => {
+        console.log(ele.file_path);
+        let path = ele.file_path + ele.file_name + '.' + ele.file_extn;
+        console.log(path);
+        this.imagePath.push(path);
+      });
+      console.log('imagePath : ' + this.imagePath)
+      
+    }
+},
   computed : {
     getRealImage1() {
       return this.image1; // image1 바뀐것 감지해서 사진 다시 로드

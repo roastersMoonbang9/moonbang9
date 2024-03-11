@@ -19,6 +19,13 @@ eventRouter.put("/event/:eno", async (request, response) => {
   response.send(result);
 });
 
+//이벤트 삭제
+eventRouter.delete("/eventDel/:event_cd", async (request, response)=>{
+  let data = request.params.event_cd;
+  let result = await db.connection('event','delEvent', data);
+  console.log(result);
+  response.send(result);
+});
 
 
 //이벤트 생성 및 파일 업로드 같이 시도

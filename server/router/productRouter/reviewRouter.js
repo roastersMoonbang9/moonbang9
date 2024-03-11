@@ -4,7 +4,7 @@ const db = require("../../db.js");
 
 //예시
 //쿼리형태로 받음
-reviewRouter.get("/review/:rv_no", async (request,response)=>{ ///:pno
+reviewRouter.get("/reviewList/:rv_no", async (request,response)=>{ ///:pno
   let data = request.params.rv_no;
   //console.log('data는'+data);
     let result = await db.connection('review','reviewList', data) //,data
