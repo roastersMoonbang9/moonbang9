@@ -13,6 +13,7 @@ import myOrders from '../views/user/mypage/myOrdersView.vue'
 import myOrdersDetail from '../views/user/mypage/myOrdersDetailView.vue'
 import myOrdersEditProfile from '../views/user/mypage/myOrdersEditProfileView.vue'
 import myOrdersInquiry from '../views/user/mypage/myOrdersInquiryView.vue'
+import noticeView from '../views/user/noticeView.vue'
 
 
 export default {
@@ -59,6 +60,11 @@ export default {
                 path: 'productInfo',
                 name: 'productInfo',
                 component: ProductInfo
+            },
+            {
+                path: 'notice',
+                name: 'notice',
+                component: noticeView
             },
             {
                 path: 'mypage/',

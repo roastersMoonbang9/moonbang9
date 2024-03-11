@@ -64,9 +64,11 @@ orderRouter.post("/orderList",async (request,response)=>{
     console.log("result7 : ",result7)
     lastResult.push(result7)
     
-    //배송정보 등록(보류)
-    // let data7 = request.body.userUpdates;
-    // let result7 = await db.trConnection(conn,'order','orderAdd',data1);
+    //배송정보 등록
+    let data8 = request.body.deliveryAdd;
+    let result8 = await db.trConnection(conn,'delivery','insertDelivery',data8);
+    console.log("result8 : ",result8)
+    lastResult.push(result8)
 
     //트랜지션 커밋
     await db.excuteConnection(conn,"COMMIT")

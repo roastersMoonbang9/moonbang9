@@ -28,13 +28,13 @@
 			<td></td>
 			<td>{{list.prdt_cd}}</td>
       <td></td>
-			<td><img v-bind:src="imgMod(list.image)" width="50px" height="50px"></td>
+			<td><img v-bind:src="imgMod(list.image)" width="50px" height="50px" alt="이미지 없음"></td>
 			<td class="lt">
 				<p class="tPad05 cnt">{{list.prdt_name}}</p>
 				<p class="tPad02" v-if="list.opt_name != null"><strong>옵션</strong> : {{list.opt_name}}</p>
 			</td>
 			<td>
-						<p class="txtML cr999 cnt">{{list.price}}원</p>
+						<p class="txtML cr999 cnt" style="text-decoration: line-through;">{{list.price}}원</p>
 						<p class="crRed" v-if="list.price != list.sale_price"><strong>{{list.sale_price}}원</strong></p>
 			</td>
 			<td>
@@ -200,7 +200,7 @@
         },
         // 이미지 자르기
         imgMod(img){
-          return 'img/' + img.substring(30)
+          return 'img/' + img.substring(21)
         }
     },
     components: { TotalOrderPrice }

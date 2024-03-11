@@ -295,7 +295,8 @@ export default {
             mem_status: 3,
             grd_no: 1,
             gen: gen == undefined ? "" : gen,
-            birth_dt: birth_dt
+            birth_dt: birth_dt,
+            used_payment : 0
           };
 
           console.log(data);

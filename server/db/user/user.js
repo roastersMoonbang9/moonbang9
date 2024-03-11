@@ -139,7 +139,7 @@ WHERE mem_no = ?`;
 // 회원 토탈사용금액 갱신
 const usedPaymentUpdate = 
 `UPDATE member 
-SET used_payment = used_payment + ?
+SET used_payment = NVL(used_payment,0) + ?
 WHERE mem_no = ?`;
 
 const checkUser =
