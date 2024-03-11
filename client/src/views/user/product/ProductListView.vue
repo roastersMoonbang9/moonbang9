@@ -152,13 +152,15 @@
                       <li class="list-inline-item text-muted me-3"><a class="reset-anchor p-0" href="#!"><i class="fas fa-th-large"></i></a></li>
                       <li class="list-inline-item text-muted me-3"><a class="reset-anchor p-0" href="#!"><i class="fas fa-th"></i></a></li>
                       <li class="list-inline-item">
-                        <select class="selectpicker" data-customclass="form-control form-control-sm">
-                          <option value>신상품순</option>
-                          <option value="default" selected>인기상품순</option>
-                          <option value="popularity">낮은가격순</option>
-                          <option value="low-high">높은가격순</option>
-                          <option value="high-low">할인율순</option>
+
+                        <select v-model="sort" class="selectpicker" data-customclass="form-control form-control-sm">
+                          <option value="regis_dt">신상품순</option>
+                          <option value="popular" selected>인기상품순</option>
+                          <option value="low_price">낮은가격순</option>
+                          <option value="high_price">높은가격순</option>
+                          <option value="dc_pct">할인율순</option>
                         </select>
+
                       </li>
                     </ul>
                   </div>
@@ -183,6 +185,9 @@ import ProductList from '../../../components/ProductList.vue'
       },
       data() {
           return {
+            sort : null //order기준 전달
+            /* where : searched,large_code,small_code, 등록일, 수정일
+               order : 신상품순,높은가격,낮은가격,할인율순,인기상품순(default) */
           };
       }
     }

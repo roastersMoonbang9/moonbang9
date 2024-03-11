@@ -13,6 +13,7 @@ const productList =
          p.dc_pct,
          p.image,
          p.regis_dt,
+         p.modify_dt,
          d.sell
 FROM  product p LEFT OUTER JOIN (SELECT COUNT(*) as sell, 
                                         prdt_cd
@@ -24,9 +25,9 @@ FROM  product p LEFT OUTER JOIN (SELECT COUNT(*) as sell,
 const productCount = 
 `SELECT count(p.prdt_cd) as count
 FROM product p LEFT OUTER JOIN (SELECT COUNT(*) as sell, 
-prdt_cd
-FROM order_detail
-GROUP BY prdt_cd) d
+                                       prdt_cd
+                                FROM order_detail
+                                GROUP BY prdt_cd) d
 ON p.prdt_cd = d.prdt_cd`;
 
 // 상품상세 페이지 내부 : 상품상세 컴포넌트 => (이미지 제외) 상품정보
@@ -80,11 +81,23 @@ const insertCart =
 `INSERT INTO cart
 SET ?`;
 
+// 상품등록(관리자)
+const productInsert =
+`INSERT INTO product
+SET ?`;
+
+// 옵션등록(관리자)
+const optionsInsert =
+`INSERT INTO options
+SET ?`;
+
 module.exports = {    
     productList,
     productCount,
     productInfo,
     productOptions,
     productImages,
-    insertCart
+    insertCart,
+    productInsert,
+    optionsInsert
 }
