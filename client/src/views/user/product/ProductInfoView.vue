@@ -44,7 +44,6 @@
     </div>
 
     <section class="py-5">
-      <div>
       <div class="container">
         <div class="row mb-5">
           <div class="col-lg-6">
