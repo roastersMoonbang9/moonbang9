@@ -33,5 +33,22 @@ reviewRouter.put("/boards/:rno", async (request, response) => {
   let result = await db.connection('board','boardUpdate', data);
   response.send(result);
 });
+
+// 주문번호별 리뷰 개수 체크
+reviewRouter.post("/reviewCheck", async (request, response)=>{
+  let ord_no = request.body.ord_no;
+  let prdt_cd = request.body.prdt_cd;
+  let result = await db.connection('review','checkReview', [ord_no, prdt_cd]);
+  response.send(result);
+});
+
+// 리뷰 삭제
+reviewRouter.post("/reviewDelete", async (request, response)=>{
+  let ord_no = request.body.ord_no;
+  let prdt_cd = request.body.prdt_cd;
+  let result = await db.connection('review','usreviewDel', [ord_no, prdt_cd]).catch(err => console.log(err));
+  response.send(result);
+});
+
   module.exports = reviewRouter;
 

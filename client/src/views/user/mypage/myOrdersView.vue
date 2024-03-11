@@ -1,5 +1,5 @@
 <template>
-<div class="myContent">
+<div class="myContent" style="float: none;">
 		<div class="titleSection">
 			<h3>주문조회</h3>
 		</div>
@@ -103,7 +103,7 @@
 								<td>{{ table.ord_no }}</td>
 								<td>{{ getDate(table.ord_dt) }}</td>
 								<td>{{ table.rcv_name }}</td>
-								<td>{{ table.prod_name }} 외 {{table.prod_count}}개</td>
+								<td>{{ table.prod_name }}<span v-if="table.prod_count != 1"> 외 {{table.prod_count -1}}개</span></td>
 								<td>{{ table.total_payment }}원</td>
 								<td>{{ this.checkStatus(table.status) }}</td>
             				</tr>

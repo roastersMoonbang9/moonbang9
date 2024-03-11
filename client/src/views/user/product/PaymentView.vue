@@ -22,8 +22,8 @@
           <td> {{ list.cart_qty }}개 </td>
           <td>{{list.total_price}}원 </td>
         </tr>
+        {{ paymentList }}
       </tbody>
-      {{ list }}
     </table>
         <!--주문금액 컴포넌트-->
         <TotalOrderPrice v-bind:list="paymentList"/>
@@ -227,7 +227,11 @@ export default {
       },
       //포인트 내역 조회
       updateSale2(value){
-        this.point = value;
+        if(value == null){
+          this.point=0;
+        }else{
+          this.point = value;
+        }
       },
       // 최종결제 조회
       updateSale3(value){
