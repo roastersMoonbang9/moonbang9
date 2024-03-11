@@ -6,6 +6,7 @@ import orderListView from '../views/admin/OrderListView.vue'
 import memberlistView from '../views/admin/MemberListView.vue'
 import GradeView from '../views/admin/GradeList.vue'
 import cancelOrderListView from '../views/admin/CancelOrderListView.vue'
+import adminProductView from '../views/admin/AdminProductView.vue'
 import CouponView from '../views/admin/CouponView.vue'
 import PossCouponView from '../views/admin/PossCouponView.vue'
 import ProductAddView from '../views/admin/ProductAddView.vue'
@@ -72,6 +73,10 @@ export default {
             component: cancelOrderListView
         },
         {
+            path: 'adminProduct',
+            name: 'adminProduct',
+            component: adminProductView
+        },
             path: 'possCoupon',
             name: 'possCoupon',
             component: PossCouponView

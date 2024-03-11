@@ -12,32 +12,47 @@ productRouter.post("/", async (request,response)=>{
 
   let limit = parseInt(request.body.param.limit);
   let offset = parseInt(request.body.param.offset);
-  let keyword = request.body.param.keyword;
+  let searched = request.body.param.searched;
   let large_code = request.body.param.large_code;
   let small_code = request.body.param.small_code;
   let order = request.body.param.order;
 
+  let checkSearch = request.body.param.checkSearch;
+  let getDate1 = request.body.param.getDate1;
+  let getDate2 = request.body.param.getDate2;
+  let checkDate = request.body.param.checkDate;
+
 
   let data = [];
   let where = " WHERE 1=1";
-  //const myURL = new URL(request.url, 'http://localhost:8081/');
-  //console.log(myURL.search);
-  //let keyword = myURL.searchParams.keyword;
-  //let keyword = search.keyword;
-
-  // var queryData = url.parse(request.url, true).query;
-  // let keyword = queryData.keyword;
-  // let large_code = queryData.large_code;
-  // let small_code = queryData.small_code;
-  // let order = queryData.order;
-  // let limit = parseInt(queryData.limit);
-
 
 
   // 키워드(검색어) 있는 경우
-  if(keyword){
-    where += " AND p.prdt_name LIKE ? "
-    data.push("%" + keyword + "%");
+  // if(keyword){
+  //   where += " AND p.prdt_name LIKE ? "
+  //   data.push("%" + keyword + "%");
+  // }
+  if(searched){
+    if(checkSearch == "1"){
+      where += " AND p.prdt_name LIKE ? "
+      data.push("%" + searched + "%");
+    } else if(checkSearch == "2"){
+      where += " AND p.brand LIKE ? "
+      data.push("%" + searched + "%");
+    } else if(checkSearch == "3") { //user검색 기능에서 사용...카테고리 넣고 싶으면 동적쿼리 새로 만들어야...
+      where += " AND p.prdt_name LIKE ? OR p.brand LIKE ?"
+    }
+  }
+
+  // 등록일/수정일 있는 경우
+  if(getDate1 && getDate2){
+    if(checkDate == "1"){
+      where += " AND p.regis_dt BETWEEN ? AND ?"
+      data.push(getDate1, getDate2);
+    } else if(checkDate == "2"){
+      where += " AND p.modify_dt BETWEEN ? AND ?"
+      data.push(getDate1, getDate2);
+    }
   }
 
   // 대분류(카테고리) 있는 경우
@@ -102,31 +117,41 @@ productRouter.post("/", async (request,response)=>{
 
 
 productRouter.post("/productCount", async (request, response)=>{
-  let keyword = request.body.param.keyword;
+  let searched = request.body.param.searched;
   let large_code = request.body.param.large_code;
   let small_code = request.body.param.small_code;
+
+  let checkSearch = request.body.param.checkSearch;
+  let getDate1 = request.body.param.getDate1;
+  let getDate2 = request.body.param.getDate2;
+  let checkDate = request.body.param.checkDate;
 
 
   let data = [];
   let where = " WHERE 1=1";
-  //const myURL = new URL(request.url, 'http://localhost:8081/');
-  //console.log(myURL.search);
-  //let keyword = myURL.searchParams.keyword;
-  //let keyword = search.keyword;
-
-  // var queryData = url.parse(request.url, true).query;
-  // let keyword = queryData.keyword;
-  // let large_code = queryData.large_code;
-  // let small_code = queryData.small_code;
-  // let order = queryData.order;
-  // let limit = parseInt(queryData.limit);
-
-
 
   // 키워드(검색어) 있는 경우
-  if(keyword){
-    where += " AND p.prdt_name LIKE ? "
-    data.push("%" + keyword + "%");
+  if(searched){
+    if(checkSearch == "1"){
+      where += " AND p.prdt_name LIKE ? "
+      data.push("%" + searched + "%");
+    } else if(checkSearch == "2"){
+      where += " AND p.brand LIKE ? "
+      data.push("%" + searched + "%");
+    } else if(checkSearch == "3") { //user검색 기능에서 사용...카테고리 넣고 싶으면 동적쿼리 새로 만들어야...
+      where += " AND p.prdt_name LIKE ? OR p.brand LIKE ?"
+    }
+  }
+
+  // 등록일/수정일 있는 경우
+  if(getDate1 && getDate2){
+    if(checkDate == "1"){
+      where += " AND p.regis_dt BETWEEN ? AND ?"
+      data.push(getDate1, getDate2);
+    } else if(checkDate == "2"){
+      where += " AND p.modify_dt BETWEEN ? AND ?"
+      data.push(getDate1, getDate2);
+    }
   }
 
   // 대분류(카테고리) 있는 경우
@@ -145,36 +170,6 @@ productRouter.post("/productCount", async (request, response)=>{
   let result = await db.connection('product', 'productCount', data, where).catch((err)=> console.log(err));
   response.send(result);
 })
-
-
-// 재활용 할지말지 생각중~~~!
-// // 메인 페이지 - 인기상품 3개 목록
-// productRouter.get("/mainPopular", async (request,response)=>{
-//   let result = await db.connection('product','mainPopularProductList');
-//   response.send(result);
-// });
-
-// // 메인 페이지 - 신상품 6개 목록
-// productRouter.get("/mainNew", async (request,response)=>{
-//   let result = await db.connection('product','mainNewProductList');
-//   response.send(result);
-// }); 
-
-
-// // 상품목록페이지 - 인기상품순 정렬 목록
-// productRouter.get("/popular/:category", async (request,response)=>{
-//   let data = request.params.category;
-//   let result = await db.connection('product','popularProductList', data);
-//   response.send(result);
-// });
-
-// // 상품목록페이지 - 신상품순/낮은가격순/높은가격순/할인율순 정렬 목록
-// productRouter.get("/general/:large_code", async (request,response)=>{
-//   let data = request.params.large_code;
-//   let result = await db.connection('product','generalProductList', data);
-//   response.send(result);
-// });
-
 
 // 상품상세 페이지 - (이미지 제외) 상품정보
 productRouter.get("/productInfo/:prdt_cd", async (request,response)=>{
