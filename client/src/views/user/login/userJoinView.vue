@@ -17,7 +17,7 @@
           <div class="row">
             <div class="form-item col-lg-6 my-3">
               <label for="username">아이디<sup>*</sup></label>
-              <input
+              <input @change="this.getUserList()"
                 type="text"
                 class="form-control"
                 placeholder="아이디를 입력하세요"
@@ -109,6 +109,7 @@
                 name="gender"
                 id="male"
                 value="M"
+                v-model="userInfo.gen"
               />
               <label class="form-check-label" for="male">남성</label>
             </div>
@@ -119,6 +120,7 @@
                 name="gender"
                 id="female"
                 value="F"
+                v-model="userInfo.gen"
               />
               <label class="form-check-label" for="female">여성</label>
             </div>
@@ -211,7 +213,7 @@ export default {
         name: "",
         phone: "",
         birth: null,
-        gender: "",
+        gen: "",
         email: "",
         postcode: "",
         address: "",
@@ -219,18 +221,14 @@ export default {
         point: "",
         token: "",
         mem_status: 2,
-        grade_no: 1
+        grd_no: 1
       },
       userList: [],
       check: false,
     };
   },
-  created() {
-    this.getUserList();
-  },
   components: { AddrsPost },
   methods: {
-    
     validation() {
       if (this.userInfo.id == "") {
         alert("아이디를 입력해주세요.");
@@ -299,29 +297,25 @@ export default {
     },
     async getUserList() {
       let result = await axios
-        .get("/api/user/userList")
+        .get("/api/user/checkUser/"+ this.userInfo.id)
         .catch((err) => console.log(err));
       this.userList = result.data;
+      console.log(this.userList);
     },
     checkID() {
       if (this.userInfo.id == "") {
         alert("아이디를 입력해주세요.");
         return false;
       } else {
-        if (!Array.isArray(this.userList)) {
-          alert("회원 목록이 유효하지 않습니다.");
+        console.log(this.userList.id);
+        if (this.userInfo.id == this.userList.id) {
+          alert("해당 아이디는 사용 중입니다.");
           return false;
+        } else {
+          alert("사용 가능한 아이디입니다.");
+          this.check = true;
+          return true;
         }
-
-        for (let user of this.userList) {
-          if (user.id == this.userInfo.id) {
-            alert("해당 아이디는 사용 중입니다.");
-            return false;
-          }
-        }
-        alert("사용 가능한 아이디입니다.");
-        this.check = true;
-        return true;
       }
     },
     // 주소 입력 API
@@ -332,7 +326,7 @@ export default {
     },
     //회원 정보 등록
     async userInsert() {
-        if (!this.validation()) return;
+      if (!this.validation()) return;
       this.userInfo.birthday = this.getDate(this.userInfo.birthday);
       let data = {
         param: {
@@ -342,23 +336,23 @@ export default {
           phone: this.userInfo.phone,
           email: this.userInfo.email,
           birth_dt: this.userInfo.birth,
-          gen: this.userInfo.gender,
+          gen: this.userInfo.gen,
           post_cd: this.userInfo.postcode,
           user_type: this.userInfo.type,
           addr: this.userInfo.address,
           addrdt: this.userInfo.address_detail,
           mem_status: this.userInfo.mem_status,
-          grd_no: this.userInfo.grade_no
+          grd_no: this.userInfo.grd_no,
         },
       };
+      console.log(data)
       let result = await axios
+
         .post("/api/user/userJoin", data)
         .catch((err) => console.log(err));
       let info = result.data.affectedRows;
       if (info > 0) {
         alert("회원가입이 완료되었습니다.");
-      }else{
-        alert("회원가입에 실패하였습니다.");
       }
       this.$router.push({ path: "/" });
     },
@@ -411,4 +405,5 @@ input:read-only {
   content: var(--bs-breadcrumb-divider, "/");
   /* rtl: var(--bs-breadcrumb-divider, "/") */
 }
+
 </style>

@@ -8,27 +8,23 @@
       <table class="table table-hover" style="font-size: 15px;">
         <thead>
           <tr class="table-primary">
-            <th><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></th>
-          <!--<th><input class="form-check-input" type="checkbox"  name="bannerCheck" v-model="selectAll"></th> -->  
             <th>코드</th>
             <th>배너이름</th>
-            <th>이미지</th>
             <th>이동url</th>
             <th>등록일</th>
             <th>활성화여부</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <!--for 과 if를 같이 사용은 불가능하다고 생각해라-->
           <tr v-for="(event, idx) in eventList" :key="idx">
-            <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
-         <!--<td><input class="form-check-input" type="checkbox" v-model="selected" key:="idx" value="event"></td> --> 
             <td>{{ event.event_cd }}</td>
             <td>{{ event.event_name }}</td>
-            <td>{{ event.image }}</td>
             <td>{{ event.path }}</td>
-            <td>{{ event.crd_date }}</td>
+            <td>{{ dateFomat(event.crd_date) }}</td>
             <td>{{ event.status }}</td>
+            <td><button class="btn" @click="delEvent(event.event_cd)">삭제</button></td>
           </tr>
         </tbody>
       </table>
@@ -136,6 +132,14 @@
     },
     methods : {
       
+      dateFomat(date){
+        let date1 = new Date(date);
+        const year = date1.getFullYear();
+        const month = ('0' + (date1.getMonth() + 1)).slice(-2);
+        const day = ('0' + date1.getDate()).slice(-2);
+        const dateStr = `${year}-${month}-${day}`;
+        return dateStr;
+      },
       fileSelect() {
         console.log(this.$refs.images.files.length);
         if(this.$refs.images.files.length > 1){
@@ -146,6 +150,25 @@
         }
         console.log(this.bannerImage);
       },
+      async delEvent(event_cd) {
+        console.log(event_cd);
+        if(confirm('정말 삭제하시겠습니까?')){
+          let result = await axios.delete(`/api/notice/eventDel/${event_cd}`)
+                                  .catch(err => console.log(err));
+          console.log(result.data);
+          if (result.data.affectedRows > 0) {
+            Swal.fire({
+                icon: "success",
+                title: "삭제 완료",
+                showConfirmButton: false,
+                timer: 1000
+            });
+            };
+            
+          this.$router.go(this.$router.currentRoute);
+        }
+      },
+
       async bannerInsert(){
         this.bannerInfo.type_cd = this.eventList[0].event_cd + 1;
         this.bannerInfo.table_cd = 3;

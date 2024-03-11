@@ -1,6 +1,6 @@
 <template>
   <!-- 리뷰 컴포넌트-->
-  <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+  
     <div class="p-4 p-lg-5 bg-white">
       <!-- 정렬 -->
       <div class="mb-3">
@@ -18,14 +18,42 @@
           <div class="d-flex">
             <div class="flex-shrink-0"><img class="rounded-circle" src="../assets/moon2.png" alt="" width="50" /></div>
             <div class="ms-3 flex-shrink-1" @click="goToDetail(review.rv_no)">
-              <h6 class="mb-0 text-uppercase">{{ review.id }}</h6>
-              <p class="small text-muted mb-0 text-uppercase">{{ review.rv_dt }}</p>
-              <ul class="list-inline mb-1 text-xs">
+              <h6 class="mb-0 text-uppercase">{{ hideId(review.id) }}</h6>
+              <p class="small text-muted mb-0 text-uppercase">{{ dateFomat(review.rv_dt) }}</p>
+              <ul v-if="review.rating == 5" class="list-inline mb-1 text-xs" >
+                <li class="list-inline-item m-0"><i class="fas fa-star text-warning" ></i></li>
                 <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
                 <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
                 <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
                 <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
-                <li class="list-inline-item m-0"><i class="fas fa-star-half-alt text-warning"></i></li>
+              </ul>
+              <ul v-else-if="review.rating == 4" class="list-inline mb-1 text-xs" >
+                <li class="list-inline-item m-0" ><i class="fas fa-star text-warning" ></i></li>
+                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                <li class="list-inline-item m-0"><i class="far fa-star text-warning"></i></li>
+              </ul>
+              <ul v-else-if="review.rating == 3" class="list-inline mb-1 text-xs" >
+                <li class="list-inline-item m-0"><i class="fas fa-star text-warning" ></i></li>
+                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                <li class="list-inline-item m-0"><i class="far fa-star text-warning"></i></li>
+                <li class="list-inline-item m-0"><i class="far fa-star text-warning"></i></li>
+              </ul>
+              <ul v-else-if="review.rating == 2" class="list-inline mb-1 text-xs" >
+                <li class="list-inline-item m-0" ><i class="fas fa-star text-warning" ></i></li>
+                <li class="list-inline-item m-0"><i class="fas fa-star text-warning"></i></li>
+                <li class="list-inline-item m-0"><i class="far fa-star text-warning"></i></li>
+                <li class="list-inline-item m-0"><i class="far fa-star text-warning"></i></li>
+                <li class="list-inline-item m-0"><i class="far fa-star text-warning"></i></li>
+              </ul>
+              <ul v-else-if="review.rating == 1" class="list-inline mb-1 text-xs" >
+                <li class="list-inline-item m-0" ><i class="fas fa-star text-warning" ></i></li>
+                <li class="list-inline-item m-0"><i class="far fa-star text-warning"></i></li>
+                <li class="list-inline-item m-0"><i class="far fa-star text-warning"></i></li>
+                <li class="list-inline-item m-0"><i class="far fa-star text-warning"></i></li>
+                <li class="list-inline-item m-0"><i class="far fa-star text-warning"></i></li>
               </ul>
               <p class="text-sm mb-0 text-muted">{{ review.content }}</p>
             </div>
@@ -34,7 +62,6 @@
       </div>
 
     </div>
-  </div>
 </template>
 <script>
 import axios from 'axios';
@@ -78,14 +105,35 @@ sortedReviewInfo(){
 
       }
       return sortedList;
-    }
+    },
+    hideId(){
+      return (id) => {
+        if (id && id.length >= 3) {
+          // 3개만 보여주고 나머지 가리기
+          return id.substring(0, 3) + '***';
+        } else {
+          return id;
+        }
+      };
+    },
   },
 methods : {
+  dateFomat(date){
+                let date1 = new Date(date);
+                const year = date1.getFullYear();
+                const month = ('0' + (date1.getMonth() + 1)).slice(-2);
+                const day = ('0' + date1.getDate()).slice(-2);
+                const dateStr = `${year}-${month}-${day}`;
+                return dateStr;
+            },
 async getReviewInfo(prdt_cd){
     let result = await axios.get('/api/product/reviewList/'+ prdt_cd)
                            .catch(err => console.log(err));
     this.reviewInfo = result.data;
     console.log(result);
+
+},
+goToDetail(){
 
 }
 //상세목록에서 출력해줘야할것

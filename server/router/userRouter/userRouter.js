@@ -206,7 +206,7 @@ userRouter.post("/loginWithKakaoId", async (request, response) => {
 
 
 //회원 정보 수정 : put => body를 요구
-userRouter.put("/userUpdate/:mem_no", async (request, response) => {
+userRouter.post("/userUpdate/:mem_no", async (request, response) => {
   let data = [request.body.param, request.params.mem_no]; // [객체, 단일값]
   let result = await db.connection('user', 'userUpdate', data);
   response.send(result);
@@ -256,6 +256,13 @@ userRouter.post("/userCount", async (request,response)=>{
   response.send(result);
 })
 
+
+userRouter.get("/checkUser/:id", async (request, response) => {
+  let data = request.params.id;
+  let result = (await db.connection('user', 'checkUser', data))[0];
+  console.log(result)
+  response.send(result);
+})
 
 
 module.exports = userRouter;

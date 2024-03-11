@@ -4,6 +4,10 @@ const queryList =
 `select * from product_question
 where prdt_cd = ?`;
 
+const queryListAll = 
+`select * from product_question`;
+
+
 const queryInfo = 
 `SELECT * FROM product_question  
 WHERE prdt_cd = ?`;
@@ -24,7 +28,8 @@ module.exports = {
     queryInfo,
     queryUpdate,
     queryInsert,
-    queryDel
+    queryDel,
+    queryListAll
 
 
 }
