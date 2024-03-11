@@ -65,20 +65,20 @@
                         <img class="w-100" :src="require(`${path.file_path}\${path.file_name}.\${file_extn}`)" alt="...">
                       </div> -->
                       <!-- <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" :src="require(imageTest.test)" alt="..."></div> -->
-                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" v-bind:src="image1" alt="..."></div>
-                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" v-bind:src="image2" alt="..."></div>
-                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" v-bind:src="image3" alt="..."></div>
-                      <div class="swiper-slide h-auto swiper-thumb-item mb-3"><img class="w-100" v-bind:src="image4" alt="..."></div>
+                      <div class="swiper-slide h-auto swiper-thumb-item mb-3" @click="showImage('A')"><img class="w-100" v-bind:src="image1" alt="..."></div>
+                      <div class="swiper-slide h-auto swiper-thumb-item mb-3" @click="showImage('B')"><img class="w-100" v-bind:src="image2" alt="..."></div>
+                      <div class="swiper-slide h-auto swiper-thumb-item mb-3" @click="showImage('C')"><img class="w-100" v-bind:src="image3" alt="..."></div>
+                      <div class="swiper-slide h-auto swiper-thumb-item mb-3" @click="showImage('D')"><img class="w-100" v-bind:src="image4" alt="..."></div>
                     </div>
                   </div>
                 </div>
                 <div class="col-sm-10 order-1 order-sm-2">
                   <div class="swiper product-slider">
                     <div class="swiper-wrapper" style="flex-direction: column">
-                      <div class="swiper-slide h-auto"><a class="glightbox product-view" href="img/product-detail-2.jpg" data-gallery="gallery2" data-glightbox="Product item 2"><img class="img-fluid" v-bind:src="image1" alt="..."></a></div>
-                      <div class="swiper-slide h-auto"><a class="glightbox product-view" href="img/product-detail-3.jpg" data-gallery="gallery2" data-glightbox="Product item 3"><img class="img-fluid" v-bind:src="image2" alt="..."></a></div>
-                      <div class="swiper-slide h-auto"><a class="glightbox product-view" href="img/product-detail-4.jpg" data-gallery="gallery2" data-glightbox="Product item 4"><img class="img-fluid" v-bind:src="image3" alt="..."></a></div>
-                      <div class="swiper-slide h-auto"><a class="glightbox product-view" href="img/product-detail-4.jpg" data-gallery="gallery2" data-glightbox="Product item 4"><img class="img-fluid" v-bind:src="image4" alt="..."></a></div>
+                      <div class="swiper-slide h-auto" v-if="show=='A'"><a class="glightbox product-view" href="img/product-detail-2.jpg" data-gallery="gallery2" data-glightbox="Product item 2"><img class="img-fluid imgSize" v-bind:src="image1" alt="..."></a></div>
+                      <div class="swiper-slide h-auto" v-else-if="show=='B'"><a class="glightbox product-view" href="img/product-detail-3.jpg" data-gallery="gallery2" data-glightbox="Product item 3"><img class="img-fluid imgSize" v-bind:src="image2" alt="..."></a></div>
+                      <div class="swiper-slide h-auto" v-else-if="show=='C'"><a class="glightbox product-view" href="img/product-detail-4.jpg" data-gallery="gallery2" data-glightbox="Product item 4"><img class="img-fluid imgSize" v-bind:src="image3" alt="..."></a></div>
+                      <div class="swiper-slide h-auto" v-else><a class="glightbox product-view" href="img/product-detail-4.jpg" data-gallery="gallery2" data-glightbox="Product item 4"><img class="img-fluid imgSize" v-bind:src="image4" alt="..."></a></div>
                     </div>
                   </div>
                 </div>
@@ -165,7 +165,9 @@ export default  {
       image1 : '',
       image2 : '',
       image3 : '',
-      image4 : ''
+      image4 : '',
+
+      show: 'A'
     }
   },
   created() {
@@ -181,36 +183,47 @@ export default  {
   //   }
   // },
   methods: {
-      // getImage1(data){
-      //   console.log('자식으로부터 받은 상품 대표이미지 파일명 : '+ data);
-      //   this.image1 = data; //ProductInfo.vue로부터 image1 파일명 받아오고 나면 감지해서 파일명 교체
-      // },
-      async getImages(cd) { //여기가 문제.....데이터를 제대로 못받아옴?
-        console.log('코드 : ' + cd)
-        let result = await axios.get("/api/product/productImages/" + cd);
-        console.log(result.data);
+    // getImage1(data){
+    //   console.log('자식으로부터 받은 상품 대표이미지 파일명 : '+ data);
+    //   this.image1 = data; //ProductInfo.vue로부터 image1 파일명 받아오고 나면 감지해서 파일명 교체
+    // },
+    async getImages(cd) { //여기가 문제.....데이터를 제대로 못받아옴?
+      console.log('코드 : ' + cd)
+      let result = await axios.get("/api/product/productImages/" + cd);
+      console.log(result.data);
+      
+      // this.image1 = '@/assets/user/img/CB00001_02_aibao.jpg'; // + result.data[0].file_path.substring(30)
+      this.image1 = 'img/' + result.data[0].file_path.substring(30);
+      this.image2 = 'img/' + result.data[1].file_path.substring(30);
+      this.image3 = 'img/' + result.data[2].file_path.substring(30);
+      this.image4 = 'img/' + result.data[3].file_path.substring(30);
+      console.log('사진1 : ' + this.image1);
+      
+        // this.imagePath = result.data;
+        // console.log('이미지패스리스트 : ' + this.imagePath);
         
-        // this.image1 = '@/assets/user/img/CB00001_02_aibao.jpg'; // + result.data[0].file_path.substring(30)
-        this.image1 = 'img/' + result.data[0].file_path.substring(30);
-        this.image2 = 'img/' + result.data[1].file_path.substring(30);
-        this.image3 = 'img/' + result.data[2].file_path.substring(30);
-        this.image4 = 'img/' + result.data[3].file_path.substring(30);
-        console.log('사진1 : ' + this.image1);
+        // imageList.forEach(ele => {
+        //   console.log(ele.file_path);
+        //   let path = ele.file_path + ele.file_name + '.' + ele.file_extn;
+        //   console.log(path);
+        //   let realPath = {path};
+        //   this.imagePath.splice(this.imagePath.length, 0, realPath);
+        //   console.log(realPath);
+        // });
+        // console.log('나머지 사진주소 : ' + this.imagePath)
         
-          // this.imagePath = result.data;
-          // console.log('이미지패스리스트 : ' + this.imagePath);
-          
-          // imageList.forEach(ele => {
-          //   console.log(ele.file_path);
-          //   let path = ele.file_path + ele.file_name + '.' + ele.file_extn;
-          //   console.log(path);
-          //   let realPath = {path};
-          //   this.imagePath.splice(this.imagePath.length, 0, realPath);
-          //   console.log(realPath);
-          // });
-          // console.log('나머지 사진주소 : ' + this.imagePath)
-          
-        }
+      },
+      showImage(show){
+        this.show = show;
+      }
   }
 }
 </script>
+
+<style>
+.imgSize {
+  width : 500px;
+  height : 500px;
+  object-fit: cover;
+}
+</style>

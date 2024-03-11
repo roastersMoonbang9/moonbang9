@@ -81,7 +81,7 @@
             <div v-for="(product,idx) in popularList" v-bind:key="idx" class="col-xl-3 col-lg-4 col-sm-6">
               <div class="product text-center">
                 <div class="position-relative mb-3">
-                  <div class="badge text-white bg-"></div><a class="d-block" href="#" @click="goToProductInfo(product.prdt_cd)"><img class="img-fluid w-100" :src="require(`@/assets/user/img/${product.image}`)" alt="..."></a>
+                  <div class="badge text-white bg-"></div><a class="d-block" href="#" @click="goToProductInfo(product.prdt_cd)"><img class="img-fluid w-100" v-bind:src="`img/${product.image}`" alt="..."></a>
                   <div class="product-overlay">
                     <ul class="mb-0 list-inline">
                       <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#!"><i class="far fa-heart"></i></a></li>
@@ -178,7 +178,7 @@ export default {
     },
     created() {
       let large_code = this.$route.query.large_code;
-      console.log('created: ' + large_code);
+      console.log('created: ' , large_code);
       this.getPopularProduct(8);
     },
     methods : {
@@ -196,6 +196,8 @@ export default {
           let result = await axios.post(`/api/product`, data);
           console.log(result);
           this.popularList = result.data;
+
+          console.log('이미지는 ' , this.popularList);
       },
       goToProductInfo(prdt_cd){
         this.$router.push({ path : 'productInfo', query : { 'prdt_cd' : prdt_cd }})

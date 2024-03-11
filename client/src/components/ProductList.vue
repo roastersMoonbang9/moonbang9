@@ -29,7 +29,7 @@
       <div class="product text-center">
         <div class="mb-3 position-relative">
           <div class="badge text-white bg-"></div>
-            <img class="img-fluid w-100" :src="require(`@/assets/user/img/${product.image}`)" @click="goToProductInfo(product.prdt_cd)"> 
+            <img class="img-fluid w-100" v-bind:src="`img/${product.image}`" @click="goToProductInfo(product.prdt_cd)"> 
           <div class="product-overlay">
             <ul class="mb-0 list-inline">
               <li class="list-inline-item m-0 p-0">
