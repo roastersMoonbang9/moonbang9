@@ -4,12 +4,12 @@ const db = require("../../db.js");
 
 //예시
 //회원의 쿠폰리스트 가져오기
-couponRouter.get("/coupon/:mem_no/:state", async (request,response)=>{
-    let no = [request.params.mem_no, request.params.state];
-    // let couponState = request.params.state;
-    let result = await db.connection('coupon','possCouponList',no);
-    response.send(result);
-  })
+// couponRouter.get("/coupon/:mem_no/:state", async (request,response)=>{
+//     let no = [request.params.mem_no, request.params.state];
+//     // let couponState = request.params.state;
+//     let result = await db.connection('coupon','possCouponList',no).catch(err=>{console.log(err)});
+//     response.send(result);
+//   })
 
 // 쿠폰목록(관리자)
 couponRouter.get("/couponList/:offset/:limit", async (request,response)=>{
@@ -76,5 +76,23 @@ couponRouter.post("/possCouponInsert", async (request, response)=>{
   response.send(result1);
 });
 
+// 쿠폰보유목록
+couponRouter.post("/possCouponList", async (request,response)=>{
+  let mem_no = parseInt(request.body.param.chMem);
+  let limit = parseInt(request.body.param.limit);
+  let offset = parseInt(request.body.param.offset);
+  let dataResult = [mem_no, limit, offset];
+  let result = await db.connection('coupon','possCouponList', dataResult);
+  response.send(result);
+})
+
+// 보유쿠폰 총 갯수
+couponRouter.get("/possCouponCount/:mem_no", async (request,response)=>{
+  let mem_no = parseInt(request.params.mem_no);
+  console.log('mem_no',mem_no);
+  let result = await db.connection('coupon','possCouponCount',mem_no);
+  console.log('count',result);
+  response.send(result);
+});
 
   module.exports = couponRouter;

@@ -32,7 +32,8 @@
               <ul class="navbar-nav ms-auto">               
                 <li v-if="isLogin" class="nav-item"><p class="nav-link" >{{ this.$store.state.userStore.name }}님</p></li>
                 <li v-else class="nav-item"><p class="nav-link"></p></li>
-                <li class="nav-item"><router-link to="/admin"><p class="nav-link" >관리자홈</p></router-link></li>
+                
+                <li v-if="mem_status=='1'" class="nav-item"><router-link to="/admin/memberList"><p class="nav-link" >관리자홈</p></router-link></li>
                 <li class="nav-item"><a class="nav-link"  @click="goToCart"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small class="text-gray fw-normal"></small></a></li>
                 <li v-if="isLogin" class="nav-item"><a class="nav-link" href="/myPage"> <i class="fas fa-user me-1 text-gray fw-normal"></i>마이페이지</a></li> <!--정보수정창으로 넘어감-->
                 <li v-else class="nav-item"><a class="nav-link" href="/userJoin"> <i class="fas fa-user me-1 text-gray fw-normal"></i>회원가입</a></li>
@@ -53,9 +54,10 @@ export default {
   setup() {
     const store = useStore();
     const isLogin = computed(() => store.state.userStore.isLogin);
-
+    const mem_status = computed(() => store.state.userStore.mem_status);
     return {
-      isLogin
+      isLogin,
+      mem_status
     };
   },
    data () {
