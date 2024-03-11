@@ -98,7 +98,7 @@ export default {
   },
   created() {
     let cd = this.$route.query.prdt_cd;
-    this.getQueryList(cd);
+    // this.getQueryList(cd);
   },
   // watch(){
   //   changeList(){

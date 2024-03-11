@@ -29,6 +29,7 @@
         <strong class="text-uppercase text-dark">할인판매가:</strong
         ><a class="reset-anchor ms-2" href="#!">{{ productInfo.sale_price }}</a>
       </li>
+      
     </ul>
 
     <!-- <p class="text-muted lead">정상가 {{ productInfo.price }}</p>
@@ -41,7 +42,7 @@
       v-model="selectedOption"
       @change="selectOption(selectedOption)"
     >
-      <option :value="null">상품을 선택해주세요</option>
+      <option :value="null" disabled style="display: none;">상품을 선택해주세요</option>
       <option :key="idx" v-for="(option, idx) in productOptions" :value="idx">
         {{ option.opt_number }} {{ option.opt_name }}
       </option>
@@ -112,6 +113,9 @@
             </tbody>
           </table>
         </div>
+        <div class="col-lg-6">
+          <h1></h1>
+        </div>
         <div class="totalPrice">
           <span>상품 금액 합계</span>
           <strong><span id="spTotalPrc">{{total}}</span></strong>
@@ -132,14 +136,14 @@
                     </div>
                   </div>
                 </div> -->
-      <div class="col-sm-3 pl-sm-0">
+      <div class="col-sm-3 pl-sm-0 divMargin">
         <a
           class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"
           href="cart.html"
           >바로구매</a
         >
       </div>
-      <div class="col-sm-3 pl-sm-0">
+      <div class="col-sm-3 pl-sm-0 divMargin">
         <a
           class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"
           href="#" @click="insertCart()"
@@ -180,7 +184,9 @@ export default {
       selectedOptions: [],
       selectedOption: null, // ocd, onumber, oname, oqty
       total : 0,
+      payList : [],
       cartProducts : [] //`cart_qty`, `mem_no`, `opt_cd`, `prdt_cd`
+      
     };
   },
   created() {
@@ -199,7 +205,7 @@ export default {
       this.productInfo = result.data;
       console.log(result);
       // 상품 대표 이미지 ProductInfoView에게 전달
-      this.$emit('send-image', this.productInfo.image);
+      // this.$emit('send-image', this.productInfo.image);
     },
     // 상품 옵션 목록
     async getProductOptions(cd) {
@@ -216,9 +222,21 @@ export default {
       let oname = this.productOptions[opt_idx].opt_name;
       let oqty = 1;
       console.log(ocd, onumber, oname, oqty);
-      let selectedO = { ocd, onumber, oname, oqty };
+      
+      // 이미 selectedOptions에 담겨있는지 검증
+      let optionCheck = true;
+      this.selectedOptions.forEach(ele => {
+        console.log('선택된옵션 : ' , ele);
+        if(ele.ocd == ocd){
+          optionCheck = false;
+        }
+      })
+      if(optionCheck){
+        let selectedO = { ocd, onumber, oname, oqty };
+        this.selectedOptions.splice(this.selectedOptions.length, 0, selectedO);
+      }
+     
       // this.selectedOptions.push(selectedO);
-      this.selectedOptions.splice(this.selectedOptions.length, 0, selectedO);
       console.log(this.selectedOptions);
       this.makeTotal();
       this.showSelectedOpt = true;
@@ -283,7 +301,27 @@ export default {
         total += price * ele.oqty;
       })
       this.total = total;
-    }
+    },
+//     goToPayment(){
+// //       { "prdt_cd": "CB00001", "prdt_name": "모나마", "brand": "모나마", 
+// // "large_code": "C", "small_code": "B", "price": 3000, 
+// // "sale_price": 2400, "dc_pct": 0.2, "image": "CB00001_01_lebao.jpg", 
+// // "cart_cd": 58, "cart_qty": 2, "opt_cd": "CB0000104", "opt_name": "초록", "total_price": 4800 }
+//       let prdt_cd = this.productInfo.prdt_cd;
+//       let prdt_name = this.productInfo.prdt_name;
+//       let brand = this.productInfo.brand;
+//       let large_code = this.productInfo.large_code;
+//       let small_code = this.productInfo.small_code;
+//       let price = this.productInfo.price;
+//       let sale_price = this.productInfo.sale_price;
+//       let dc_pct = this.productInfo.dc_pct;
+//       let image = this.productInfo.image;
+//       let cart_cd = ''; //카트코드?
+//       let cart_qty = this.selectedOptions[i].opt_cd;
+//       let opt_cd = this.selectedOptions[i].opt_name;
+//       let total_price = this.total;
+
+//     }
   },
 };
 </script>
@@ -478,5 +516,9 @@ a {
     list-style: none;
     padding: 0;
     z-index: 1;
+}
+
+.divMargin {
+  margin-top: 20px;
 }
 </style>
