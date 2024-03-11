@@ -65,7 +65,7 @@
                 <li v-else class="nav-item"><p class="nav-link"></p></li>
                 <li class="nav-item"><router-link to="/admin"><p class="nav-link" >관리자홈</p></router-link></li>
                 <li class="nav-item"><a class="nav-link"  @click="goToCart"> <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small class="text-gray fw-normal"></small></a></li>
-                <li v-if="isLogin" class="nav-item"><a class="nav-link" href="/myPage/editProfile"> <i class="fas fa-user me-1 text-gray fw-normal"></i>마이페이지</a></li> <!--정보수정창으로 넘어감-->
+                <li v-if="isLogin" class="nav-item"><a class="nav-link" href="/myPage"> <i class="fas fa-user me-1 text-gray fw-normal"></i>마이페이지</a></li> <!--정보수정창으로 넘어감-->
                 <li v-else class="nav-item"><a class="nav-link" href="/userJoin"> <i class="fas fa-user me-1 text-gray fw-normal"></i>회원가입</a></li>
                 <li v-if="isLogin" class="nav-item"><a class="nav-link" @click="handleLogout"> <i class="fas fa-user me-1 text-gray fw-normal"></i>로그아웃</a></li>
                 <li v-else class="nav-item"><a class="nav-link" href="/login"> <i class="fas fa-user me-1 text-gray fw-normal"></i>로그인</a></li>              

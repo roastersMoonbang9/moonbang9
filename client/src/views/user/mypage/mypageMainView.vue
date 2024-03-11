@@ -21,7 +21,7 @@ export default {
 
 <style>
 .twse{
-  height: 900px;
+  height: 1600px;
   display: flex;
 }
 .twse2{

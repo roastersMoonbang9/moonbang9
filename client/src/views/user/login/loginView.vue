@@ -238,6 +238,12 @@ export default {
               name: result.data[0].name,
               isLogin: true,
               mem_status: result.data[0].mem_status,
+              email: result.data[0].email,
+              phone: result.data[0].phone,
+              addr: result.data[0].addr,
+              addrdt: result.data[0].addrdt,
+              post_cd: result.data[0].post_cd,
+              birth_dt: result.data[0].birth_dt
             });
             this.$router.push("/");
             alert(this.$store.state.userStore.name + "님 로그인 되었습니다.");
@@ -289,6 +295,7 @@ export default {
             mem_status: 3,
             grd_no: 1,
             gen: gen == undefined ? "" : gen,
+            birth_dt: birth_dt
           };
 
           console.log(data);
@@ -307,6 +314,12 @@ export default {
               mem_no: datas[0].mem_no,
               mem_status: datas[0].mem_status,
               token: datas[0].token,
+              email: result.data[0].email,
+              phone: result.data[0].phone,
+              addr: result.data[0].addr,
+              addrdt: result.data[0].addrdt,
+              post_cd: result.data[0].post_cd,
+              birth_dt: result.data[0].birth_dt
             });
 
             alert(`${datas[0].name}님 로그인 되었습니다.`);
