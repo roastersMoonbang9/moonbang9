@@ -56,7 +56,8 @@ const userLogin =
         mem_status
 FROM    member 
 WHERE   id = ? 
-AND     pwd = ?`;
+AND     pwd = ?
+AND     mem_status in (1,2,3)`;
 
 //카카오 아이디 확인
 const checkKakaoId = 
@@ -78,9 +79,10 @@ const checkKakaoId =
         (select rwd_pct from grade where grd_no = member.grd_no) as rwd_pct,
         used_payment 
 FROM member
-WHERE id=?`;
+WHERE id=?
+AND     mem_status in (1,2,3)`;
 
-// 카카오 아이디로 회원 가입
+// 카카오 아이디로 회원 가입    
 const registerWithKakaoAccount = 
 `INSERT INTO member 
  SET ?`;
