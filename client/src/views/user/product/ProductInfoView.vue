@@ -91,23 +91,6 @@
           <ProductInfo @send-image="getImage1" />
 
         </div>
-        <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
-          <li class="nav-item">
-            <a class="nav-link text-uppercase" id="description-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="description" aria-selected="false">상품 후기</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-uppercase active" id="reviews-tab" data-bs-toggle="tab" href="#query" role="tab" aria-controls="reviews" aria-selected="true">상품 관련 문의</a>
-          </li>
-        </ul>
-
-        <div class="tab-content">
-          <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="description-tab">
-            <ProductReview :prdt_cd="prdt_cd" />
-          </div>
-          <div class="tab-pane fade show active" id="query" role="tabpanel" aria-labelledby="reviews-tab">
-            <ProductQuery :prdt_cd="prdt_cd" />
-          </div>
-        </div>
             <div class="row m-sm-0">
                 <div class="col-sm-2 p-sm-0 order-2 order-sm-1 mt-2 mt-sm-0 px-xl-2">
                   <div class="swiper product-slider-thumbs">
@@ -137,18 +120,27 @@
                 </div>
               </div>
 
-
-
-
-
-
-            
-          
           
           <ProductInfo @send-image="getImage1" />
-
         </div>
-        <ProductReview />
+          <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link text-uppercase" id="description-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="description" aria-selected="false">상품 후기</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-uppercase " id="reviews-tab" data-bs-toggle="tab" href="#query" role="tab" aria-controls="reviews" aria-selected="true">상품 관련 문의</a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane show"  id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+            <ProductReview :prdt_cd="prdt_cd" />
+          </div>
+          <div class="tab-pane " id="query" role="tabpanel" aria-labelledby="query-tab">
+            <ProductQuery :prdt_cd="prdt_cd" />
+          </div>
+        </div>
+        </div>
         <!-- RELATED PRODUCTS-->
         <h2 class="h5 text-uppercase mb-4">카테고리 인기상품</h2>
         <div class="row">
@@ -171,7 +163,7 @@
           </div>
         </div>
 
-      </div>
+     
       
     </section>
 
