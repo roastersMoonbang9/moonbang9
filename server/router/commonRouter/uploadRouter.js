@@ -37,23 +37,65 @@ fileUploadRouter.post("/", upload.array('dataFiles'), async (req,res)=>{
   let table_cd = req.body.table_cd;
   let table_name = '';
   let tableData = {};
+  let opt_names = [];
+  let optionData = {};
   if(table_cd == "4"){
-    table_name = "notice"
     tableData = {
       title : req.body.title,
       content : req.body.content,
       impor : parseInt(req.body.impor)
     }
+    let eventResult = await db.connection('notice','noticeInsert',tableData).catch(err => console.log(err));
+    console.log(eventResult);
   } else if(table_cd == "3"){
-    table_name = "event"
     tableData = {
       event_name : req.body.event_name,
       path : req.body.path,
       status : parseInt(req.body.status)
     }
+    let eventResult = await db.connection('event','eventInsert',tableData).catch(err => console.log(err));
+    console.log(eventResult);
+  } else if(table_cd == "0"){
+    tableData = {
+      prdt_cd : req.body.type_cd,
+      prdt_name : req.body.prdt_name,
+      brand : req.body.brand,
+      large_code : req.body.large_code,
+      small_code : req.body.small_code,
+      price : req.body.price,
+      dc_pct : req.body.dc_pct,
+      sale_price : req.body.sale_price,
+      prdt_detail : req.body.prdt_detail,
+      image : req.body.image
+    }
+    let eventResult = await db.connection('product','productInsert',tableData).catch(err => console.log(err));
+    console.log(eventResult);
+    if(req.body.opt_name1 != ''){
+      opt_names.push(req.body.opt_name1);
+    }
+    if(req.body.opt_name2 != ''){
+      opt_names.push(req.body.opt_name2);
+    }
+    if(req.body.opt_name3 != ''){
+      opt_names.push(req.body.opt_name3);
+    }
+    if(req.body.opt_name4 != ''){
+      opt_names.push(req.body.opt_name4);
+    }
+    for(let i = 0; i < opt_names.length; i++){
+      optionData = {
+        opt_cd : req.body.type_cd + (i+1),
+        opt_name : opt_names[i],
+        prdt_cd : req.body.type_cd
+      }
+      console.log(optionData);
+      let optionResult = await db.connection('product','optionsInsert',optionData).catch(err => console.log(err));
+      console.log(optionResult);
+    }
   }
+  console.log('Received type_cd:', req.body.type_cd);
   console.log('Received Table Data:', tableData);
-
+  console.log('Received option Data:', opt_names);
   let fileData = req.body.dataFiles; // 이미지파일 정보 
   console.log('Received File Data:', req.files);
     let imgUrlList = [];
@@ -82,9 +124,7 @@ fileUploadRouter.post("/", upload.array('dataFiles'), async (req,res)=>{
       console.log(imgUrlList);
 
     }
-    let eventResult = await db.connection(table_name, table_name +'Insert',tableData).catch(err => console.log(err));
-      console.log(eventResult);
-      res.send(eventResult);
+    res.send("성공");
   });
 
 // 첨부파일 정보 전체조회
