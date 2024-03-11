@@ -48,8 +48,8 @@
           <div class="container py-5">
             <div class="row px-4 px-lg-5">
               <div class="col-lg-6">
-                <p class="text-muted small text-uppercase mb-2">New Inspiration 2024</p>
-                <h1 class="h2 text-uppercase mb-3">MOONBANG9</h1><a class="btn btn-dark" href="#" @click="goToList()">전체 상품 보기</a>
+                <img v-bind:src="'../img/moon2.png'" alt="">
+                <h1 class="h2 text-uppercase mb-3"></h1><a class="btn btn-dark" href="#" @click="goToList()">전체 상품 보기</a>
               </div>
             </div>
           </div>

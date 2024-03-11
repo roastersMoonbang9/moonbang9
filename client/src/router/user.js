@@ -13,6 +13,7 @@ import myOrders from '../views/user/mypage/myOrdersView.vue'
 import myOrdersDetail from '../views/user/mypage/myOrdersDetailView.vue'
 import myOrdersEditProfile from '../views/user/mypage/myOrdersEditProfileView.vue'
 import myOrdersInquiry from '../views/user/mypage/myOrdersInquiryView.vue'
+import myCouponList from '../views/user/mypage/myCouponListView.vue'
 
 
 export default {
@@ -84,6 +85,11 @@ export default {
                         path: 'myOrdersDetail', //주문내역 상세
                         name: 'myOrdersDetail',
                         component: myOrdersDetail
+                    },
+                    {
+                        path: 'myCouponList', //주문내역 상세
+                        name: 'myCouponList',
+                        component: myCouponList
                     }
                 ]
             }

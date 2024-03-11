@@ -17,18 +17,18 @@ export default {
     path: '/admin',
     name: 'admin',
     component: adminView,
-    // beforeEnter: (to, from, next) => {
-    //     let mem_status = store.state.userStore.mem_status;
-    //     let isLogin =  store.state.userStore.isLogin;
+    beforeEnter: (to, from, next) => {
+        let mem_status = store.state.userStore.mem_status;
+        let isLogin =  store.state.userStore.isLogin;
 
-    //     if(mem_status != '1' || !isLogin ){
-    //       alert('관리자만 접근 가능한 페이지입니다.'),
-    //       next('/');
-    //     }
-    //     else {
-    //       next();
-    //     }
-    //   },
+        if(mem_status != '1' || !isLogin ){
+          alert('관리자만 접근 가능한 페이지입니다.'),
+          next('/');
+        }
+        else {
+          next();
+        }
+      },
     children: [
         {
             path: 'delivery',

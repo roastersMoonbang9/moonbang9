@@ -60,12 +60,8 @@
             </li>
             <li>
                 <a href="#">
-                <i class="bi bi-circle"></i><span>상품 리뷰</span>
-                </a>
-            </li>
-            <li>
-                <a href="/admin/productQuery">
-                <i class="bi bi-circle"></i><span>상품 문의</span>
+                <i class="bi bi-circle"></i>
+                <router-link to="/admin/productQuery"><span>상품 문의</span></router-link>
                 </a>
             </li>
             </ul>
@@ -98,12 +94,12 @@
             </a>
         </li>
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link collapsed" href="#">
             <i class="bi bi-person"></i>
             <router-link to="/admin/delivery"><span style="color: #00009cda;">고객 문의 관리</span></router-link>
             </a>
-        </li>
+        </li> -->
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
