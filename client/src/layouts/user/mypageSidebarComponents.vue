@@ -1,16 +1,15 @@
 <template>
     <aside id="lnbMy10x10V15" class="lnbMy10x10V15" style="float: none;">
 	<div class="article profile new_pro21">
-		<p class="hello">안녕하세요, {{userName}}님</p>
-		<div class="figure" id="myProfile">
-			
-			<strong class="classV18 g-white">{{userInfo.grd_name}} 회원</strong>
-			<div class="profile_container">
+		<div class="figure" id="myProfile">	
+			<div class="profile_container">                
 				<img  src="../img/nomal.PNG" width="100" height="100">
 			</div>
 			<div class="pro_info_area">
-				<p class="glade"></p>
-				<p class="nick_name">좋은 하루 되세요</p>
+				<p class="glade"></p>                
+			    <strong class="classV18 g-white">{{userInfo.grd_name}} 회원</strong>
+                <p class="hello">안녕하세요, {{userName}}님</p>
+				<p class="hello">좋은 하루 되세요</p>
 			</div>
 		</div>
     <div>
