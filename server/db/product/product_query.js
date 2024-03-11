@@ -22,6 +22,9 @@ const queryDel =
 `DELETE FROM product_question
 WHERE qst_no= ?`; 
 
+const queryCount = 
+`SELECT count(qst_no) as count 
+FROM product_question`
 
 module.exports = {
     queryList,
@@ -29,7 +32,8 @@ module.exports = {
     queryUpdate,
     queryInsert,
     queryDel,
-    queryListAll
+    queryListAll,
+    queryCount
 
 
 }
