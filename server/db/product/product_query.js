@@ -14,7 +14,8 @@ WHERE prdt_cd = ?`;
 
 const queryUpdate = 
 `UPDATE product_question
-SET ?`;
+SET ?
+WHERE pst_no = ?`;
 const queryInsert =
 `INSERT INTO product_question
 SET ?`;

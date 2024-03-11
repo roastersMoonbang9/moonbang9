@@ -73,10 +73,11 @@
                         <th>작성자</th>
                         <th>작성일자</th>
                         <th>답변상태</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(table, idx) in tableList" :key="idx">
+                    <tr v-for="(table, idx) in tableList" :key="idx " @click="openQueryForm(table.qst_no)">
                         <td>{{ idx + 1 }}</td>
                         <td>{{ table.prdt_cd }}</td>
                         <td>{{ table.title }}</td>
@@ -84,18 +85,37 @@
                         <td>{{ dateFomat(table.qst_dt)}}</td>
                         <td>{{ this.changeStatus(parseInt(table.status)) }}</td>
                     </tr>
-                    <div v-if="queryForm">
-                        <form @submit.prevent="submitQueryAnsw()">
-                            <div class="mb-3">
-                                <label for="queryAnswer" class="form-label">답변</label>
-                                <textarea v-model="table.answer" class="form-control" id="queryContent" rows="3"
-                                    required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-secondary mb-3">등록</button>
-                        </form>
-                    </div>
                 </tbody>
             </table>
+            <table class="table table-bordered table-primary" v-if="modalOpen === true">
+
+                    <tbody>
+                        <tr>
+                            <th>제목</th>
+                            <td>{{selected.title}}</td>
+                        </tr>
+                        <tr>
+                            <th>작성자</th>
+                            <td>{{selected.id}}</td>
+                        </tr>
+
+                            
+                        <tr>
+                            <th>작성일자</th>
+                            <td>{{dateFomat(selected.qst_dt)}}</td>
+                        </tr>
+                        <tr>
+                            <th>내용</th>
+                            <td>{{selected.content}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>답변</th>
+                            <td><input class="form-control" type="text" v-model="answer"><button class="btn btn-info" @click="submitQueryAnsw">등록</button></td>
+                        </tr>
+                    </tbody>
+                </table>
             <!-- 1) 페이징 테그 복붙 -->
             <Paging :pagination="pagination" v-on:prevPage="prevPage" v-on:nextPage="nextPage"
                 v-on:firstPage="firstPage" v-on:lastPaging="lastPaging" v-on:changeNowPage="changeNowPage" />
@@ -121,11 +141,14 @@ export default {
             checkStatus2: "0", //답변없음
             checkStatus3: "1", //답변 완료
             checkSt: null,
-            queryForm: false,
+        //    queryForm: false,
+            qst_no:'',
+            answer:'',
+            modalOpen:false,
+            selected: {},
 
             // 리스트
             tableList: [],
-            selected: [],
             //3) 페이징 [] 가져오기
             paging: [],
             pagination: {},
@@ -222,7 +245,7 @@ export default {
                     checkSt: this.checkSt
                 }
             }
-            let result = await axios.get('/api/product/queryListAll', data)
+            let result = await axios.post('/api/product/queryListAll', data)
                 .catch(err => console.log(err));
             console.log(result);
             this.tableList = result.data;
@@ -281,64 +304,35 @@ export default {
             this.getTableList(this.curPage);
         },
 
-        //선택한 건 배송 중으로 변경
-        async changeToShip() {
-            let change = false;
+        //답변 등록
+        async submitQueryAnsw() {
             let data = {
                 param: {
-                    status: 1  //  1  "배송 중"
+                    qst_no: this.selected.qst_no,
+                    status: 1 , //  1  "답변완료"
+                    answer: this.answer,
+
                 }
             }
-            for (let i of this.selected) {
-                let result = await axios.put('/api/order/updateDelivery/' + i.deli_no, data)
+                let result = await axios.put('/api/product/queryAns/', data)
                     .catch(err => console.log(err));
-
-                console.log('업데이트:' + result);
-                console.log('선택한 배송번호:' + i.deli_no);
                 if (result.data.changedRows > 0) {
-                    change = true;
-                }
-            };
-            if (change) {
-                Swal.fire({
+                    Swal.fire({
                     icon: "success",
-                    title: "배송 처리 되었습니다.",
+                    title: "답변이 등록 되었습니다.",
                     showConfirmButton: false,
                     timer: 1500
                 });
-            }
-        },
-        async changeToComp() {
-            // 배송완료에서 배송중으로 바꿔도 가능.. 원래 안되는건데.. 
-            let change = false;
-            let data = {
-                param: {
-                    status: 2  //  1  "배송 완료"
+                this.$router.go(this.$router.currentRoute); //리로드는 되지만 목록은 사라짐. 다시 검색으로 눌러 찾아야함
                 }
-            }
-            for (let i of this.selected) {
-                let result = await axios.put('/api/order/updateDelivery/' + i.deli_no, data)
-                    .catch(err => console.log(err));
-
-                console.log('업데이트:' + result);
-                console.log('선택한 배송번호:' + i.deli_no);
-                if (result.data.changedRows > 0) {
-                    change = true;
-                }
-            };
-            Swal.fire({
-                icon: "success",
-                title: "배송 완료",
-                showConfirmButton: false,
-                timer: 1500
-            });
-            this.$router.go(this.$router.currentRoute); //리로드는 되지만 목록은 사라짐. 다시 검색으로 눌러 찾아야함
-
-
+         
         },
-    clickQueryForm() {
-      this.queryForm = !this.queryForm; //false였던 답변 등록창 true
-    },
+        openQueryForm(qst_no) {
+            this.selected = this.tableList.find((item)=> item.qst_no === qst_no); //tableList에서 qst_no 와 일치하는것 찾아주는 메소드 find -> selected 에 적용
+        this.modalOpen = !this.modalOpen; //false였던 답변 등록창 true
     }
-}
+        },
+    
+    }
+
 </script>
