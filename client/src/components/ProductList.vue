@@ -29,7 +29,7 @@
       <div class="product text-center">
         <div class="mb-3 position-relative">
           <div class="badge text-white bg-"></div>
-            <img class="img-fluid w-100" v-bind:src="`img/${product.image}`" @click="goToProductInfo(product.prdt_cd)"> 
+            <img class="img-fluid w-100" v-bind:src="`img/${product.image.substring(21)}`" @click="goToProductInfo(product.prdt_cd)"> 
           <div class="product-overlay">
             <ul class="mb-0 list-inline">
               <li class="list-inline-item m-0 p-0">
@@ -138,7 +138,9 @@ import Paging from '@/components/PagingComponent.vue';
                                         .catch(err => console.log(err));
                 console.log(result);
                 this.productList = result.data;
-                console.log(this.productList[0].image);
+                console.log(this.productList[0].image.substring(21));
+                // ..\client\public\img\1710156976435_고래연필세트1.jpg
+                // img/CB00001_02_aibao.jpg
             },
       async getTableCount(large, small) {
           let data = {
