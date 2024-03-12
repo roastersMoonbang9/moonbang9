@@ -160,7 +160,7 @@ export default {
           this.couponList = list;
         },
         setPoint(){
-            if(this.newPoint < 10000){
+            if(this.newPoint > 10000){
                 alert('한번에 10000포인트를 넘게 사용할 수 없습니다.')
                 this.newPoint = 10000
             }
