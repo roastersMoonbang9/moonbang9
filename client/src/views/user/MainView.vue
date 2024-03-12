@@ -63,9 +63,9 @@
           <div class="row">
             <div class="col-md-4"><a class="category-item leftRightImage" href="#" @click="goToList('A')"><img class="img-fluid" src="img/main1.jpg" alt=""/><strong class="category-item-title">다이어리</strong></a>
             </div>
-            <div class="col-md-4"><a class="category-item mb-4 middleImage" href="#" @click="goToList('B')"><img class="img-fluid middleImage" src="img/main2.jpg" alt=""/><strong class="category-item-title">노트</strong></a><a class="category-item" href="#" @click="goToList('C')"><img class="img-fluid middleImage" src="img/main3.jpg" alt=""/><strong class="category-item-title">필기류</strong></a>
+            <div class="col-md-4" style="padding-right: 0;"><a class="category-item mb-4 middleImage" href="#" @click="goToList('B')"><img class="img-fluid middleImage" src="img/main2.jpg" alt=""/><strong class="category-item-title">노트</strong></a><a class="category-item" href="#" @click="goToList('C')"><img class="img-fluid middleImage" src="img/main3.jpg" alt=""/><strong class="category-item-title">필기류</strong></a>
             </div>
-            <div class="col-md-4"><a class="category-item leftRightImage" href="#" @click="goToList('D')"><img class="img-fluid" src="img/main4.jpg" alt=""/><strong class="category-item-title">데코레이션</strong></a>
+            <div class="col-md-4" style="padding-left: 0;"><a class="category-item leftRightImage" href="#" @click="goToList('D')"><img class="img-fluid" src="img/main4.jpg" alt=""/><strong class="category-item-title">데코레이션</strong></a>
             </div>
           </div>
         </section>
