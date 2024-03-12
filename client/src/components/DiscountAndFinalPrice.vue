@@ -161,7 +161,7 @@ export default {
         },
         setPoint(){
             if(this.newPoint < 10000){
-                alert('보유포인트의 최대값을 넘게 사용할 수 없습니다.')
+                alert('한번에 10000포인트를 넘게 사용할 수 없습니다.')
                 this.newPoint = 10000
             }
             if(this.newPoint > this.point){
