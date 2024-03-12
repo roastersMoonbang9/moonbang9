@@ -79,11 +79,16 @@ data.push(offset);
 });
 
 //수정 (답변 등록) : put => body
-productQueryRouter.put("/queryAns/:qst_no", async (request, response) => {
-  let data = [request.body.param, request.params.qst_no];
-  console.log('넘어오는:'+request.body.param)
-  console.log('문의호:'+request.params.qst_no)
-  let result = await db.connection('product_query','queryUpdate', data);
+productQueryRouter.put("/queryAns", async (request, response) => {
+  console.log('넘어오는:',request.body.param)
+
+  let qst_no = request.body.param.qst_no;
+  console.log('문의호:',qst_no)
+  let status = request.body.param.status;
+  let answer = request.body.param.answer;
+  let datas = { status, answer};
+  let data = [datas, qst_no];
+  let result = await db.connection('product_query','queryUpdate', data).catch(err=>{console.log(err)});
   response.send(result);
 });
   //상품문의 삭제 
@@ -94,24 +99,8 @@ productQueryRouter.put("/queryAns/:qst_no", async (request, response) => {
     response.send(result);
   });
 
-  productQueryRouter.post("/queryCount", async (request,response)=>{
-    //let checkSearch = request.body.param.checkSearch;
-    // let getDate1 = request.body.param.getDate1;
-    // let getDate2 = request.body.param.getDate2;
-    // let checkDate = request.body.param.checkDate;
-    // let checkSt = parseInt(request.body.param.checkSt);
-  
-    let data = [];
-    let where = " WHERE 1=1";
-      
-    
-      // // 회원등급 조건 존재할 경우
-      // if(checkSt){
-      //   where += " AND status = ? "
-      //   data.push(checkSt);
-      // }
-  
-    let result = await db.connection('product_query','queryCount', data, where);
+  productQueryRouter.get("/queryCount", async (request,response)=>{
+    let result = await db.connection('product_query','queryCount');
     response.send(result);
   })
 

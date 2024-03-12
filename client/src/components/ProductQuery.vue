@@ -21,7 +21,7 @@
             <tr :key="i" v-for="(table, i) in tableList">
               <td>{{ table.title }}</td>
               <td>{{ table.content }}</td>
-              <td>{{ table.qst_dt }}</td>
+              <td>{{ dateFomat(table.qst_dt) }}</td>
               <td>{{ hideId(table.id) }}</td>
               <!-- 아이디 동일할때만 삭세하거나 수정할 수 있도록 -->
               <td v-if="isCurrentUser(table.id)">
@@ -98,7 +98,7 @@ export default {
   },
   created() {
     let cd = this.$route.query.prdt_cd;
-    this.getTableList(cd);
+    this.getTableList(1);
   },
   // watch(){
   //   changeList(){
@@ -129,15 +129,15 @@ export default {
             },
              //4) 전체를 가져와서 
         async getTableList(curPage) {
-            // curPage = this.judgePage(curPage);
+            curPage = this.judgePage(curPage);
             if (!curPage || curPage <= 0)
                 curPage = this.startPage;
             let gap = curPage % this.navSize === 0 ? this.navSize - 1 : curPage % this.navSize - 1;
-            // this.startPage = this.judgePage(curPage - gap);
+            this.startPage = this.judgePage(curPage - gap);
             this.endPage = this.startPage + this.navSize - 1;
             await this.getTableCount(curPage);
-
             this.curPage = curPage;
+            
             let data = {
                 param: {
                     limit: this.pageSize,
@@ -145,24 +145,16 @@ export default {
                     prdt_cd:this.$route.query.prdt_cd
                 }
             }
+            console.log('데이타', data);
+            console.log('데이타2', curPage, this.pageSize, this.curPage);
             let result = await axios.post('/api/product/queryList/', data)
                 .catch(err => console.log(err));
-            console.log(result);
+            console.log("쿼리리스트",result);
             this.tableList = result.data;
         },
-    },
+    
     async getTableCount() {
-            let data = {
-                param: {
-                    checkSearch: this.checkSearch,
-                    searched: this.searched,
-                    getDate1: this.getDate1,
-                    checkDate: this.checkDate,
-                    getDate2: this.getDate2,
-                    checkSt: this.checkSt
-                }
-            }
-            let result = await axios.post(`/api/product/queryCount`, data) //쿼리문에 count문이 있어야함
+            let result = await axios.get(`/api/product/queryCount`) //쿼리문에 count문이 있어야함
                 .catch(err => console.log(err));
             this.allSize = result.data[0].count;
             this.lastPage = Math.ceil(this.allSize / this.pageSize);
@@ -226,9 +218,12 @@ export default {
       let result = await axios.post('/api/product/addQuery/',data) 
         .catch(err => console.log(err));
         let newQueryData = result.data;
-      this.queryList.unshift(newQueryData);
+      // this.queryList.unshift(newQueryData);
       console.log(result);
-
+      if(result){
+        Swal.fire('등록되었습니다');
+        this.$router.go(this.$router.currentRoute);
+      }
       this.newQuery = {
         title: '',
         content: '',
@@ -246,6 +241,7 @@ export default {
       console.log(result);
       if (result.data.affectedRows > 0) {
                 Swal.fire('삭제되었습니다');
+                this.$router.go(this.$router.currentRoute);
                 }
       this.queryL = true;
       this.queryForm = false;
@@ -254,5 +250,5 @@ export default {
 
   }
  
-  
+}
 </script>
