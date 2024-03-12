@@ -14,6 +14,7 @@ const productList =
          p.image,
          p.regis_dt,
          p.modify_dt,
+         p.prdt_detail,
          d.sell
 FROM  product p LEFT OUTER JOIN (SELECT COUNT(*) as sell, 
                                         prdt_cd

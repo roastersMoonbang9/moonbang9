@@ -177,7 +177,7 @@ export default {
         sale_price: "",
         dc_pct: "",
         image: "",
-        prdt_detail: "",
+        prdt_detail: ""// 부모한테 넘겨줘야함
       },
       productOptions: [], //opt_cd, opt_number, opt_name
       showSelectedOpt : false,
@@ -196,6 +196,7 @@ export default {
   },
   mounted() {
     // this.$emit('send-image', this.productInfo.image);
+    this.$emit('send-detail', this.productInfo.prdt_detail);
   },  
   methods: {
     // 상품 정보

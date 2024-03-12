@@ -89,8 +89,15 @@
           
           <ProductInfo />
 
+<!-- DETAILS TABS-->
+
         </div>
           <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
+        
+          <li class="nav-item">
+            <a class="nav-link text-uppercase active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">상품 설명</a>
+          </li>
+            
           <li class="nav-item">
             <a class="nav-link text-uppercase" id="description-tab" data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="description" aria-selected="false">상품 후기</a>
           </li>
@@ -99,7 +106,21 @@
           </li>
         </ul>
         
+
+
         <div class="tab-content">
+
+
+
+          <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+              <div class="p-4 p-lg-5 bg-white">
+                <h6 class="text-uppercase">Product description </h6>
+                <p class="text-muted text-sm mb-0">{{getProductDetail}}Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+              </div>
+          </div>
+
+
+
           <div class="tab-pane show"  id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
             <ProductReview :prdt_cd="prdt_cd" />
           </div>
@@ -152,6 +173,8 @@ export default  {
   data() {
     return {
       // image1 : 'moonbang9_logo.png', //메인 사진 받아오지 못할때 기본으로 뜨는 로고 파일명
+      p_detail : '', // 상품 설명 받아오지 못할때 기본으로 뜨는 내용
+
       image1 : '',
       image2 : '',
       image3 : '',
@@ -165,15 +188,24 @@ export default  {
     let cd = this.$route.query.prdt_cd
     this.getImages(cd);
   },
-  // computed : {
-  //   getRealImage1() {
-  //     return this.image1; // image1 바뀐것 감지해서 사진 다시 로드
-  //   },  
-  //   getRealPath(){
-  //     return this.imagePath;
-  //   }
-  // },
+  computed : {
+    sendRealDetail(){
+      return this.$refs.ProductInfo.p_detail;
+    },
+    // getRealImage1() {
+    //   return this.image1; // image1 바뀐것 감지해서 사진 다시 로드
+    // },  
+    // getRealPath(){
+    //   return this.imagePath;
+    // }
+    getProductDetail(){
+      return this.p_detail;
+    }
+  },
   methods: {
+    sendDetail(data){
+      console.log(data)
+    },
     // getImage1(data){
     //   console.log('자식으로부터 받은 상품 대표이미지 파일명 : '+ data);
     //   this.image1 = data; //ProductInfo.vue로부터 image1 파일명 받아오고 나면 감지해서 파일명 교체
@@ -184,10 +216,10 @@ export default  {
       console.log(result.data);
       
       // this.image1 = '@/assets/user/img/CB00001_02_aibao.jpg'; // + result.data[0].file_path.substring(30)
-      this.image1 = 'img/' + result.data[0].file_path.substring(30);
-      this.image2 = 'img/' + result.data[1].file_path.substring(30);
-      this.image3 = 'img/' + result.data[2].file_path.substring(30);
-      this.image4 = 'img/' + result.data[3].file_path.substring(30);
+      this.image1 = 'img/' + result.data[0].file_path.substring(21);
+      this.image2 = 'img/' + result.data[1].file_path.substring(21);
+      this.image3 = 'img/' + result.data[2].file_path.substring(21);
+      this.image4 = 'img/' + result.data[3].file_path.substring(21);
       console.log('사진1 : ' + this.image1);
       
         // this.imagePath = result.data;
