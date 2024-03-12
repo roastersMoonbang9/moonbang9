@@ -6,7 +6,7 @@
               <img src="/moonbang9_3.png" alt="moonbang9" style="width: 115px;">
             </div>
             <div class="col-md-4 mb-3 mb-md-0">
-              <h6 class="text-uppercase mb-3">Company</h6>
+              <h6 class="text-uppercase mb-3">YEDAM</h6>
               <ul class="list-unstyled mb-0">
                 <li><a class="footer-link" href="#!">What We Do</a></li>
                 <li><a class="footer-link" href="#!">Available Services</a></li>

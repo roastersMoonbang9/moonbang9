@@ -39,8 +39,8 @@
           </div>
         </div>
         <h6><a class="reset-anchor" href="#" @click="goToProductInfo(product.prdt_cd)">{{ product.prdt_name }}</a></h6>
-        <p class="small text-muted">{{ product.price }} 원</p>
-        <p class="small text-muted">{{ product.sale_price }}</p>
+        <!-- <p class="small text-muted">{{ product.price }} 원</p> -->
+        <p class="small text-muted">{{ product.sale_price }} 원</p>
       </div>
     </div>
     <Paging 
