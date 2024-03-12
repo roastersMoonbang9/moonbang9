@@ -192,7 +192,6 @@
             </div>
           </div>
         </form>
-        {{ userInfo }}
       </div>
     </body>
   </div>

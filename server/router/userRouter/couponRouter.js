@@ -4,12 +4,12 @@ const db = require("../../db.js");
 
 //예시
 //회원의 쿠폰리스트 가져오기
-// couponRouter.get("/coupon/:mem_no/:state", async (request,response)=>{
-//     let no = [request.params.mem_no, request.params.state];
-//     // let couponState = request.params.state;
-//     let result = await db.connection('coupon','possCouponList',no).catch(err=>{console.log(err)});
-//     response.send(result);
-//   })
+couponRouter.get("/getcoupon/:mem_no/:state", async (request,response)=>{
+    let no = [request.params.mem_no, request.params.state];
+    // let couponState = request.params.state;
+    let result = await db.connection('coupon','possCouponList',no).catch(err=>{console.log(err)});
+    response.send(result);
+  })
 
 // 쿠폰목록(관리자)
 couponRouter.get("/couponList/:offset/:limit", async (request,response)=>{

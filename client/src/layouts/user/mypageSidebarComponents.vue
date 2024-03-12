@@ -55,7 +55,7 @@ import axios from 'axios'
     },
     methods: {
         moveCouponList(){
-            this.$router.push({ path: 'myCouponList' })
+            this.$router.push({ name: 'myCouponList' })
         },
         // 포인트 및 등급 정보
         async getGrade() {

@@ -2,6 +2,7 @@ require('dotenv').config({ path : './db/db.env'});
 const express = require('express');
 const app = express();
 const port = 3000;
+/*var path = require('path'); //build 구동 -> 노드로만 서버랑 vue구동 (npm run build)*/
 
 //라우팅방식 app 
 const userRouter =require('./router/userRouter/userRouter.js');
@@ -20,7 +21,7 @@ const deliveryRouter =require('./router/orderRouter/deliveryRouter.js');
 const returnRouter =require('./router/orderRouter/returnRouter.js');
 const fileUploadRouter =require('./router/commonRouter/uploadRouter.js');
 
-
+/*app.use(express.static("public"));  //build 구동 -> 노드로만 서버랑 vue구동*/
 app.use(express.json());
 app.use(express.json()).use(express.urlencoded({extended : false}));
 
@@ -44,3 +45,7 @@ app.use('/upload',fileUploadRouter);
 app.listen(port, () => {
     console.log(`서버가 실행됩니다. http://localhost:${port}`)
 })
+
+/*app.get('/',function(req,res,next) {
+    res.sendFile(path.join(__dirname,'/public','index.html'))  //build 구동 -> 노드로만 서버랑 vue구동
+})*/

@@ -150,6 +150,7 @@ export default  {
   },
   created() {
     let cd = this.$route.query.prdt_cd;
+    this.prdt_cd = cd;
     this.getImages(cd);
   },
   computed : {
