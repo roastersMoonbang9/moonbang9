@@ -5,7 +5,7 @@
       <!-- 정렬 -->
       <div class="mb-3">
         <label for="sortSelect" class="form-label">정렬기준:</label>
-        <select v-model="sortBy" @change="updateSort" class="form-select" id="sortSelect">
+        <select v-model="sortBy" @change="updateSort" class="form-select form-select-sm" id="sortSelect" >
           <option value="date">최근 등록순</option>
           <option value="rating">별점 높은순</option>
         </select>

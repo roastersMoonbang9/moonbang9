@@ -193,7 +193,12 @@
             let result = await axios.post("/api/upload", formData ,axiosConfig)
                                .catch(err => console.log(err));
                                console.log(' Result출력:', result.data);
-                  this.$router.go(this.$router.currentRoute);
+            if(result) {
+              alert('등록이 완료되었습니다.');
+              this.$router.go(this.$router.currentRoute);
+            } else {
+              alert('등록이 실패하였습니다. 재시도해주세요.');
+            }
       },
       modalOpenTF(){
         if(this.modalOpen == false){

@@ -18,15 +18,15 @@
               <th>아이디</th>
               <th></th>
             </tr>
-            <tr :key="i" v-for="(query, i) in queryList">
-              <td>{{ query.title }}</td>
-              <td>{{ query.content }}</td>
-              <td>{{ query.qst_dt }}</td>
-              <td>{{ hideId(query.id) }}</td>
+            <tr :key="i" v-for="(table, i) in tableList">
+              <td>{{ table.title }}</td>
+              <td>{{ table.content }}</td>
+              <td>{{ table.qst_dt }}</td>
+              <td>{{ hideId(table.id) }}</td>
               <!-- 아이디 동일할때만 삭세하거나 수정할 수 있도록 -->
-              <td v-if="isCurrentUser(query.id)">
+              <td v-if="isCurrentUser(table.id)">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button @click="deleteQuery(query.qst_no)" class="btn btn-light btn-sm">삭제</button>
+                <button @click="deleteQuery(table.qst_no)" class="btn btn-light btn-sm">삭제</button>
               </div>
               </td>
             </tr>
@@ -72,7 +72,7 @@ export default {
         },
   data() {
     return {
-      queryList: [],
+      tableList: [],
       queryForm: false,
       queryL: true,
       newQuery: {
@@ -98,13 +98,26 @@ export default {
   },
   created() {
     let cd = this.$route.query.prdt_cd;
-    // this.getQueryList(cd);
+    this.getTableList(cd);
   },
   // watch(){
   //   changeList(){
   //   this.refreshQuery = this.
   //   }
   // },
+  computed: {
+    hideId(){
+      return (id) => {
+        if (id && id.length >= 3) {
+          // 3개만 보여주고 나머지 가리기
+          return id.substring(0, 3) + '***';
+        } else {
+          return id;
+        }
+      };
+    }
+    },
+    
   methods: {
     dateFomat(date){
                 let date1 = new Date(date);
@@ -114,13 +127,85 @@ export default {
                 const dateStr = `${year}-${month}-${day}`;
                 return dateStr;
             },
-    async getQueryList(prdt_cd) {
-      let result = await axios.get('/api/product/queryList/'+ prdt_cd)
-        .catch(err => console.log(err));
-      this.queryList = result.data; 
-      console.log(result);
+             //4) 전체를 가져와서 
+        async getTableList(curPage) {
+            // curPage = this.judgePage(curPage);
+            if (!curPage || curPage <= 0)
+                curPage = this.startPage;
+            let gap = curPage % this.navSize === 0 ? this.navSize - 1 : curPage % this.navSize - 1;
+            // this.startPage = this.judgePage(curPage - gap);
+            this.endPage = this.startPage + this.navSize - 1;
+            await this.getTableCount(curPage);
 
+            this.curPage = curPage;
+            let data = {
+                param: {
+                    limit: this.pageSize,
+                    offset: (curPage - 1) * this.pageSize,
+                    prdt_cd:this.$route.query.prdt_cd
+                }
+            }
+            let result = await axios.post('/api/product/queryList/', data)
+                .catch(err => console.log(err));
+            console.log(result);
+            this.tableList = result.data;
+        },
     },
+    async getTableCount() {
+            let data = {
+                param: {
+                    checkSearch: this.checkSearch,
+                    searched: this.searched,
+                    getDate1: this.getDate1,
+                    checkDate: this.checkDate,
+                    getDate2: this.getDate2,
+                    checkSt: this.checkSt
+                }
+            }
+            let result = await axios.post(`/api/product/queryCount`, data) //쿼리문에 count문이 있어야함
+                .catch(err => console.log(err));
+            this.allSize = result.data[0].count;
+            this.lastPage = Math.ceil(this.allSize / this.pageSize);
+            this.pagination = {
+                lastPage: this.lastPage,
+                startPage: this.startPage,
+                endPage: this.endPage,
+                curPage: this.curPage
+            }
+        },
+        judgePage(page) {
+            if (!page || page <= 0)
+                page = 1
+            else if (page > this.lastPage)
+                page = this.lastPage
+            return page
+        },
+
+        // 페이징
+        prevPage() {
+            this.getTableList(--this.curPage);
+        },
+
+        nextPage() {
+            this.getTableList(++this.curPage);
+        },
+
+        firstPage() {
+            this.curPage = 1;
+            this.getTableList(this.curPage);
+        },
+
+        lastPaging() {
+            this.curPage = this.lastPage;
+            this.getTableList(this.curPage);
+
+        },
+
+        changeNowPage(page) {
+            this.curPage = page
+            this.getTableList(this.curPage);
+        },
+
     clickQueryForm() {
       this.queryForm = !this.queryForm; //false였던 문의글 등록 true
       this.queryL = ! this.queryL;
@@ -167,18 +252,7 @@ export default {
      
     }
 
-  },
-  computed: {
-    hideId(){
-      return (id) => {
-        if (id && id.length >= 3) {
-          // 3개만 보여주고 나머지 가리기
-          return id.substring(0, 3) + '***';
-        } else {
-          return id;
-        }
-      };
-    },
-    }
   }
+ 
+  
 </script>

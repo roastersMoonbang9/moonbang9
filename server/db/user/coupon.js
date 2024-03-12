@@ -1,22 +1,22 @@
 //coupon.js
 // 예시
 //보유 쿠폰 목록 
-const possCouponList = 
-`SELECT p.poss_no,
-        p.cpn_no,
-        p.mem_no,
-        p.crt_dt,
-        p.poss_rsn,
-        p.end_dt,
-        p.status,
-        p.cpnused_dt,
-        c.cpn_name,
-        c.dc_pct,
-        c.dc_price,
-        c.cpn_dt
-FROM poss_coupon p 
-JOIN coupon c ON p.cpn_no = c.cpn_no 
-WHERE p.mem_no=? and p.status=? and p.end_dt >= now()`;
+// const possCouponList = 
+// `SELECT p.poss_no,
+//         p.cpn_no,
+//         p.mem_no,
+//         p.crt_dt,
+//         p.poss_rsn,
+//         p.end_dt,
+//         p.status,
+//         p.cpnused_dt,
+//         c.cpn_name,
+//         c.dc_pct,
+//         c.dc_price,
+//         c.cpn_dt
+// FROM poss_coupon p 
+// JOIN coupon c ON p.cpn_no = c.cpn_no 
+// WHERE p.mem_no=? and p.status=? and p.end_dt >= now()`;
 
 
 //쿠폰 상태변경
@@ -84,7 +84,28 @@ const possCouponInsert =
 `INSERT INTO poss_coupon
 SET ?`;
 
+// 보유쿠폰 목록
+const possCouponList =
+`SELECT 	p.poss_no,
+c.cpn_name,
+c.dc_pct,
+c.dc_price,
+p.mem_no,
+p.crt_dt,
+p.end_dt,
+p.status,
+p.cpnused_dt
+FROM poss_coupon p JOIN coupon c
+ON p.cpn_no = c.cpn_no
+WHERE p.mem_no= ?
+limit ? 
+offset ?`
 
+// 보유 쿠폰 수
+const possCouponCount = 
+`SELECT COUNT(poss_no) as count
+FROM poss_coupon
+WHERE mem_no = ?`;
 
 module.exports = {
     possCouponList,
@@ -96,5 +117,6 @@ module.exports = {
     giveCouponList,
     giveCouponCount,
     checkMemNo,
-    possCouponInsert
+    possCouponInsert,
+    possCouponCount
 }

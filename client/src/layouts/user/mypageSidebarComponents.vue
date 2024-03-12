@@ -14,7 +14,7 @@
 		</div>
     <div>
 		<ul>
-			<li><a><strong>{{coupon.length}}장</strong>쿠폰</a></li>
+			<li><a @click="moveCouponList()"><strong>{{coupon}}장</strong>쿠폰</a></li>
 			<li class="mymileage"><a><strong>{{userInfo.point}}P</strong>포인트</a><span id="mileageCreditAvailable"></span></li>
 		</ul>
   </div>
@@ -46,7 +46,7 @@ import axios from 'axios'
             grd_name: '', // 회원 등급
             point: 0 // 포인트
         },
-        coupon:[]
+        coupon : ''
       };
     },
     created(){
@@ -54,6 +54,9 @@ import axios from 'axios'
         this.getCoupon();
     },
     methods: {
+        moveCouponList(){
+            this.$router.push({ path: 'myCouponList' })
+        },
         // 포인트 및 등급 정보
         async getGrade() {
           let result = await axios.get(`/apiuser/gradePoint/${this.$store.state.userStore.mem_no}`)
@@ -63,10 +66,11 @@ import axios from 'axios'
         },
         // 쿠폰 정보
         async getCoupon() {
-          let result = await axios.get(`/apiuser/coupon/${this.$store.state.userStore.mem_no}/0`)
+          let result = await axios.get(`/apiuser/possCouponCount/${this.$store.state.userStore.mem_no}`)
           .catch(err => console.log(err));
-          let list = result.data;
-          this.coupon = list;
+          let count = result.data[0].count;
+          console.log(count);
+          this.coupon = count;
         },
         // 회원탈퇴
         withdraw(){
