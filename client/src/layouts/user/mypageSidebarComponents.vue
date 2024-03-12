@@ -24,7 +24,7 @@
 		<div class="quick">
 			<strong class="heading" style="font-size: 14px;"><span></span>QUICK MENU</strong>
 			<ul>
-            <li><router-link to="/myPage/inquiry">1:1문의</router-link></li>
+            <!-- <li><router-link to="/myPage/inquiry">1:1문의</router-link></li> -->
             <li><router-link to="/cart">장바구니</router-link></li>
             <li><router-link to="/myPage/myOrders">주문내역확인</router-link></li>
             <li><router-link to="/myPage/editProfile">회원정보수정</router-link></li>
