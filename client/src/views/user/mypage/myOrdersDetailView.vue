@@ -58,11 +58,11 @@
                                 <td style="text-align: right;">내용</td>
                                 <td colspan="6"><textarea cols="80" rows="10" style="width: 90%; height: 6.25em; border: 1px solid #000; resize: none;" v-model="reviewList.content" placeholder="리뷰는 300자까지 입력이 가능합니다."></textarea></td>
                             </tr>
-                            <tr style="border-style: hidden;" v-show="reviewBtn">
+                            <!-- <tr style="border-style: hidden;" v-show="reviewBtn">
                                 <td></td>
                                 <td style="text-align: right;" colspan="2"><input @change="fileSelect()" for="dataFilesUpl" class="form-control" type="file" name="dataFiles" accept="image/*" multiple ref="images"/></td>
                                 <td colspan="4"></td>
-                            </tr>
+                            </tr> -->
                             <tr v-show="reviewBtn">
                                 <td></td>
                                 <td style="text-align: left;" colspan="2"><button style="margin: 0 15px 0 30px; border: 1px solid #ccc;border-radius: 5px;" @click="insertReview">등록</button><button @click="reviewRefesh()" style="border: 1px solid #ccc;border-radius: 5px;">취소</button></td>

@@ -414,6 +414,8 @@ export default {
     },
     //메일링 서비스
     sendRequestEmail(ord_no) {
+      console.log(ord_no)
+      let ord_nos = ord_no;
       const payload = {
         // from_name: this.from_name,
         // to_name: this.to_name,
@@ -422,7 +424,7 @@ export default {
         // form_title: this.form.title,
         // form_content: this.form.content,
         form_time: new Date(),
-        ord_nos : ord_no,
+        ord_nos : ord_nos,
         paymentList : this.paymentList, //구매리스트 정보
         userInfo: this.userInfo, //보내는이 정보
         deliInfo:this.deliInfo, //배송지 정보
@@ -433,6 +435,7 @@ export default {
         total_prices : this.total_prices, //총 합계(수정필요)
         couponPrice : this.couponPrice //쿠폰할인액
       }
+      console.log(payload)
       emailjs.send('service_cg36xv8', 'template_iky19ki', payload, '_W_PmzEjAaLrqeshH')
         .then((res) => {
             console.log(res)
