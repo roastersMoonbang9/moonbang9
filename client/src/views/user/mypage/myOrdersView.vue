@@ -86,7 +86,7 @@
 					<table class="baseTable">
 						<caption>주문배송조회 목록</caption>
 							<colgroup>
-								 <col width="88"> <col width="88"><col width="50"> <col width="130"> <col width="81"> <col width="100">
+								 <col width="88"> <col width="88"><col width="50"> <col width="150"> <col width="81"> <col width="100">
 							</colgroup>
 						<thead>
 							<tr>

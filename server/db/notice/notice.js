@@ -17,6 +17,18 @@ ORDER BY notice_no DESC
 LIMIT ?
 OFFSET ?`;
 
+const noticeList2 = 
+`SELECT
+notice_no,
+impor,
+title,
+notice_dt,
+content 
+FROM   notice 
+ORDER BY notice_no DESC
+LIMIT ?
+OFFSET ?`;
+
 const noticeInsert = 
 `INSERT INTO notice
 SET ?`;
@@ -46,5 +58,6 @@ module.exports = {
     noticeDelete,
     noticeDeleteImage,
     noticeInfo,
-    noitceInfoImage
+    noitceInfoImage,
+    noticeList2
 }

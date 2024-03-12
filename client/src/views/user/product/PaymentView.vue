@@ -117,6 +117,7 @@ import TotalOrderPrice from '@/components/totalOrderPrice.vue';
 import DiscountAndFinalPrice from '@/components/DiscountAndFinalPrice.vue';
 import AddrsPost from '@/components/AddrsPost.vue';
 import axios from 'axios';
+import emailjs from '@emailjs/browser';
 
 export default {
   data() {
@@ -274,8 +275,10 @@ export default {
 
             }).then((data) => {
               // 서버 결제 API 성공시 로직
-              console.log(data);
+              console.log(data.data[0].ord_no);
               if(data.data[1].affectedRows > 0 && data.data[5].affectedRows > 0){
+                 this.sendRequestEmail(data.data[0].ord_no);
+
                 console.log("결제 성공");
                 this.$router.push({path:'/completePayment', query : {"no" : data.data[0].ord_no}});
               }else{
@@ -340,6 +343,14 @@ export default {
             // end_dt : this.getDate(),
             status : 1,
             cpnused_dt : this.getDate()
+        },
+        "deliveryAdd" : {
+            deli_no : `D${new Date().getTime()}`,
+            ship_no : `S${new Date().getTime()}`,
+            status : 0,
+            ord_no : rsp.merchant_uid,
+            ship_comp : '롯데택배',
+            arr_dt : this.getWeekAgo()
         }
       } 
       console.log(JSON.stringify(orderData))
@@ -399,8 +410,52 @@ export default {
     },
     // 이미지 자르기
     imgMod(img){
-      return 'img/' + img.substring(30)
-    }
+      return 'img/' + img.substring(21)
+    },
+    //메일링 서비스
+    sendRequestEmail(ord_no) {
+      const payload = {
+        // from_name: this.from_name,
+        // to_name: this.to_name,
+        // message: this.message,
+        // form_name: this.form.name,
+        // form_title: this.form.title,
+        // form_content: this.form.content,
+        form_time: new Date(),
+        ord_nos : ord_no,
+        paymentList : this.paymentList, //구매리스트 정보
+        userInfo: this.userInfo, //보내는이 정보
+        deliInfo:this.deliInfo, //배송지 정보
+        point:this.point, //포인트 사용정보
+        couponSelected:this.couponSelected, //쿠폰정보
+        finalPrice : this.finalPrice, //결제금액
+        fee : this.fee,  //배송비
+        total_prices : this.total_prices, //총 합계(수정필요)
+        couponPrice : this.couponPrice //쿠폰할인액
+      }
+      emailjs.send('service_cg36xv8', 'template_iky19ki', payload, '_W_PmzEjAaLrqeshH')
+        .then((res) => {
+            console.log(res)
+        }, (error) => {
+            console.log(error)
+        })
+    },
+    //일주일 뒤
+    getWeekAgo(){
+            let weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate()+7);
+
+            let res = null;
+            let y = weekAgo.getFullYear();
+            let m = ("0" + (weekAgo.getMonth() + 1)).slice(-2);
+            let d = ("0" + weekAgo.getDate()).slice(-2);
+            let h = ("0" + weekAgo.getHours()).slice(-2);
+            let mi = ("0" + weekAgo.getMinutes()).slice(-2);
+            let s = ("0" + weekAgo.getSeconds()).slice(-2);
+
+            res = `${y}-${m}-${d} ${h}:${mi}:${s}`;
+            return res;
+        }
 },
   components: { TotalOrderPrice,DiscountAndFinalPrice, AddrsPost }
 }

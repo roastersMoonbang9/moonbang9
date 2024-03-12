@@ -186,11 +186,11 @@ export default{
         },
         //마이페이지 이동 버튼
         mypageBtn(){
-            this.$router.push({path:'/'});
+            this.$router.push({path:'/myPage/myOrders'});
         },
         // 이미지 자르기
         imgMod(img){
-            return 'img/' + img.substring(30)
+            return 'img/' + img.substring(21)
         }
 
     },

@@ -24,8 +24,15 @@ const deliveryCount =
 `SELECT count(deli_no) as count 
 FROM delivery`;
 
+// 배송 추가
+const insertDelivery = 
+`INSERT INTO delivery
+SET ?`;
+
+
 module.exports = {
     deliveryList,
     updateShipNo,
-    deliveryCount
+    deliveryCount,
+    insertDelivery
 }

@@ -30,7 +30,7 @@
 								<td>{{ table.price }}원</td>
 								<td>{{ table.sum_price }}원</td>
 								<td v-if="table.revCount == 0"><button @click="reviewShow(table.prdt_cd,table.ord_no)" v-if="!reviewBtn" style="border: 1px solid #ccc;border-radius: 5px;">리뷰작성</button><button style="border: 1px solid #ccc;border-radius: 5px;" @click="reviewShow(table.prdt_cd,table.ord_no)" v-else>리뷰닫기</button></td>
-                                <td v-else><button @click="reviewDel(table.prdt_cd,table.ord_no)" style="border: 1px solid #ccc;border-radius: 5px;" v-if="!reviewBtn">리뷰삭제</button></td>
+                                <td v-else><button @click="reviewDel(table.prdt_cd,table.ord_no)" style="border: 1px solid #ccc;border-radius: 5px; background-color: pink;" v-if="!reviewBtn">리뷰삭제</button></td>
                                 <td><button style="border: 1px solid #ccc;border-radius: 5px;" @click="recart(table)">재구매</button></td>
             				</tr>
                             <tr v-show="reviewBtn">
@@ -60,7 +60,7 @@
                             </tr>
                             <tr style="border-style: hidden;" v-show="reviewBtn">
                                 <td></td>
-                                <td style="text-align: right;" colspan="2"><input type="file" accept="image/*"></td>
+                                <td style="text-align: right;" colspan="2"><input @change="fileSelect()" for="dataFilesUpl" class="form-control" type="file" name="dataFiles" accept="image/*" multiple ref="images"/></td>
                                 <td colspan="4"></td>
                             </tr>
                             <tr v-show="reviewBtn">
@@ -110,7 +110,7 @@ v-on:firstPage="firstPage" v-on:lastPaging="lastPaging" v-on:changeNowPage="chan
 						<li>
 							<div class="total">
 								<strong>상품금액</strong>
-								<em class="amount"><span>{{tableList1.sum_price}}</span>원</em>
+								<em class="amount"><span>{{tableList1.total_price}}</span>원</em>
 							</div>
 						</li>
 						<li>
@@ -298,6 +298,8 @@ export default{
             // },
             //리뷰 활성화
             reviewShow(prdt_cd, ord_no){
+                this.reviewList.content == ""
+                this.reviewList.rating == 1
                 if(this.reviewBtn == true){
                     this.reviewBtn = false;
                     this.reviewList.prdt_cd = ""
@@ -322,6 +324,8 @@ export default{
             },
             //리뷰 등록 이벤트
             async insertReview(){
+                this.reviewList.content == ""
+                this.reviewList.rating == 1
                 let data = {
                     param : {
                         content : this.reviewList.content,
@@ -338,16 +342,18 @@ export default{
                       icon: "error",
                       title: "내용이 존재하지 않습니다. <br>내용 작성후 다시 시도해 주세요."
                     });
-
+                    
                     return 
                 }
-
+                
                 let result = await axios.post(`/api/product/review`, data) 
                                         .catch(err => console.log(err));
                 let info = result.data.affectedRows;
                 if (info > 0) {
                   alert("리뷰가 등록되었습니다.");
                   this.reviewShow(this.reviewList.prdt_cd, this.reviewList.ord_no)
+                  this.reviewList.content == ""
+                  this.reviewList.rating == 1
                   this.getTableList();
                 }else{
                   alert("리뷰등록에 실패하였습니다.");
@@ -356,6 +362,8 @@ export default{
             },
             //등록된 리뷰 확인
             async reviewDel(prdt_cd,ord_no){
+                this.reviewList.content == ""
+                this.reviewList.rating == 1
                 let data = {
                     prdt_cd : prdt_cd,
                     ord_no : ord_no
@@ -365,6 +373,7 @@ export default{
                 let info = result.data.affectedRows;
                 if (info > 0) {
                   alert("리뷰가 삭제되었습니다.");
+                  this.reviewList.content = ""
                   this.getTableList();
                 }else{
                   alert("리뷰삭제에 실패하였습니다.");
@@ -398,8 +407,17 @@ export default{
             },
             // 이미지 자르기
             imgMod(img){
-                return 'img/' + img.substring(30)
-            }
+                return '../img/' + img.substring(21)
+            },
+            //사진 갯수제한
+            async fileSelect() {
+                if(this.$refs.images.files.length > 4){
+                    alert('사진은 4개까지 첨부 가능합니다.');
+                    this.$refs.images.value = null;
+                }else {
+                    this.productFiles = this.$refs.images.files;
+                }
+            },
         }
     }
 </script>
