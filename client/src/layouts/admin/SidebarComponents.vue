@@ -109,7 +109,7 @@
             <li>
                 <a href="#">
                 <i class="bi bi-circle"></i>
-                <router-link to="/admin/notice/"><span>공지사항</span></router-link>
+                <router-link to="/admin/noticeList"><span>공지사항</span></router-link>
                 </a>
             </li>
             <li>

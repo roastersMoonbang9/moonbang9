@@ -36,8 +36,8 @@ export default {
             component: DeliveryView
         },
         {
-            path: 'notice',
-            name: 'notice',
+            path: 'noticeList',
+            name: 'noticeList',
             component: noticeView
         },
         {
