@@ -42,7 +42,7 @@
         <th>이메일</th>
         <td>
             <p>
-                <input type="text" class="txtInp" name="buyemail_Pre" title="이메일 아이디 입력" style="width:120px;" v-model="userInfo.email" @change="emailState(userInfo.email)" ref="emailFocus">
+                <input type="text" class="txtInp" name="buyemail_Pre" title="이메일 아이디 입력" style="width:150px;" v-model="userInfo.email" @change="emailState(userInfo.email)" ref="emailFocus">
             </p>
             <p class="tPad05">주문정보를 이메일로 보내드립니다.</p>
         </td>
