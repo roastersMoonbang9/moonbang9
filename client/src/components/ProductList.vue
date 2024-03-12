@@ -94,7 +94,14 @@ import Paging from '@/components/PagingComponent.vue';
     },
 
     methods : {
-    
+      async getProductInfo(cd) {
+      console.log(cd);
+      let result = await axios.get("/api/product/productInfo/" + cd);
+      this.productInfo = result.data;
+      console.log(result);
+      // 상품 대표 이미지 ProductInfoView에게 전달
+      // this.$emit('send-image', this.productInfo.image);
+    },
       // 카테고리별 상품 목록
       // async getProductList(large, small){
       //     console.log(large, small);

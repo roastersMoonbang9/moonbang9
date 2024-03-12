@@ -207,6 +207,7 @@ export default {
       console.log(result);
       // 상품 대표 이미지 ProductInfoView에게 전달
       // this.$emit('send-image', this.productInfo.image);
+      this.$emit('send-detail', this.productInfo.prdt_detail);
     },
     // 상품 옵션 목록
     async getProductOptions(cd) {
