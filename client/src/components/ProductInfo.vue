@@ -304,7 +304,21 @@ export default {
               }
             });
           }else{
-            alert('장바구니에 상품을 담지 못했습니다.');
+            Swal.fire({
+              title: '로그인을 해주세요',
+              // icon : 'success',
+              type : "warning",
+              confirmButtonClass : "btn-danger",
+              confirmButtonText : "확인",
+              closeOnConfirm : false,
+              closeOnCancel : true
+            }).then(function(isConfirm){
+              if(isConfirm){
+                goToCart.$router.push({ path : '/login'})
+              }else{
+                
+              }
+            });
           }
     },
     // // 옵션별 합산금액 보류
