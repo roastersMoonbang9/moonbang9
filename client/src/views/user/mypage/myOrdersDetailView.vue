@@ -8,7 +8,7 @@
 					<table class="baseTable">
 						<caption>주문배송조회 목록</caption>
 							<colgroup>
-								 <col width="88"><col width="88"> <col width="88"><col width="50"> <col width="130"> <col width="81"><col width="81">
+								 <col width="88"><col width="88"> <col width="88"><col width="50"> <col width="130"> <col width="81">
 							</colgroup>
 						<thead>
 							<tr>
@@ -18,7 +18,6 @@
 								<th scope="col">단건가격</th>
 								<th scope="col">총 금액</th>
 								<th scope="col">리뷰</th>
-								<th scope="col">재구매</th>
 							</tr>
 						</thead>
                         <!-- {{ reviewList }} -->
@@ -30,8 +29,7 @@
 								<td>{{ table.price }}원</td>
 								<td>{{ table.sum_price }}원</td>
 								<td v-if="table.revCount == 0"><button @click="reviewShow(table.prdt_cd,table.ord_no)" v-if="!reviewBtn" style="border: 1px solid #ccc;border-radius: 5px;">리뷰작성</button><button style="border: 1px solid #ccc;border-radius: 5px;" @click="reviewShow(table.prdt_cd,table.ord_no)" v-else>리뷰닫기</button></td>
-                                <td v-else><button @click="reviewDel(table.prdt_cd,table.ord_no)" style="border: 1px solid #ccc;border-radius: 5px; background-color: pink;" v-if="!reviewBtn">리뷰삭제</button></td>
-                                <td><button style="border: 1px solid #ccc;border-radius: 5px;" @click="recart(table)">재구매</button></td>
+                                <td v-else><button  @click="reviewDel(table.prdt_cd,table.ord_no)" style="border: 1px solid #ccc;border-radius: 5px; background-color: pink;" v-if="!reviewBtn">리뷰삭제</button></td>
             				</tr>
                             <tr v-show="reviewBtn">
                                 <td colspan="7" style="text-align: left;">리뷰작성하기</td>
