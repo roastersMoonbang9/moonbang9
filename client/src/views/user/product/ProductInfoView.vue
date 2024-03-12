@@ -87,7 +87,7 @@
             
           </div>
           
-          <ProductInfo />
+          <ProductInfo @send-detail="sendDetail"/>
 
 <!-- DETAILS TABS-->
 
@@ -95,7 +95,7 @@
           <ul class="nav nav-tabs border-0" id="myTab" role="tablist">
         
           <li class="nav-item">
-            <a class="nav-link text-uppercase active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">상품 설명</a>
+            <a class="nav-link text-uppercase active" id="description-tab" data-bs-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">상품 상세</a>
           </li>
             
           <li class="nav-item">
@@ -114,8 +114,8 @@
 
           <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
               <div class="p-4 p-lg-5 bg-white">
-                <h6 class="text-uppercase">Product description </h6>
-                <p class="text-muted text-sm mb-0">{{getProductDetail}}Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <h6 class="text-uppercase">상품 설명</h6>
+                <p class="text-muted text-sm mb-0" style="font-size: 13px;">{{this.p_detail}}</p>
               </div>
           </div>
 
@@ -129,12 +129,14 @@
           </div>
         </div>
         </div>
+        
+        
         <!-- RELATED PRODUCTS-->
-        <h2 class="h5 text-uppercase mb-4">카테고리 인기상품</h2>
-        <div class="row">
+        <!-- <h2 class="h5 text-uppercase mb-4">카테고리 인기상품</h2>
+        <div class="row"> -->
 
           <!-- PRODUCT-->
-          <div class="col-lg-3 col-sm-6">
+          <!-- <div class="col-lg-3 col-sm-6">
             <div class="product text-center skel-loader">
               <div class="d-block mb-3 position-relative"><a class="d-block" href="detail.html"><img class="img-fluid w-100" src="img/product-1.jpg" alt="..."></a>
                 <div class="product-overlay">
@@ -149,7 +151,7 @@
               <p class="small text-muted">$250</p>
             </div>
           </div>
-        </div>
+        </div> -->
 
      
       
@@ -189,22 +191,20 @@ export default  {
     this.getImages(cd);
   },
   computed : {
-    sendRealDetail(){
-      return this.$refs.ProductInfo.p_detail;
-    },
+    getRealDetail(){
+      return this.p_detail;
+    }
     // getRealImage1() {
     //   return this.image1; // image1 바뀐것 감지해서 사진 다시 로드
     // },  
     // getRealPath(){
     //   return this.imagePath;
     // }
-    getProductDetail(){
-      return this.p_detail;
-    }
   },
   methods: {
     sendDetail(data){
-      console.log(data)
+      this.p_detail = data;
+      console.log('상세설명' , data);
     },
     // getImage1(data){
     //   console.log('자식으로부터 받은 상품 대표이미지 파일명 : '+ data);
