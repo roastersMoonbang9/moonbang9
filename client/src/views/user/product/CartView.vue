@@ -121,6 +121,7 @@
                         this.cartList.splice(j, 1);
                     }
                 }
+                this.selected =[]
                 console.log(result);
             }
         },
