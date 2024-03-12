@@ -110,9 +110,13 @@
                             </td>
                         </tr>
 
-                        <tr>
+                        <tr v-if="selected.status == 0">
                             <th>답변</th>
                             <td><input class="form-control" type="text" v-model="answer"><button class="btn btn-info" @click="submitQueryAnsw">등록</button></td>
+                        </tr>
+                        <tr v-else-if="selected.status == 1">
+                            <th>답변</th>
+                            <td>{{ selected.answer }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -314,7 +318,7 @@ export default {
 
                 }
             }
-                let result = await axios.put('/api/product/queryAns/', data)
+                let result = await axios.put('/api/product/queryAns', data)
                     .catch(err => console.log(err));
                 if (result.data.changedRows > 0) {
                     Swal.fire({
