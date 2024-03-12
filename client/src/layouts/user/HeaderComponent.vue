@@ -12,7 +12,7 @@
               
               <router-link to="/" class="nav-link active"><a class="navbar-brand" href="#">
 
-              <span class="fw-bold text-uppercase text-dark">MOONBANGKU</span></a></router-link>
+              <span class="fw-bold text-uppercase text-dark">MOONBANG9</span></a></router-link>
 
               <ul class="navbar-nav me-auto">
                 <li class="nav-item">

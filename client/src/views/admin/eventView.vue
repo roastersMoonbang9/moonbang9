@@ -1,7 +1,6 @@
 <template>
     <div class="container">
       <h1 style="padding: 15px; font-size: 27px;">이벤트</h1>
-      <button type="button" class="btn btn-outline-secondary m-2">선택 삭제</button> <!--  @click="deleteSelected()"-->
       <button type="button" class="btn btn-outline-secondary m-2"  @click="modalOpenTF" v-if="modalOpen === false">추가</button>
       <button type="button" class="btn btn-outline-secondary m-2"  @click="modalOpenTF" v-if="modalOpen === true">닫기</button>
 

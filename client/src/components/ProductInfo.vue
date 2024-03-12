@@ -136,13 +136,7 @@
                     </div>
                   </div>
                 </div> -->
-      <div class="col-sm-3 pl-sm-0 divMargin">
-        <a
-          class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"
-          href="cart.html"
-          >바로구매</a
-        >
-      </div>
+      
       <div class="col-sm-3 pl-sm-0 divMargin">
         <a
           class="btn btn-dark btn-sm btn-block h-100 d-flex align-items-center justify-content-center px-0"

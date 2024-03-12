@@ -19,7 +19,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(table, idx) in tableList" :key="idx" @click="goToOrderDetail(table.ord_no)">
+                            <tr v-for="(table, idx) in tableList" :key="idx">
                                 <td>{{ table.cpn_name }}</td>
                                 <td>{{ table.dc_pct }} %</td>
                                 <td>{{ table.dc_price }}</td>

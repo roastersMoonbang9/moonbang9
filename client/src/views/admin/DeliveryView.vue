@@ -43,15 +43,6 @@
                             </li>
                             <li class="nav-item">
                                 <div class="form-check">
-                                    <input v-bind:value="checkStatus2" v-model="checkSt" class="form-check-input"
-                                        type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                                    <label class="form-check-label" for="flexRadioDefault2">
-                                        배송 준비&nbsp;&nbsp;&nbsp;
-                                    </label>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <div class="form-check">
                                     <input v-bind:value="checkStatus3" v-model="checkSt" class="form-check-input"
                                         type="radio" name="flexRadioDefault" id="flexRadioDefault3">
                                     <label class="form-check-label" for="flexRadioDefault3">
@@ -342,6 +333,7 @@ export default {
                     showConfirmButton: false,
                     timer: 1500
                 });
+                this.$router.go(this.$router.currentRoute);
             }
         },
         async changeToComp() {

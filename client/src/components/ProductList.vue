@@ -32,9 +32,7 @@
             <img class="img-fluid w-100" v-bind:src="`img/${product.image.substring(21)}`" @click="goToProductInfo(product.prdt_cd)"> 
           <div class="product-overlay">
             <ul class="mb-0 list-inline">
-              <li class="list-inline-item m-0 p-0">
-                <a class="btn btn-sm btn-dark" href="cart.html">미리보기</a>
-              </li>
+             
             </ul>
           </div>
         </div>

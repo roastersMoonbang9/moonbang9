@@ -99,9 +99,42 @@ productQueryRouter.put("/queryAns", async (request, response) => {
     response.send(result);
   });
 
-  productQueryRouter.get("/queryCount", async (request,response)=>{
-    let result = await db.connection('product_query','queryCount');
+
+  productQueryRouter.post("/queryCount", async (request,response)=>{
+    let getDate1 = request.body.param.getDate1;
+    let getDate2 = request.body.param.getDate2;
+    let checkDate = request.body.param.checkDate;
+    let checkSt = parseInt(request.body.param.checkSt);
+  
+    let data = [];
+    let where = " WHERE 1=1";
+  
+      // 가입일자 / 탈퇴일자 있는 경우
+      if(getDate1 && getDate2){
+        if(checkDate == "1"){
+          where += " AND join_dt BETWEEN ? AND ?"
+          data.push(getDate1, getDate2);
+        } else if(checkDate == "2"){
+          where += " AND unjoin_dt BETWEEN ? AND ?"
+          data.push(getDate1, getDate2);
+        }
+      }
+    
+      // 회원등급 조건 존재할 경우
+      if(checkSt){
+        where += " AND status = ? "
+        data.push(checkSt);
+      }
+  
+    let result = await db.connection('product_query','queryCount', data, where);
     response.send(result);
   })
+
+  productQueryRouter.get("/queryCount1/:prdt_cd", async (request,response)=>{
+    let data = request.params.prdt_cd;
+    let result = await db.connection('product_query','queryCount1', data);
+    response.send(result);
+  })
+
 
   module.exports = productQueryRouter;

@@ -27,6 +27,11 @@ const queryCount =
 `SELECT count(qst_no) as count 
 FROM product_question`
 
+const queryCount1 = 
+`SELECT count(qst_no) as count 
+FROM product_question
+WHERE prdt_cd = ?`
+
 module.exports = {
     queryList,
     queryInfo,
@@ -34,7 +39,8 @@ module.exports = {
     queryInsert,
     queryDel,
     queryListAll,
-    queryCount
+    queryCount,
+    queryCount1
 
 
 }

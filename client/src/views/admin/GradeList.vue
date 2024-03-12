@@ -82,8 +82,8 @@ export default {
             if(result.data.changedRows > 0){
               change = true;
                 this.editMode = false; //수정모드에서 자동으로 나감
-            } ;
-        }
+              } ;
+            }
         if(change){
           Swal.fire('수정되었습니다.'); 
         }

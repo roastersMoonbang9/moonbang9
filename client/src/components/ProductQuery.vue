@@ -154,7 +154,7 @@ export default {
         },
     
     async getTableCount() {
-            let result = await axios.get(`/api/product/queryCount`) //쿼리문에 count문이 있어야함
+            let result = await axios.get(`/api/product/queryCount1/`+this.$route.query.prdt_cd) //쿼리문에 count문이 있어야함
                 .catch(err => console.log(err));
             this.allSize = result.data[0].count;
             this.lastPage = Math.ceil(this.allSize / this.pageSize);
