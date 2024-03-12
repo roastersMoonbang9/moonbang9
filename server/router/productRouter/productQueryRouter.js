@@ -4,16 +4,25 @@ const db = require("../../db.js");
 
 //예시
 //상품문의 목록 출력 
-productQueryRouter.get("/queryList/:prdt_cd", async (request,response)=>{
-  let data = request.params.prdt_cd;
+productQueryRouter.post("/queryList", async (request,response)=>{
+  let limit = parseInt(request.body.param.limit);
+  let offset = parseInt(request.body.param.offset);
+  let prdt_cd = request.body.param.prdt_cd;
+  let data = [];
+data.push(prdt_cd);
+let where = " LIMIT ?"
+data.push(limit);
+where += " OFFSET ?"
+data.push(offset);
   console.log('리스트'+data);
-    let result = await db.connection('product_query','queryList' , data);
+    let result = await db.connection('product_query','queryList' , data,where)
+    .catch(err=>{console.log(err)})
     response.send(result);
     console.log('result :'+result);
   });
 
   //상품별 아닌 전체 문의 출력
-  productQueryRouter.get("/querylistAll", async (request,response)=>{
+  productQueryRouter.post("/querylistAll", async (request,response)=>{
     let limit = parseInt(request.body.param.limit);
     let offset = parseInt(request.body.param.offset);
      let getDate1 = request.body.param.getDate1;
@@ -72,6 +81,8 @@ productQueryRouter.get("/queryList/:prdt_cd", async (request,response)=>{
 //수정 (답변 등록) : put => body
 productQueryRouter.put("/queryAns/:qst_no", async (request, response) => {
   let data = [request.body.param, request.params.qst_no];
+  console.log('넘어오는:'+request.body.param)
+  console.log('문의호:'+request.params.qst_no)
   let result = await db.connection('product_query','queryUpdate', data);
   response.send(result);
 });
